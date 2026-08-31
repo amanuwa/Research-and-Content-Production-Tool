@@ -7,9 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
+    <style>
+        body {
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.90)), url('path-to-agri-terrain-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-slate-100 flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md p-8 bg-slate-800 rounded-2xl shadow-xl border border-slate-700">
+<body class="text-slate-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-8 bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-700">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center">Create Secure Account</h2>
 
         <form id="signup-form" class="space-y-4">
