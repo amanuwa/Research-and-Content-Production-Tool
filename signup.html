@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research & Content Production Tool - Create Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-8 bg-slate-800 rounded-2xl shadow-xl border border-slate-700">
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center">Create Secure Account</h2>
+
+        <form id="signup-form" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Full Name / Organization Name</label>
+                <input type="text" id="fullname" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
+                <input type="email" id="email" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Account Tier</label>
+                <select id="account-tier" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                    <option value="governmental_authority">Governmental Authority (State Tier)</option>
+                    <option value="institution">Major Institution (Priority Tier)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Password</label>
+                <input type="password" id="password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white" placeholder="Min 12 chars, symbols & numbers">
+                <p class="text-xs text-slate-400 mt-1">Must contain uppercase, lowercase, number, and special character.</p>
+            </div>
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-lg transition duration-200 text-white">Register Secure Account</button>
+        </form>
+
+        <div class="mt-6 text-center">
+            <a href="auth.html" class="text-sm text-emerald-400 hover:underline">Already have an account? Sign In</a>
+        </div>
+    </div>
+
+    <script>
+        const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+
+        function validatePassword(password) {
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
+            return regex.test(password);
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const tier = document.getElementById('account-tier').value;
+            const password = document.getElementById('password').value;
+
+            if (!validatePassword(password)) {
+                alert('Password security requirements not met. Must be at least 12 characters and include uppercase, lowercase, numbers, and a special symbol.');
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullname,
+                        account_tier: tier
+                    }
+                }
+            });
+
+            if (error) {
+                alert('Registration Error: ' + error.message);
+            } else {
+                alert('Account created successfully! Please check your email to verify your registration before logging in.');
+                window.location.href = 'auth.html';
+            }
+        });
+    </script>
+</body>
+</html>
