@@ -17,6 +17,23 @@
             background-position: center;
             background-attachment: fixed;
         }
+        .map-container {
+            position: relative;
+        }
+        .map-container.fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: #0f172a !important;
+            padding: 20px !important;
+            border-radius: 0 !important;
+        }
+        .map-container.fullscreen .leaflet-map {
+            height: calc(100vh - 80px) !important;
+        }
     </style>
 </head>
 <body class="text-gray-100 min-h-screen flex flex-col">
@@ -79,6 +96,16 @@
                     <p class="text-xs text-gray-400 mt-2">Automated ingestion of field trial datasets and crop simulation modules.</p>
                 </div>
             </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">EIAR Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-eiar-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-eiar-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-eiar" class="leaflet-map w-full h-full rounded-lg"></div>
+                </div>
+            </div>
         </section>
 
         <!-- 2. ATI Panel -->
@@ -105,6 +132,16 @@
                     <p class="text-xs text-gray-400">AI Resource Pipeline</p>
                     <p class="text-lg font-semibold text-white mt-1">Apify Market Scrapers</p>
                     <p class="text-xs text-gray-400 mt-2">Automated regional commodity pricing and input-voucher synchronization.</p>
+                </div>
+            </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">ATI Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-ati-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-ati-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-ati" class="leaflet-map w-full h-full rounded-lg"></div>
                 </div>
             </div>
         </section>
@@ -135,6 +172,16 @@
                     <p class="text-xs text-gray-400 mt-2">Automated document verification and secure member directory indexing.</p>
                 </div>
             </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">Cooperative Commission Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-coop-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-coop-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-coop" class="leaflet-map w-full h-full rounded-lg"></div>
+                </div>
+            </div>
         </section>
 
         <!-- 4. Coffee and Tea Authority Panel -->
@@ -161,6 +208,16 @@
                     <p class="text-xs text-gray-400">AI Resource Pipeline</p>
                     <p class="text-lg font-semibold text-white mt-1">Global Commodity API</p>
                     <p class="text-xs text-gray-400 mt-2">Real-time international market price feeds and compliance checklist engines.</p>
+                </div>
+            </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">ECTA Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-ecta-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-ecta-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-ecta" class="leaflet-map w-full h-full rounded-lg"></div>
                 </div>
             </div>
         </section>
@@ -191,6 +248,16 @@
                     <p class="text-xs text-gray-400 mt-2">Semantic search engine for chemical registries and phytosanitary parsers.</p>
                 </div>
             </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">EAA Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-eaa-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-eaa-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-eaa" class="leaflet-map w-full h-full rounded-lg"></div>
+                </div>
+            </div>
         </section>
 
         <!-- 6. Institute of Animal Health Panel -->
@@ -217,6 +284,16 @@
                     <p class="text-xs text-gray-400">AI Resource Pipeline</p>
                     <p class="text-lg font-semibold text-white mt-1">Outbreak Scraper & Maps</p>
                     <p class="text-xs text-gray-400 mt-2">Automated epidemiological alert scrapers and diagnostic protocol management.</p>
+                </div>
+            </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">AHI Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-ahi-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-ahi-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-ahi" class="leaflet-map w-full h-full rounded-lg"></div>
                 </div>
             </div>
         </section>
@@ -247,6 +324,16 @@
                     <p class="text-xs text-gray-400 mt-2">Livestock genetic tracking and artificial insemination distribution modeling.</p>
                 </div>
             </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">Animal Development Institute Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-adi-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-adi-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-adi" class="leaflet-map w-full h-full rounded-lg"></div>
+                </div>
+            </div>
         </section>
 
         <!-- 8. Ethiopian Forest Development Panel -->
@@ -273,6 +360,16 @@
                     <p class="text-xs text-gray-400">AI Resource Pipeline</p>
                     <p class="text-lg font-semibold text-white mt-1">Carbon Calculation Scripts</p>
                     <p class="text-xs text-gray-400 mt-2">Automated alerts for unauthorized clearing and national forest inventory DBs.</p>
+                </div>
+            </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">EFD Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-efd-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-efd-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-efd" class="leaflet-map w-full h-full rounded-lg"></div>
                 </div>
             </div>
         </section>
@@ -303,16 +400,20 @@
                     <p class="text-xs text-gray-400 mt-2">Endangered species vector databases and access-and-benefit-sharing document manager.</p>
                 </div>
             </div>
+            <!-- Institutional Map Container -->
+            <div class="map-container bg-gray-900/80 p-4 rounded-xl border border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-300">EBI Live Geospatial Telemetry</h3>
+                    <button onclick="toggleFullscreen('map-ebi-container')" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1 rounded-lg transition">Full Screen</button>
+                </div>
+                <div id="map-ebi-container" class="map-container w-full h-64 rounded-lg bg-gray-900 flex flex-col">
+                    <div id="map-ebi" class="leaflet-map w-full h-full rounded-lg"></div>
+                </div>
+            </div>
         </section>
 
-        <!-- Global Map & Analytics Overview Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6">
-            <!-- Leaflet Map Container -->
-            <div class="lg:col-span-2 bg-gray-800/90 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col shadow-xl">
-                <h3 class="text-sm font-semibold text-gray-300 mb-3">Live Geospatial Satellite & Soil Sensor Telemetry Feed</h3>
-                <div id="map" class="w-full h-80 rounded-lg bg-gray-900"></div>
-            </div>
-
+        <!-- Charts Overview Section -->
+        <div class="grid grid-cols-1 pt-6">
             <!-- Charts Container -->
             <div class="bg-gray-800/90 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col justify-between shadow-xl">
                 <h3 class="text-sm font-semibold text-gray-300 mb-3">Platform & Resource Distribution</h3>
@@ -328,12 +429,42 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="config.js"></script>
     <script>
-        // Initialize Map centered over Addis Ababa / East Africa focus area
-        const map = L.map('map').setView([9.03, 38.74], 7);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+        // Initialize maps for all 9 institutions
+        const mapConfigs = [
+            { id: 'map-eiar', coords: [9.03, 38.74] },
+            { id: 'map-ati', coords: [9.02, 38.75] },
+            { id: 'map-coop', coords: [9.01, 38.72] },
+            { id: 'map-ecta', coords: [9.04, 38.76] },
+            { id: 'map-eaa', coords: [9.00, 38.73] },
+            { id: 'map-ahi', coords: [9.05, 38.71] },
+            { id: 'map-adi', coords: [8.99, 38.77] },
+            { id: 'map-efd', coords: [9.06, 38.70] },
+            { id: 'map-ebi', coords: [8.98, 38.78] }
+        ];
+
+        const maps = {};
+
+        mapConfigs.forEach(config => {
+            const m = L.map(config.id).setView(config.coords, 7);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(m);
+            maps[config.id] = m;
+        });
+
+        function toggleFullscreen(containerId) {
+            const container = document.getElementById(containerId);
+            container.classList.toggle('fullscreen');
+            
+            // Find map id within this container
+            const mapDiv = container.querySelector('.leaflet-map');
+            if (mapDiv && maps[mapDiv.id]) {
+                setTimeout(() => {
+                    maps[mapDiv.id].invalidateSize();
+                }, 100);
+            }
+        }
 
         // Render Pie Chart for Resource & Platform Metrics
         const ctx = document.getElementById('resourcePieChart').getContext('2d');
