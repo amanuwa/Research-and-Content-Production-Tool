@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research and Content Production Tool - Executive Satellite Hub</title>
+    <title>Research and Content Production Tool - 9 Institutional Hub</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN for Graphs & Pie Charts -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Leaflet CSS for Satellite & Geospatial mapping -->
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<style>
+    <style>
         body {
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.90)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -22,10 +22,10 @@
 <body class="text-gray-100 min-h-screen flex flex-col">
 
     <!-- Top Navigation Bar -->
-    <header class="bg-gray-800/90 backdrop-blur-md border-b border-gray-700 px-6 py-4 flex justify-between items-center">
+    <header class="bg-gray-800/90 backdrop-blur-md border-b border-gray-700 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div class="flex items-center space-x-3">
             <span class="text-xl font-bold tracking-wider text-emerald-400">AGRI-PULSE OS</span>
-            <span class="text-xs bg-emerald-900 text-emerald-300 px-2.5 py-1 rounded-full font-medium">Research & Content Hub</span>
+            <span class="text-xs bg-emerald-900 text-emerald-300 px-2.5 py-1 rounded-full font-medium">9 Institutional Hub</span>
         </div>
         <nav class="flex space-x-6 text-sm font-medium">
             <a href="index.html" class="text-emerald-400 border-b-2 border-emerald-400 pb-1">Satellite Hub</a>
@@ -35,55 +35,291 @@
         </nav>
     </header>
 
-    <!-- Main Content Grid -->
-    <main class="flex-1 p-6 space-y-6 max-w-7xl mx-auto w-full">
-        
-        <!-- Institutional Priority Section (Front & Center) -->
-        <section class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-xl p-6 shadow-xl">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold text-white flex items-center space-x-2">
-                    <span class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></span>
-                    <span>9 Major Institutional Accounts — Priority Telemetry</span>
-                </h2>
-                <span class="text-xs text-gray-400">Real-time sync active</span>
+    <!-- Sub-Navbar: Quick Jump Buttons for All 9 Institutions -->
+    <div class="bg-gray-900/90 border-b border-gray-800 px-6 py-3 sticky top-[73px] z-40 backdrop-blur-md overflow-x-auto">
+        <div class="flex space-x-3 max-w-7xl mx-auto whitespace-nowrap">
+            <a href="#eiar" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">1. EIAR</a>
+            <a href="#ati" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">2. ATI</a>
+            <a href="#coop" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">3. Cooperative Commission</a>
+            <a href="#ecta" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">4. Coffee & Tea</a>
+            <a href="#eaa" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">5. Agricultural Authority</a>
+            <a href="#ahi" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">6. Animal Health</a>
+            <a href="#adi" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">7. Animal Development</a>
+            <a href="#efd" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">8. Forest Development</a>
+            <a href="#ebi" class="text-xs bg-emerald-600/30 border border-emerald-500/50 hover:bg-emerald-600 text-emerald-300 hover:text-white px-3 py-1.5 rounded-lg transition">9. Biodiversity</a>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 p-6 space-y-12 max-w-7xl mx-auto w-full">
+
+        <!-- 1. EIAR Panel -->
+        <section id="eiar" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 01</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Institute of Agricultural Research (EIAR)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Satellite Feed</span>
             </div>
-            <div id="institutional-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Dynamically loaded institutional metrics cards -->
-                <div class="bg-gray-900/80 p-4 rounded-lg border border-gray-700">
-                    <p class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Highlands Agronomy Corp</p>
-                    <p class="text-2xl font-bold mt-1 text-white">1,420 ha</p>
-                    <p class="text-xs text-gray-400 mt-1">Soil Moisture Index: <span class="text-green-400 font-medium">Optimal (78%)</span></p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Satellite Sensor Layer</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Sentinel-2 NDVI Crop Health</p>
+                    <p class="text-xs text-gray-400 mt-2">Real-time multispectral vegetation index tracking active across national research plots.</p>
                 </div>
-                <div class="bg-gray-900/80 p-4 rounded-lg border border-gray-700">
-                    <p class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">East Africa Research Group</p>
-                    <p class="text-2xl font-bold mt-1 text-white">890 ha</p>
-                    <p class="text-xs text-gray-400 mt-1">Carbon Storage Rate: <span class="text-green-400 font-medium">+4.2 t/ha</span></p>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Crop & Soil Agronomy</p>
+                    <p class="text-xs text-gray-400 mt-2">Managing soil and water management, mechanization, and food science research.</p>
                 </div>
-                <div class="bg-gray-900/80 p-4 rounded-lg border border-gray-700">
-                    <p class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Global Bio-Consultants</p>
-                    <p class="text-2xl font-bold mt-1 text-white">2,100 ha</p>
-                    <p class="text-xs text-gray-400 mt-1">Active Alerts: <span class="text-amber-400 font-medium">1 Stressed Zone</span></p>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">n8n Scraping & DSSAT Models</p>
+                    <p class="text-xs text-gray-400 mt-2">Automated ingestion of field trial datasets and crop simulation modules.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Graphical Analytics & Map Row -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- Map Container (Leaflet) -->
-            <div class="lg:col-span-2 bg-gray-800/90 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col">
-                <h3 class="text-sm font-semibold text-gray-300 mb-3">Live Geospatial Satellite & Soil Sensor Feed</h3>
+        <!-- 2. ATI Panel -->
+        <section id="ati" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 02</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Agriculture Transformation Institute (ATI)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Cluster Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">ACC Boundary Tracking</p>
+                    <p class="text-xs text-gray-400 mt-2">High-resolution vector layers monitoring Agricultural Commercialization Clusters.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Systemic Bottleneck Resolution</p>
+                    <p class="text-xs text-gray-400 mt-2">Digital agriculture tools and input-output market value chain optimization.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Apify Market Scrapers</p>
+                    <p class="text-xs text-gray-400 mt-2">Automated regional commodity pricing and input-voucher synchronization.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Cooperative Commission Panel -->
+        <section id="coop" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 03</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Cooperative Commission</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Union Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Union Coverage Density</p>
+                    <p class="text-xs text-gray-400 mt-2">Regional administrative boundary mapping for cooperative societies.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Cooperative Legal & Audit Oversight</p>
+                    <p class="text-xs text-gray-400 mt-2">Capacity building, union auditing, and rural financial inclusion frameworks.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Supabase PDF Auditing</p>
+                    <p class="text-xs text-gray-400 mt-2">Automated document verification and secure member directory indexing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Coffee and Tea Authority Panel -->
+        <section id="ecta" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 04</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Coffee and Tea Authority (ECTA)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Canopy Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Highland Canopy & Microclimate</p>
+                    <p class="text-xs text-gray-400 mt-2">Canopy cover raster layers and encroachment alert monitoring in export belts.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Quality Control & Export Compliance</p>
+                    <p class="text-xs text-gray-400 mt-2">Standardization, grading, and sustainable production mapping.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Global Commodity API</p>
+                    <p class="text-xs text-gray-400 mt-2">Real-time international market price feeds and compliance checklist engines.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Agricultural Authority Panel -->
+        <section id="eaa" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 05</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Agricultural Authority (EAA)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Quarantine Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Quarantine & Land-Use Change</p>
+                    <p class="text-xs text-gray-400 mt-2">Border monitoring overlays and land-use change detection for regulatory enforcement.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Regulatory Oversight & Plant Health</p>
+                    <p class="text-xs text-gray-400 mt-2">Pest protection, quarantine standards, pesticide registration, and seed quality control.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Supabase pgvector Search</p>
+                    <p class="text-xs text-gray-400 mt-2">Semantic search engine for chemical registries and phytosanitary parsers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Institute of Animal Health Panel -->
+        <section id="ahi" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 06</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Institute of Animal Health (AHI)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Thermal Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Thermal Rangeland Stress</p>
+                    <p class="text-xs text-gray-400 mt-2">Environmental thermal imaging to predict disease vectors and vector habitats.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Veterinary Epidemiology & Vaccines</p>
+                    <p class="text-xs text-gray-400 mt-2">Transboundary animal disease monitoring, vaccine production, and zoonotic risk management.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Outbreak Scraper & Maps</p>
+                    <p class="text-xs text-gray-400 mt-2">Automated epidemiological alert scrapers and diagnostic protocol management.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Animal Development Institute Panel -->
+        <section id="adi" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 07</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Animal Development Institute</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Corridor Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Grazing Corridors & Water Points</p>
+                    <p class="text-xs text-gray-400 mt-2">Seasonal livestock corridor tracking and water-point availability mapping.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Genetic Improvement & Husbandry</p>
+                    <p class="text-xs text-gray-400 mt-2">Dairy, poultry, and apiculture development, artificial insemination, and feed optimization.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Lineage Analytics DB</p>
+                    <p class="text-xs text-gray-400 mt-2">Livestock genetic tracking and artificial insemination distribution modeling.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Ethiopian Forest Development Panel -->
+        <section id="efd" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 08</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Forest Development (EFD)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active FIRMS Fire Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">NASA FIRMS Wildfire Detection</p>
+                    <p class="text-xs text-gray-400 mt-2">Real-time thermal alerts and forest canopy density degradation monitoring.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Afforestation & Carbon Sequestration</p>
+                    <p class="text-xs text-gray-400 mt-2">Forest resource management, reforestation programs, and sustainable industries.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Carbon Calculation Scripts</p>
+                    <p class="text-xs text-gray-400 mt-2">Automated alerts for unauthorized clearing and national forest inventory DBs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. Ethiopian Biodiversity Institute Panel -->
+        <section id="ebi" class="bg-gray-800/90 backdrop-blur-md border border-emerald-500/30 rounded-2xl p-8 shadow-2xl space-y-6 scroll-mt-36">
+            <div class="flex justify-between items-center border-b border-gray-700 pb-4">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Institution 09</span>
+                    <h2 class="text-2xl font-bold text-white mt-1">Ethiopian Biodiversity Institute (EBI)</h2>
+                </div>
+                <span class="bg-emerald-900/60 text-emerald-300 border border-emerald-500/30 text-xs px-3 py-1 rounded-full">Active Ecosystem Feed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Geospatial Mapping</p>
+                    <p class="text-lg font-semibold text-emerald-400 mt-1">Habitat Integrity & Fragmentation</p>
+                    <p class="text-xs text-gray-400 mt-2">Protected habitat boundary integrity and ecological corridor tracking.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">Primary Mandate</p>
+                    <p class="text-lg font-semibold text-white mt-1">Genetic Conservation & ABS Frameworks</p>
+                    <p class="text-xs text-gray-400 mt-2">Conservation of plant, animal, and microbial resources, plus indigenous knowledge.</p>
+                </div>
+                <div class="bg-gray-900/80 p-5 rounded-xl border border-gray-700">
+                    <p class="text-xs text-gray-400">AI Resource Pipeline</p>
+                    <p class="text-lg font-semibold text-white mt-1">Genebank Metadata Hub</p>
+                    <p class="text-xs text-gray-400 mt-2">Endangered species vector databases and access-and-benefit-sharing document manager.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Global Map & Analytics Overview Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6">
+            <!-- Leaflet Map Container -->
+            <div class="lg:col-span-2 bg-gray-800/90 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col shadow-xl">
+                <h3 class="text-sm font-semibold text-gray-300 mb-3">Live Geospatial Satellite & Soil Sensor Telemetry Feed</h3>
                 <div id="map" class="w-full h-80 rounded-lg bg-gray-900"></div>
             </div>
 
             <!-- Charts Container -->
-            <div class="bg-gray-800/90 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col justify-between">
+            <div class="bg-gray-800/90 backdrop-blur-md border border-gray-700 rounded-xl p-5 flex flex-col justify-between shadow-xl">
                 <h3 class="text-sm font-semibold text-gray-300 mb-3">Platform & Resource Distribution</h3>
                 <div class="relative h-64 flex justify-center items-center">
                     <canvas id="resourcePieChart"></canvas>
                 </div>
             </div>
-            
         </div>
 
     </main>
@@ -104,7 +340,7 @@
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Institutions (9)', 'Governmental Authorities', 'Automated Feeds'],
+                labels: ['Accountable Institutions (9)', 'Governmental Authorities', 'Automated Feeds'],
                 datasets: [{
                     data: [45, 40, 15],
                     backgroundColor: ['#10b981', '#3b82f6', '#6b7280'],
