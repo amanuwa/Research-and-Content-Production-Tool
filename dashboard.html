@@ -426,121 +426,115 @@
     </main>
 
     <!-- Leaflet JS CDN -->
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
-    //const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-    // ... rest of your code  // Initialize maps for all 9 institutions
-        const mapConfigs = [
-            { id: 'map-eiar', coords: [9.03, 38.74] },
-            { id: 'map-ati', coords: [9.02, 38.75] },
-            { id: 'map-coop', coords: [9.01, 38.72] },
-            { id: 'map-ecta', coords: [9.04, 38.76] },
-            { id: 'map-eaa', coords: [9.00, 38.73] },
-            { id: 'map-ahi', coords: [9.05, 38.71] },
-            { id: 'map-adi', coords: [8.99, 38.77] },
-            { id: 'map-efd', coords: [9.06, 38.70] },
-            { id: 'map-ebi', coords: [8.98, 38.78] }
-        ];
+<script type="module">
+    import { supabaseClient } from './config.js';
 
-        const maps = {};
+    // Initialize maps for all 9 institutions
+    const mapConfigs = [
+        { id: 'map-eiar', coords: [9.03, 38.74] },
+        { id: 'map-ati', coords: [9.02, 38.75] },
+        { id: 'map-coop', coords: [9.01, 38.72] },
+        { id: 'map-ecta', coords: [9.04, 38.76] },
+        { id: 'map-eaa', coords: [9.00, 38.73] },
+        { id: 'map-ahi', coords: [9.05, 38.71] },
+        { id: 'map-adi', coords: [8.99, 38.77] },
+        { id: 'map-efd', coords: [9.06, 38.70] },
+        { id: 'map-ebi', coords: [8.98, 38.78] }
+    ];
 
-        mapConfigs.forEach(config => {
-            const m = L.map(config.id).setView(config.coords, 7);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(m);
-            maps[config.id] = m;
-        });
+    const maps = {};
 
-        // Fetch latest geospatial config and dynamically update the EIAR panel
-        async function loadLatestEiarConfig() {
-            try {
-                // Assumes supabaseClient is initialized globally inside config.js
-                const { data, error } = await supabaseClient
-                    .from('geospatial_configs')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-                    .limit(1);
+    mapConfigs.forEach(config => {
+        const m = L.map(config.id).setView(config.coords, 7);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(m);
+        maps[config.id] = m;
+    });
 
-                if (error) {
-                    console.error('Error fetching geospatial config:', error);
-                    return;
-                }
+    // Fetch latest geospatial config and dynamically update the EIAR panel
+    async function loadLatestEiarConfig() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('geospatial_configs')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(1);
 
-                if (data && data.length > 0) {
-                    const latestRow = data[0];
-                    const payload = latestRow.config_payload;
+            if (error) {
+                console.error('Error fetching geospatial config:', error);
+                return;
+            }
 
-                    const eiarSection = document.getElementById('eiar');
-                    if (eiarSection && latestRow) {
-                        // Update the EIAR title with the dataset name
-                        const titleEl = eiarSection.querySelector('h2');
-                        if (titleEl) {
-                            titleEl.textContent = latestRow.dataset_name;
-                        }
+            if (data && data.length > 0) {
+                const latestRow = data[0];
+                const payload = latestRow.config_payload;
 
-                        // Update badge text
-                        const badge = eiarSection.querySelector('.rounded-full');
-                        if (badge) {
-                            badge.textContent = `Synced: ${new Date(latestRow.created_at).toLocaleDateString()}`;
-                        }
+                const eiarSection = document.getElementById('eiar');
+                if (eiarSection && latestRow) {
+                    const titleEl = eiarSection.querySelector('h2');
+                    if (titleEl) {
+                        titleEl.textContent = latestRow.dataset_name;
+                    }
 
-                        // If initSources exists in payload, update description text dynamically
-                        if (payload && payload.initSources && payload.initSources.length > 0) {
-                            const descEl = eiarSection.querySelector('.grid div:first-child p.text-xs.text-gray-400.mt-2');
-                            if (descEl) {
-                                descEl.textContent = `Active Source URL: ${payload.initSources[0]}`;
-                            }
+                    const badge = eiarSection.querySelector('.rounded-full');
+                    if (badge) {
+                        badge.textContent = `Synced: ${new Date(latestRow.created_at).toLocaleDateString()}`;
+                    }
+
+                    if (payload && payload.initSources && payload.initSources.length > 0) {
+                        const descEl = eiarSection.querySelector('.grid div:first-child p.text-xs.text-gray-400.mt-2');
+                        if (descEl) {
+                            descEl.textContent = `Active Source URL: ${payload.initSources[0]}`;
                         }
                     }
                 }
-            } catch (err) {
-                console.error('Unexpected error loading EIAR config:', err);
+            }
+        } catch (err) {
+            console.error('Unexpected error loading EIAR config:', err);
+        }
+    }
+
+    // Run fetch on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadLatestEiarConfig();
+    });
+
+    window.toggleFullscreen = function(containerId) {
+        const container = document.getElementById(containerId);
+        container.classList.toggle('fullscreen');
+        
+        const mapDiv = container.querySelector('.leaflet-map');
+        if (mapDiv && maps[mapDiv.id]) {
+            setTimeout(() => {
+                maps[mapDiv.id].invalidateSize();
+            }, 100);
+        }
+    }
+
+    // Render Pie Chart for Resource & Platform Metrics (Ensure Chart.js is included in your head)
+    const ctx = document.getElementById('resourcePieChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Accountable Institutions (9)', 'Governmental Authorities', 'Automated Feeds'],
+            datasets: [{
+                data: [45, 40, 15],
+                backgroundColor: ['#10b981', '#3b82f6', '#6b7280'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#d1d5db', boxWidth: 12 } }
             }
         }
-
-        // Run fetch on DOM load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadLatestEiarConfig();
-        });
-
-        function toggleFullscreen(containerId) {
-            const container = document.getElementById(containerId);
-            container.classList.toggle('fullscreen');
-            
-            // Find map id within this container
-            const mapDiv = container.querySelector('.leaflet-map');
-            if (mapDiv && maps[mapDiv.id]) {
-                setTimeout(() => {
-                    maps[mapDiv.id].invalidateSize();
-                }, 100);
-            }
-        }
-
-        // Render Pie Chart for Resource & Platform Metrics
-        const ctx = document.getElementById('resourcePieChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Accountable Institutions (9)', 'Governmental Authorities', 'Automated Feeds'],
-                datasets: [{
-                    data: [45, 40, 15],
-                    backgroundColor: ['#10b981', '#3b82f6', '#6b7280'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom', labels: { color: '#d1d5db', boxWidth: 12 } }
-                }
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>
