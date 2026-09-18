@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgriIntel - Global Agriculture Intelligence Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Back Arrow Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { 
             margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
@@ -27,13 +29,20 @@
 
     <!-- Top Navigation Bar -->
     <header class="app-interface w-full bg-slate-900/90 backdrop-blur-md border-b border-blue-500/30 px-6 py-4 flex justify-between items-center shadow-lg">
-        <div class="flex items-center space-x-3">
-            <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
-            <h1 class="text-xl font-bold text-blue-400 tracking-wide">AgriIntel <span class="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">Global Intelligence Matrix</span></h1>
+        <div class="flex items-center space-x-4">
+            <!-- Back Button to dashboard.html on the top-most left -->
+            <button onclick="window.location.href='dashboard.html'" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-xl border border-slate-700 transition flex items-center space-x-2 shadow" title="Return to Dashboard">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="hidden sm:inline">Dashboard</span>
+            </button>
+            <div class="h-5 w-[1px] bg-slate-800"></div>
+            <div class="flex items-center space-x-3">
+                <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
+                <h1 class="text-xl font-bold text-blue-400 tracking-wide">AgriIntel <span class="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">Global Intelligence Matrix</span></h1>
+            </div>
         </div>
         <div class="flex items-center space-x-4">
             <span id="user-email" class="text-sm text-slate-400">Loading session...</span>
-            <button id="logout-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded-lg border border-slate-700 transition">Sign Out</button>
         </div>
     </header>
 
@@ -309,11 +318,6 @@
             }
         }
         checkUserSession();
-
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-          //  await supabase.auth.signOut();
-            window.location.href = 'dashboard.html';
-        });
     </script>
 </body>
 </html>
