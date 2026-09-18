@@ -10,40 +10,39 @@
             margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
             background-color: #02040e; position: relative; overflow-x: hidden; overflow-y: auto;
         }
-        /* FUTURISTIC CYBER BACKDROP */
         .cyber-backdrop-container {
             position: fixed; inset: 0; z-index: 0;
-            background: radial-gradient(circle at center, #071235 0%, #02040e 100%);
+            background: radial-gradient(circle at center, #0a192f 0%, #02040e 100%);
             pointer-events: none;
         }
         .hud-overlay {
             position: absolute; inset: 0;
             background-image: 
-                linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px; z-index: 1; pointer-events: none;
+                linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+            background-size: 40px 40px; z-index: 1; pointer-events: none;
         }
         .scanline {
-            position: absolute; width: 100%; height: 4px;
+            position: absolute; left: 0; right: 0; height: 3px;
             background: linear-gradient(90deg, transparent, #10b981, #00f2fe, #10b981, transparent);
-            box-shadow: 0 0 20px #10b981; top: 0; z-index: 4;
-            animation: scanning 3s linear infinite; pointer-events: none;
+            box-shadow: 0 0 15px #10b981, 0 0 30px #00f2fe; z-index: 4;
+            animation: scanning 4s ease-in-out infinite; pointer-events: none;
         }
         @keyframes scanning {
-            0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; }
+            0% { top: 0%; opacity: 0.2; }
+            50% { top: 100%; opacity: 1; }
+            100% { top: 0%; opacity: 0.2; }
         }
         .app-interface { position: relative; z-index: 10; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen py-10">
 
-    <!-- Futuristic Cyber Background Elements -->
     <div class="cyber-backdrop-container">
         <div class="hud-overlay"></div>
         <div class="scanline"></div>
     </div>
 
-    <!-- Main Content Box -->
     <div class="app-interface w-full max-w-md p-8 bg-slate-900/80 backdrop-blur-md rounded-2xl shadow-2xl border border-emerald-500/30">
         <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center tracking-wider">Create Secure Account</h2>
         
