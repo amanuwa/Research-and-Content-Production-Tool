@@ -3,49 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research & Content Production Tool - Create Account</title>
+    <title>Create Secure Account</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-<style>
-        body {
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-    </style>
 </head>
-<body class="text-slate-100 flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md p-8 bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-700">
-        <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center">Create Secure Account</h2>
+<body class="bg-[#02040e] text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
 
+    <div class="w-full max-w-md bg-[#121824] border border-slate-800 p-8 rounded-xl shadow-xl">
+        <h2 class="text-2xl font-bold text-center mb-6 text-emerald-400">Create Secure Account</h2>
+        
         <form id="signup-form" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Full Name / Organization Name</label>
-                <input type="text" id="fullname" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                <input type="text" id="fullName" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
             </div>
+
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
                 <input type="email" id="email" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
             </div>
+
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Account Tier</label>
                 <select id="account-tier" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
-                    <option value="governmental_authority">Governmental Authority (State Tier)</option>
-                    <option value="institution">Major Institution (Priority Tier)</option>
+                    <option value="Governmental Authority (State Tier)">Governmental Authority (State Tier)</option>
+                    <option value="Ministry">Ministry institutions</option>
+                
                 </select>
             </div>
+
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Password</label>
-                <input type="password" id="password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white" placeholder="Min 12 chars, symbols & numbers">
+                <input type="password" id="password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
                 <p class="text-xs text-slate-400 mt-1">Must contain uppercase, lowercase, number, and special character.</p>
             </div>
+
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Confirm Password</label>
-                <input type="password" id="confirm-password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white" placeholder="Re-enter your password">
+                <input type="password" id="confirm-password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
             </div>
-            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-lg transition duration-200 text-white">Register Secure Account</button>
+
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-lg transition duration-250 text-white">Register Secure Account</button>
         </form>
 
         <div class="mt-6 text-center">
@@ -53,9 +50,10 @@
         </div>
     </div>
 
-    <!-- <script>
-     //   const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-import { supabase, DEV_MODE_OVERRIDE } from './config.js';
+    <!-- CRITICAL: type="module" allows the import statement to execute successfully -->
+    <script type="module">
+        import { supabase, DEV_MODE_OVERRIDE } from './config.js';
+
         function validatePassword(password) {
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
             return regex.test(password);
@@ -63,13 +61,12 @@ import { supabase, DEV_MODE_OVERRIDE } from './config.js';
 
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const fullname = document.getElementById('fullname').value;
+            const fullName = document.getElementById('fullName').value;
             const email = document.getElementById('email').value;
             const tier = document.getElementById('account-tier').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
 
-            // Check if both passwords match before hitting Supabase
             if (password !== confirmPassword) {
                 alert('Passwords do not match. Please re-enter.');
                 return;
@@ -80,67 +77,21 @@ import { supabase, DEV_MODE_OVERRIDE } from './config.js';
                 return;
             }
 
-            const { data, error } = await supabaseClient.auth.signUp({
+            const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
                 options: {
-                    data: {
-                        full_name: fullname,
-                        account_tier: tier
-                    }
+                    data: { full_name: fullName, account_tier: tier }
                 }
             });
 
             if (error) {
-                alert('Registration Error: ' + error.message);
+                alert('Sign Up Error: ' + error.message);
             } else {
-                alert('Account created successfully! Please check your email to verify your registration before logging in.');
+                alert('Account created successfully! Please sign in.');
                 window.location.href = 'index.html';
             }
         });
-    </script> -->
-    <script type="module">
-    import { supabase, DEV_MODE_OVERRIDE } from './config.js';
-
-    function validatePassword(password) {
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
-        return regex.test(password);
-    }
-
-    document.getElementById('signup-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('email').value;
-        const tier = document.getElementById('account-tier').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
-
-        if (password !== confirmPassword) {
-            alert('Passwords do not match. Please re-enter.');
-            return;
-        }
-
-        if (!validatePassword(password)) {
-            alert('Password security requirements not met. Must be at least 12 characters and include uppercase, lowercase, numbers, and a special symbol.');
-            return;
-        }
-
-        // Use 'supabase' to sign up
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: { full_name: fullName, account_tier: tier }
-            }
-        });
-
-        if (error) {
-            alert('Sign Up Error: ' + error.message);
-        } else {
-            alert('Account created successfully! Please sign in.');
-            window.location.href = 'index.html';
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
