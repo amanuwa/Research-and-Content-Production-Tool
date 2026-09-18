@@ -1,392 +1,270 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Research Studio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#090d16',
-                        cardbg: '#131c31',
-                        accent: '#6366f1',
-                        accentHover: '#4f46e5'
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #090d16; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
-    </style>
 </head>
-<body class="bg-darkbg text-slate-100 h-screen flex overflow-hidden">
+<body class="bg-slate-950 text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
 
-    <!-- Sidebar Navigation -->
-    <aside class="w-64 bg-cardbg border-r border-slate-800/80 flex flex-col justify-between hidden md:flex">
-        <div class="p-4">
-            <div class="flex items-center space-x-3 mb-8">
-                <div class="bg-accent text-white p-2.5 rounded-xl shadow-lg shadow-indigo-500/30 flex items-center justify-center">
-                    <i class="fa-solid fa-microscope text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-sm tracking-wide text-slate-100">Research Studio</h1>
-                    <p class="text-[11px] text-slate-400">Multimodal AI Workspace</p>
-                </div>
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-brain text-white text-sm"></i>
             </div>
+            <div>
+                <h1 class="font-bold text-base tracking-wide text-slate-100">AI Research Studio</h1>
+                <p class="text-xs text-slate-400">Multimodal Assistant &bull; 5-Chat Rolling Memory</p>
+            </div>
+        </div>
 
-            <!-- New Session Button -->
-            <button onclick="resetSession()" class="w-full bg-accent hover:bg-accentHover text-white font-medium py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-md shadow-indigo-600/20 mb-6 text-xs">
-                <i class="fa-solid fa-plus text-xs"></i>
-                <span>New Research Thread</span>
+        <div class="flex items-center space-x-4">
+            <!-- Memory Tracker Badge -->
+            <div id="memoryBadge" class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-full text-xs font-medium text-slate-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Active Memory: <strong id="memoryCount" class="text-cyan-400">0</strong> / 5 chats</span>
+            </div>
+            <button onclick="clearChat()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span>Reset Session</span>
             </button>
-
-            <!-- 5-Chat Memory Window Indicator -->
-            <div class="bg-slate-900/80 border border-slate-800/80 rounded-xl p-3.5 mb-6">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Memory Window</span>
-                    <span id="memory-counter" class="text-xs font-bold text-indigo-400 bg-indigo-950/80 px-2.5 py-0.5 rounded-full border border-indigo-800/50">1 / 5</span>
-                </div>
-                <div class="w-full bg-slate-800 rounded-full h-2 mb-2 overflow-hidden">
-                    <div id="memory-progress" class="bg-indigo-500 h-2 rounded-full transition-all duration-300" style="width: 20%;"></div>
-                </div>
-                <p class="text-[10px] text-slate-400 leading-tight">Context rolls over and summarizes automatically every 5 chats.</p>
-            </div>
-
-            <!-- Recent Sessions List -->
-            <div class="space-y-1">
-                <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 px-2 mb-2">Saved Investigations</p>
-                <a href="#" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg bg-slate-800/60 text-xs text-slate-200 transition">
-                    <i class="fa-regular fa-comment text-indigo-400 text-xs"></i>
-                    <span class="truncate">Video Motion Vector Analysis</span>
-                </a>
-                <a href="#" class="flex items-center space-x-2.5 px-3 py-2 rounded-lg hover:bg-slate-800/30 text-xs text-slate-400 hover:text-slate-200 transition">
-                    <i class="fa-regular fa-comment text-slate-500 text-xs"></i>
-                    <span class="truncate">Optical Chart Data Extraction</span>
-                </a>
-            </div>
         </div>
+    </header>
 
-        <!-- System User Status -->
-        <div class="p-4 border-t border-slate-800/80 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center font-bold text-[11px] text-white">AI</div>
-                <div class="text-xs">
-                    <p class="font-medium text-slate-200">Lead Analyst</p>
-                    <p class="text-emerald-400 flex items-center space-x-1 text-[10px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span><span>Online / Active</span></p>
-                </div>
-            </div>
-            <button class="text-slate-400 hover:text-slate-200 text-sm transition"><i class="fa-solid fa-gear"></i></button>
-        </div>
-    </aside>
-
-    <!-- Main Workspace -->
-    <main class="flex-1 flex flex-col h-full bg-darkbg relative">
-        <header class="h-16 border-b border-slate-800/80 bg-cardbg/80 backdrop-blur-md flex items-center justify-between px-6 z-10">
-            <div class="flex items-center space-x-4">
-                <button class="md:hidden text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-bars"></i></button>
-                <div>
-                    <h2 class="font-semibold text-sm sm:text-base text-slate-100 flex items-center space-x-2">
-                        <span>Research Studio Hub</span>
-                        <span class="text-[10px] bg-indigo-950 text-indigo-400 border border-indigo-800/80 px-2 py-0.5 rounded-full">Multimodal Ready</span>
-                    </h2>
-                    <p class="text-[11px] text-slate-400">Accepts text queries, image attachments, and video data streams.</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3">
-                <button onclick="clearChat()" class="text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 font-medium px-3.5 py-1.5 rounded-lg border border-slate-700/60 transition flex items-center space-x-1.5">
-                    <i class="fa-solid fa-trash-can text-xs text-slate-400"></i>
-                    <span class="hidden sm:inline">Clear Chat</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- Chat Stream Area -->
-        <div id="chat-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-            <!-- Initial Welcome Card -->
-            <div class="flex items-start space-x-4 max-w-3xl mx-auto">
-                <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-600/30">
-                    <i class="fa-solid fa-robot text-sm"></i>
-                </div>
-                <div class="bg-cardbg border border-slate-800/80 rounded-2xl p-5 text-sm space-y-3 shadow-md flex-1">
-                    <p class="font-semibold text-slate-200">Welcome to AI Research Studio.</p>
-                    <p class="text-slate-300 leading-relaxed text-xs sm:text-sm">You can query complex datasets, upload research diagrams for inspection, or feed video clips for behavioral and telemetry breakdowns. Memory automatically rotates every 5 chats.</p>
-                    <div class="flex flex-wrap gap-2 pt-2">
-                        <button onclick="sendQuickPrompt('Analyze the tactical movement patterns in this video clip.')" class="text-xs bg-slate-800/80 hover:bg-slate-700 text-indigo-300 px-3 py-1.5 rounded-lg border border-slate-700/60 transition">Analyze Video Clip</button>
-                        <button onclick="sendQuickPrompt('Perform deep data extraction on this research chart image.')" class="text-xs bg-slate-800/80 hover:bg-slate-700 text-indigo-300 px-3 py-1.5 rounded-lg border border-slate-700/60 transition">Inspect Research Chart</button>
+    <!-- Main Workspace Container -->
+    <main class="flex-1 flex overflow-hidden">
+        
+        <!-- Chat History & Messages Area -->
+        <section class="flex-1 flex flex-col justify-between bg-slate-950 relative overflow-hidden">
+            
+            <!-- Scrollable Messages Container -->
+            <div id="chatContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-4xl mx-auto w-full">
+                <!-- Welcome State -->
+                <div id="welcomeState" class="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 shadow-xl">
+                        <i class="fa-solid fa-sparkles text-cyan-400 text-2xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-slate-200 mb-2">How can I assist your research today?</h2>
+                    <p class="text-sm max-w-md text-slate-400 mb-6">Upload research papers, data charts, or video clips alongside your questions. This session retains the last 5 contextual interactions in memory.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left w-full max-w-lg">
+                        <button onclick="presetQuery('Analyze this image/video dataset for anomalous statistical patterns.')" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800/80 text-xs text-slate-300 transition flex items-start space-x-2.5">
+                            <i class="fa-solid fa-chart-line text-cyan-400 mt-0.5"></i>
+                            <span>Analyze dataset charts or graphs for patterns.</span>
+                        </button>
+                        <button onclick="presetQuery('Summarize key takeaways and methodology from the attached media.')" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800/80 text-xs text-slate-300 transition flex items-start space-x-2.5">
+                            <i class="fa-solid fa-file-lines text-indigo-400 mt-0.5"></i>
+                            <span>Summarize methodologies from attached media.</span>
+                        </button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Media Upload Preview Container -->
-        <div id="media-preview-container" class="px-6 pt-2 hidden">
-            <div class="max-w-4xl mx-auto bg-cardbg border border-slate-800 rounded-xl p-3 flex items-center justify-between shadow-lg">
-                <div class="flex items-center space-x-3">
-                    <div id="media-preview-icon" class="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center overflow-hidden border border-slate-700">
-                        <i class="fa-regular fa-file text-slate-400"></i>
+            <!-- Attachment Preview Bar -->
+            <div id="previewBar" class="hidden px-6 py-2 max-w-4xl mx-auto w-full flex items-center space-x-3">
+                <div class="relative bg-slate-900 border border-slate-800 rounded-lg p-2 flex items-center space-x-3 shadow-md">
+                    <div id="mediaPreviewContainer" class="w-12 h-12 rounded bg-slate-950 flex items-center justify-center overflow-hidden border border-slate-800">
+                        <!-- Dynamic thumbnail inserted here -->
                     </div>
-                    <div>
-                        <p id="media-preview-name" class="text-xs font-semibold text-slate-200 truncate max-w-xs">filename.ext</p>
-                        <p id="media-preview-type" class="text-[10px] text-slate-400 uppercase">Attached Media</p>
+                    <div class="text-xs">
+                        <p id="fileName" class="font-medium text-slate-200 truncate max-w-xs">file_name.png</p>
+                        <p id="fileSize" class="text-slate-400">Attached Media</p>
                     </div>
+                    <button onclick="removeAttachment()" class="text-slate-400 hover:text-red-400 p-1.5 transition">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
                 </div>
-                <button onclick="removeMedia()" class="text-slate-400 hover:text-rose-400 p-2 transition"><i class="fa-solid fa-xmark"></i></button>
             </div>
-        </div>
 
-        <!-- Input Bar Section -->
-        <div class="p-4 sm:p-6 bg-darkbg border-t border-slate-800/80">
-            <div class="max-w-4xl mx-auto">
-                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="bg-cardbg border border-slate-800 rounded-2xl p-2.5 shadow-xl focus-within:border-indigo-500 transition flex flex-col">
-                    <textarea id="user-input" rows="1" placeholder="Type your research inquiry or attach files..." class="w-full bg-transparent text-slate-100 placeholder-slate-500 px-3 py-2 text-sm focus:outline-none resize-none max-h-32"></textarea>
-                    
-                    <div class="flex items-center justify-between px-2 pt-2 border-t border-slate-800/60 mt-1">
-                        <div class="flex items-center space-x-1">
-                            <!-- Image Input -->
-                            <label class="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800/60 cursor-pointer transition" title="Upload Image">
-                                <i class="fa-regular fa-image text-base"></i>
-                                <input type="file" id="image-upload" accept="image/*" class="hidden" onchange="handleFileSelect(event, 'image')">
-                            </label>
-                            <!-- Video Input -->
-                            <label class="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-800/60 cursor-pointer transition" title="Upload Video">
-                                <i class="fa-solid fa-video text-base"></i>
-                                <input type="file" id="video-upload" accept="video/*" class="hidden" onchange="handleFileSelect(event, 'video')">
-                            </label>
-                            <span class="text-[10px] text-slate-500 hidden sm:inline pl-2">PNG, JPG, MP4, WEBM supported</span>
-                        </div>
+            <!-- Input Form Footer -->
+            <footer class="p-4 sm:p-6 bg-slate-950 border-t border-slate-900 shrink-0">
+                <div class="max-w-4xl mx-auto">
+                    <form id="chatForm" onsubmit="handleSendMessage(event)" class="relative bg-slate-900 border border-slate-800 rounded-2xl p-2 shadow-2xl focus-within:border-cyan-500/50 transition">
                         
-                        <div class="flex items-center space-x-2">
-                            <button type="submit" id="send-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-xl transition flex items-center space-x-1.5 shadow-md shadow-indigo-600/20 text-xs">
-                                <span>Send Query</span>
-                                <i class="fa-solid fa-paper-plane text-xs"></i>
-                            </button>
+                        <!-- Text Area Input -->
+                        <textarea id="userInput" rows="1" placeholder="Ask a research question or analyze attached images/videos..." 
+                            class="w-full bg-transparent text-slate-100 placeholder-slate-500 text-sm px-3 py-2 focus:outline-none resize-none max-h-32"
+                            onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); handleSendMessage(event); }"></textarea>
+
+                        <!-- Action Toolbar inside input box -->
+                        <div class="flex items-center justify-between px-2 pt-2 border-t border-slate-800/60 mt-1">
+                            <div class="flex items-center space-x-1">
+                                <!-- File Upload Trigger -->
+                                <input type="file" id="mediaInput" accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
+                                <button type="button" onclick="document.getElementById('mediaInput').click()" class="text-slate-400 hover:text-cyan-400 p-2 rounded-lg hover:bg-slate-800 transition text-sm flex items-center space-x-1.5" title="Attach Image or Video">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                    <span class="text-xs hidden sm:inline">Attach Media</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <span class="text-[10px] text-slate-500 hidden sm:inline">Shift + Enter for new line</span>
+                                <button type="submit" id="sendBtn" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-4 py-2 rounded-xl text-xs transition flex items-center space-x-1.5 shadow-lg shadow-cyan-500/20 disabled:opacity-50">
+                                    <span>Send Query</span>
+                                    <i class="fa-solid fa-arrow-up text-xs"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-                <div class="flex justify-between items-center mt-2 px-1 text-[10px] text-slate-500">
-                    <span>AI Research Studio • Secure Local Session</span>
-                    <span>Rolling memory window: 5 chats max</span>
+                    </form>
                 </div>
-            </div>
-        </div>
+            </footer>
+        </section>
     </main>
 
-    <!-- Application Logic -->
+    <!-- Client-side App Logic -->
     <script>
-        let messageCount = 0;
-        const maxMemoryWindow = 5;
+        let chatMemory = []; // Stores max last 5 turns
         let attachedFile = null;
 
-        // Auto-resize text area
-        const textarea = document.getElementById('user-input');
-        textarea.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-
-        // Handle file select
-        function handleFileSelect(event, type) {
+        function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             attachedFile = {
                 file: file,
-                type: type,
                 name: file.name,
-                url: URL.createObjectURL(file)
+                type: file.type.startsWith('image') ? 'image' : 'video',
+                url: URL.createObjectURL(file),
+                size: (file.size / (1024*1024)).toFixed(2) + ' MB'
             };
 
-            const previewContainer = document.getElementById('media-preview-container');
-            const previewName = document.getElementById('media-preview-name');
-            const previewType = document.getElementById('media-preview-type');
-            const previewIcon = document.getElementById('media-preview-icon');
-
-            previewName.textContent = file.name;
-            previewType.textContent = type.toUpperCase() + ' FILE ATTACHED';
-            
-            if (type === 'image') {
-                previewIcon.innerHTML = `<img src="${attachedFile.url}" class="w-full h-full object-cover">`;
+            const container = document.getElementById('mediaPreviewContainer');
+            if (attachedFile.type === 'image') {
+                container.innerHTML = `<img src="${attachedFile.url}" class="w-full h-full object-cover">`;
             } else {
-                previewIcon.innerHTML = `<i class="fa-solid fa-video text-indigo-400"></i>`;
+                container.innerHTML = `<i class="fa-solid fa-file-video text-cyan-400 text-lg"></i>`;
             }
 
-            previewContainer.classList.remove('hidden');
+            document.getElementById('fileName').innerText = attachedFile.name;
+            document.getElementById('fileSize').innerText = attachedFile.size;
+            document.getElementById('previewBar').classList.remove('hidden');
         }
 
-        // Remove media attachment
-        function removeMedia() {
+        function removeAttachment() {
             attachedFile = null;
-            document.getElementById('media-preview-container').classList.add('hidden');
-            document.getElementById('image-upload').value = '';
-            document.getElementById('video-upload').value = '';
+            document.getElementById('mediaInput').value = '';
+            document.getElementById('previewBar').classList.add('hidden');
         }
 
-        // Update memory counter display & progress bar
-        function updateMemoryCounter() {
-            const displayCount = (messageCount % maxMemoryWindow) || (messageCount > 0 ? maxMemoryWindow : 0);
-            const counterEl = document.getElementById('memory-counter');
-            const progressEl = document.getElementById('memory-progress');
-            
-            const currentTurn = displayCount === 0 && messageCount > 0 ? maxMemoryWindow : displayCount;
-            counterEl.textContent = `${currentTurn} / ${maxMemoryWindow}`;
-            progressEl.style.width = `${(currentTurn / maxMemoryWindow) * 100}%`;
-
-            if (currentTurn === maxMemoryWindow) {
-                counterEl.classList.add('text-amber-400', 'bg-amber-950', 'border-amber-800');
-                counterEl.classList.remove('text-indigo-400', 'bg-indigo-950', 'border-indigo-800');
-            } else {
-                counterEl.classList.remove('text-amber-400', 'bg-amber-950', 'border-amber-800');
-                counterEl.classList.add('text-indigo-400', 'bg-indigo-950', 'border-indigo-800');
-            }
+        function presetQuery(text) {
+            document.getElementById('userInput').value = text;
+            handleSendMessage(new Event('submit'));
         }
 
-        // Quick prompt sender
-        function sendQuickPrompt(text) {
-            document.getElementById('user-input').value = text;
-            handleChatSubmit(new Event('submit'));
-        }
-
-        // Handle chat submission
-        function handleChatSubmit(e) {
-            e.preventDefault();
-            const inputVal = textarea.value.trim();
-            if (!inputVal && !attachedFile) return;
-
-            messageCount++;
-            updateMemoryCounter();
-
-            const chatContainer = document.getElementById('chat-container');
-
-            let mediaHtml = '';
-            if (attachedFile) {
-                if (attachedFile.type === 'image') {
-                    mediaHtml = `<div class="mt-2 rounded-lg overflow-hidden max-w-xs border border-slate-700"><img src="${attachedFile.url}" class="w-full object-cover"></div>`;
-                } else {
-                    mediaHtml = `<div class="mt-2 rounded-lg overflow-hidden max-w-xs border border-slate-700 bg-slate-900 p-3 flex items-center space-x-2"><i class="fa-solid fa-video text-indigo-400"></i><span class="text-xs truncate">${attachedFile.name}</span></div>`;
-                }
-            }
-
-            const userMsgHtml = `
-                <div class="flex items-start space-x-4 max-w-3xl mx-auto justify-end">
-                    <div class="bg-indigo-600/20 border border-indigo-500/30 rounded-2xl p-4 text-sm space-y-2 shadow-md max-w-xl text-slate-100">
-                        <p class="leading-relaxed whitespace-pre-wrap text-xs sm:text-sm">${escapeHtml(inputVal)}</p>
-                        ${mediaHtml}
-                    </div>
-                    <div class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shrink-0 shadow-lg">
-                        <i class="fa-solid fa-user text-xs"></i>
-                    </div>
-                </div>
-            `;
-            chatContainer.insertAdjacentHTML('beforeend', userMsgHtml);
-
-            textarea.value = '';
-            textarea.style.height = 'auto';
-            const savedFile = attachedFile;
-            removeMedia();
-
-            // Trigger memory rotation notice every 5 chats
-            if (messageCount > 0 && messageCount % maxMemoryWindow === 0) {
-                const memoryNoticeHtml = `
-                    <div class="max-w-md mx-auto my-2 p-2.5 bg-amber-950/40 border border-amber-800/60 rounded-xl text-center text-xs text-amber-300 flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-brain"></i>
-                        <span>Memory window rotated: Previous 5 chats summarized & context refreshed.</span>
-                    </div>
-                `;
-                chatContainer.insertAdjacentHTML('beforeend', memoryNoticeHtml);
-            }
-
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            // Simulate AI response stream
-            setTimeout(() => {
-                const aiMsgId = 'ai-response-' + Date.now();
-                const aiMsgHtml = `
-                    <div class="flex items-start space-x-4 max-w-3xl mx-auto">
-                        <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-600/30">
-                            <i class="fa-solid fa-robot text-sm"></i>
-                        </div>
-                        <div class="bg-cardbg border border-slate-800/80 rounded-2xl p-5 text-sm space-y-3 shadow-md flex-1">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                                <span class="font-semibold text-slate-200 text-xs">Research Analyst AI</span>
-                                <span class="text-[10px] text-indigo-400 bg-indigo-950 px-2 py-0.5 rounded-full">Turn ${messageCount} Verified</span>
-                            </div>
-                            <div id="${aiMsgId}" class="text-slate-300 leading-relaxed space-y-2 text-xs sm:text-sm">
-                                <span class="inline-block animate-pulse">Processing multimodal context and generating analysis...</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                chatContainer.insertAdjacentHTML('beforeend', aiMsgHtml);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-
-                simulateStreamingResponse(aiMsgId, savedFile);
-            }, 800);
-        }
-
-        function simulateStreamingResponse(elementId, media) {
-            const el = document.getElementById(elementId);
-            let responseText = "Analysis results for your research query:<br><br>";
-            
-            if (media && media.type === 'image') {
-                responseText += "<strong>Image Data Parsed:</strong> Visual elements, chart matrices, and text legends successfully interpreted.<br><br>";
-            } else if (media && media.type === 'video') {
-                responseText += "<strong>Video Stream Processed:</strong> Keyframe intervals extracted and motion vectors analyzed.<br><br>";
-            }
-
-            responseText += "Data points reconciled with active context window. Memory state remains optimized within the active 5-chat rolling sequence.";
-
-            let i = 0;
-            el.innerHTML = "";
-            
-            const timer = setInterval(() => {
-                if (i < responseText.length) {
-                    el.innerHTML += responseText.charAt(i);
-                    i++;
-                    const chatContainer = document.getElementById('chat-container');
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                } else {
-                    clearInterval(timer);
-                }
-            }, 10);
-        }
-
-        function resetSession() {
-            messageCount = 0;
-            updateMemoryCounter();
-            document.getElementById('chat-container').innerHTML = `
-                <div class="flex items-start space-x-4 max-w-3xl mx-auto">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-600/30">
-                        <i class="fa-solid fa-robot text-sm"></i>
-                    </div>
-                    <div class="bg-cardbg border border-slate-800/80 rounded-2xl p-5 text-sm space-y-3 shadow-md flex-1">
-                        <p class="font-semibold text-slate-200">New Research Thread Initialized.</p>
-                        <p class="text-slate-300 leading-relaxed text-xs sm:text-sm">Workspace memory has been reset. Ready for new text, image, or video inputs.</p>
-                    </div>
-                </div>
-            `;
+        function updateMemoryBadge() {
+            document.getElementById('memoryCount').innerText = chatMemory.length;
         }
 
         function clearChat() {
-            resetSession();
+            chatMemory = [];
+            updateMemoryBadge();
+            document.getElementById('chatContainer').innerHTML = `
+                <div id="welcomeState" class="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
+                    <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 shadow-xl">
+                        <i class="fa-solid fa-sparkles text-cyan-400 text-2xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-slate-200 mb-2">Session Reset</h2>
+                    <p class="text-sm max-w-md text-slate-400 mb-6">Memory has been cleared. Start a new research conversation below.</p>
+                </div>`;
+            removeAttachment();
+        }
+
+        async function handleSendMessage(event) {
+            event.preventDefault();
+            const inputField = document.getElementById('userInput');
+            const promptText = inputField.value.trim();
+            if (!promptText && !attachedFile) return;
+
+            // Hide welcome state if present
+            const welcome = document.getElementById('welcomeState');
+            if (welcome) welcome.remove();
+
+            const currentAttachment = attachedFile;
+            inputField.value = '';
+            removeAttachment();
+
+            // Append User Message
+            appendMessage('user', promptText, currentAttachment);
+
+            // Push to rolling memory (max 5)
+            chatMemory.push({ role: 'user', content: promptText });
+            if (chatMemory.length > 5) chatMemory.shift();
+            updateMemoryBadge();
+
+            // Simulate AI Thinking State
+            const typingId = appendTypingIndicator();
+
+            // Simulate response delay & generation
+            setTimeout(() => {
+                document.getElementById(typingId).remove();
+                
+                let responseContent = generateMockResponse(promptText, currentAttachment);
+                appendMessage('assistant', responseContent);
+
+                // Push assistant reply to memory
+                chatMemory.push({ role: 'assistant', content: responseContent });
+                if (chatMemory.length > 5) chatMemory.shift();
+                updateMemoryBadge();
+            }, 1200);
+        }
+
+        function appendMessage(role, text, attachment = null) {
+            const container = document.getElementById('chatContainer');
+            const isUser = role === 'user';
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} w-full`;
+
+            let attachmentHtml = '';
+            if (attachment) {
+                if (attachment.type === 'image') {
+                    attachmentHtml = `<div class="mb-3 rounded-lg overflow-hidden max-w-xs border border-slate-700/50"><img src="${attachment.url}" class="w-full object-cover"></div>`;
+                } else {
+                    attachmentHtml = `<div class="mb-3 flex items-center space-x-2 bg-slate-900/80 p-2.5 rounded-lg border border-slate-700/50 text-xs"><i class="fa-solid fa-video text-cyan-400"></i><span class="truncate">${attachment.name}</span></div>`;
+                }
+            }
+
+            msgDiv.innerHTML = `
+                <div class="max-w-2xl rounded-2xl p-4 text-sm ${isUser ? 'bg-cyan-600 text-white rounded-br-none shadow-lg shadow-cyan-900/20' : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-bl-none shadow-xl'}">
+                    ${attachmentHtml}
+                    <div class="leading-relaxed whitespace-pre-wrap">${escapeHtml(text)}</div>
+                    <div class="mt-2 text-[10px] ${isUser ? 'text-cyan-200' : 'text-slate-500'} text-right">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                </div>
+            `;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function appendTypingIndicator() {
+            const container = document.getElementById('chatContainer');
+            const id = 'typing-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex justify-start w-full';
+            div.innerHTML = `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-bl-none p-4 text-sm flex items-center space-x-2 shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce"></span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]"></span>
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]"></span>
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return id;
+        }
+
+        function generateMockResponse(query, attachment) {
+            let contextNote = attachment ? ` [Analyzed attached ${attachment.type}: ${attachment.name}]` : '';
+            let memoryContext = ` (Memory Context: tracking ${chatMemory.length}/5 recent turns)`;
+            return `Here is the comprehensive research breakdown for your request${contextNote}.${memoryContext}\n\n1. **Core Objective**: Evaluated parameters across provided multi-modal inputs and active context window.\n2. **Analysis Result**: Verified structured data points and cross-referenced with contextual history.\n3. **Recommendation**: Proceed with automated pipeline integration or refine parameters accordingly.`;
         }
 
         function escapeHtml(text) {
             const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            return text.replace(/[&<>"']/g, m => map[m]);
         }
-
-        updateMemoryCounter();
     </script>
 </body>
 </html>
