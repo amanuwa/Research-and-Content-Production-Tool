@@ -45,27 +45,42 @@
     <!-- Top Navigation Bar -->
     <header class="bg-slate-900 border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
         <div class="flex items-center space-x-3">
-            <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg shadow-brand-600/20">
-                <i class="fa-solid fa-brain text-xl"></i>
-            </div>
-            <div>
-                <h1 class="font-bold text-lg tracking-wide text-white">AI Research Studio</h1>
-                <p class="text-xs text-slate-400">Multimodal Assistant &bull; 5-Chat Rolling Memory Window</p>
+            <!-- Back Button -->
+            <button onclick="goBackToDashboard()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-xl border border-slate-700 transition flex items-center space-x-2 text-xs font-medium" title="Return to Dashboard">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="hidden sm:inline">Dashboard</span>
+            </button>
+            
+            <div class="h-5 w-[1px] bg-slate-800"></div>
+
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg shadow-brand-600/20">
+                    <i class="fa-solid fa-brain text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-white">AI Research Studio</h1>
+                    <p class="text-xs text-slate-400">Multimodal Assistant &bull; Image, Video & Text Analysis</p>
+                </div>
             </div>
         </div>
 
         <div class="flex items-center space-x-4">
-            <!-- Memory Tracker Badge -->
-            <div class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-full">
-                <div class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div>
-                <span class="text-xs text-slate-300 font-medium">Memory Window: <span id="memory-count" class="text-brand-400 font-bold">0</span> / 5</span>
-            </div>
-
             <!-- Clear Chat Button -->
             <button onclick="clearChat()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center space-x-1.5">
                 <i class="fa-solid fa-trash-can"></i>
                 <span>Reset Session</span>
             </button>
+
+            <!-- Logged-in User Profile Widget -->
+            <div class="flex items-center space-x-2.5 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-full">
+                <div class="w-7 h-7 rounded-full bg-brand-600 flex items-center justify-center text-white text-xs font-bold shadow">
+                    AW
+                </div>
+                <div class="hidden sm:block text-left">
+                    <p class="text-xs font-medium text-slate-200 leading-tight">Amanuel W.</p>
+                    <p class="text-[10px] text-brand-400 font-semibold leading-tight">Pro Account</p>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -92,13 +107,16 @@
                 </div>
             </div>
 
-            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Active Memory Context</h2>
-            <div id="memory-sidebar-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 text-xs">
-                <div class="text-slate-500 italic p-2 text-center">No active history in current 5-chat window.</div>
-            </div>
-            
-            <div class="pt-3 border-t border-slate-800 text-slate-500 text-[10px] text-center">
-                Older messages automatically prune past index 5.
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Session Navigation</h2>
+            <div class="flex-1 flex flex-col justify-between text-xs">
+                <div class="bg-slate-800/80 p-3 rounded-lg border border-slate-700/50 space-y-2">
+                    <p class="text-slate-300 font-medium">Studio Status</p>
+                    <p class="text-[11px] text-slate-400">Ready to accept direct media ingestion and prompt execution streams.</p>
+                </div>
+                
+                <div class="pt-3 border-t border-slate-800 text-slate-500 text-[10px] text-center">
+                    AI Research Studio v2.4
+                </div>
             </div>
         </aside>
 
@@ -113,7 +131,7 @@
                         <i class="fa-solid fa-sparkles"></i>
                     </div>
                     <h2 class="text-xl font-bold text-white">Welcome to AI Research Studio</h2>
-                    <p class="text-sm text-slate-400 max-w-md mx-auto">Upload images, reference videos, or paste text prompts. The system maintains an active rolling memory of your last 5 interactions for optimal research continuity.</p>
+                    <p class="text-sm text-slate-400 max-w-md mx-auto">Upload images, reference videos, or paste text prompts for instant research analysis and generation.</p>
                 </div>
             </div>
 
@@ -160,8 +178,13 @@
 
     <!-- Application Script -->
     <script>
-        let chatMemory = []; // Holds max 5 items: { role, content, mediaType, mediaUrl, fileName }
         let currentAttachment = null; // { type: 'image'|'video', url: '', name: '', size: '' }
+
+        function goBackToDashboard() {
+            // Action when back button is clicked (can be redirected or customized)
+            alert("Returning to main dashboard view...");
+            // window.location.href = 'dashboard.html';
+        }
 
         function handleFileSelect(event) {
             const file = event.target.files[0];
@@ -224,39 +247,16 @@
             }
         }
 
-        function updateMemoryDisplay() {
-            const countEl = document.getElementById('memory-count');
-            countEl.textContent = chatMemory.length;
-
-            const sidebarList = document.getElementById('memory-sidebar-list');
-            if (chatMemory.length === 0) {
-                sidebarList.innerHTML = `<div class="text-slate-500 italic p-2 text-center">No active history in current 5-chat window.</div>`;
-                return;
-            }
-
-            sidebarList.innerHTML = chatMemory.map((item, idx) => `
-                <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700/50">
-                    <div class="flex justify-between items-center text-[10px] text-slate-400 mb-1">
-                        <span class="font-semibold text-brand-400">#${idx + 1} (${item.role})</span>
-                        <span>${item.mediaType ? item.mediaType.toUpperCase() : 'TEXT'}</span>
-                    </div>
-                    <p class="text-slate-300 truncate">${item.content}</p>
-                </div>
-            `).join('');
-        }
-
         function clearChat() {
-            chatMemory = [];
             document.getElementById('chat-container').innerHTML = `
                 <div class="max-w-2xl mx-auto text-center py-10 space-y-3">
                     <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner">
                         <i class="fa-solid fa-sparkles"></i>
                     </div>
                     <h2 class="text-xl font-bold text-white">Session Reset</h2>
-                    <p class="text-sm text-slate-400 max-w-md mx-auto">Memory window cleared. Ready for new research queries.</p>
+                    <p class="text-sm text-slate-400 max-w-md mx-auto">Chat history cleared. Ready for new research queries.</p>
                 </div>
             `;
-            updateMemoryDisplay();
             clearAttachment();
         }
 
@@ -274,16 +274,9 @@
                 fileName: currentAttachment ? currentAttachment.name : null
             };
 
-            // Push to rolling memory (keep max 5 items)
-            chatMemory.push(userMessage);
-            if (chatMemory.length > 5) {
-                chatMemory.shift(); // Remove oldest to maintain 5-chat sliding memory
-            }
-
             inputEl.value = '';
             const attachedCopy = currentAttachment;
             clearAttachment();
-            updateMemoryDisplay();
 
             appendMessageToUI(userMessage);
 
@@ -302,12 +295,6 @@
                     mediaUrl: null
                 };
 
-                chatMemory.push(aiMessage);
-                if (chatMemory.length > 5) {
-                    chatMemory.shift();
-                }
-
-                updateMemoryDisplay();
                 appendMessageToUI(aiMessage);
             }, 1200);
         }
@@ -359,7 +346,7 @@
                     <div class="w-2 h-2 rounded-full bg-brand-500 animate-bounce"></div>
                     <div class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.2s]"></div>
                     <div class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.4s]"></div>
-                    <span class="text-xs ml-2">Analyzing context & memory window...</span>
+                    <span class="text-xs ml-2">Analyzing media & prompt payload...</span>
                 </div>
             `;
             container.appendChild(wrapper);
@@ -374,11 +361,11 @@
 
         function generateSimulatedResponse(prompt, mediaType) {
             if (mediaType === 'image') {
-                return `### Image Visual Analysis Report\n- **Primary Subject:** High-resolution asset detected.\n- **Composition:** Clean alignment with balanced lighting properties.\n- **Research Insight:** This asset aligns well with your ongoing 5-chat context window parameters.`;
+                return `### Image Visual Analysis Report\n- **Primary Subject:** High-resolution asset inspected successfully.\n- **Composition:** Balanced color profiling and lighting detected.\n- **Research Insight:** Ready for integration into your workflow pipeline.`;
             } else if (mediaType === 'video') {
-                return `### Video Sequence Analysis\n- **Stream Data:** Multimodal frames successfully ingested.\n- **Motion Dynamics:** Stable transition frames with clear audio track parameters.\n- **Conclusion:** Synthesized into your active memory context for multi-turn processing.`;
+                return `### Video Sequence Analysis\n- **Stream Payload:** Multimodal frames successfully ingested and parsed.\n- **Motion Dynamics:** Stable scene transitions and clean audio tracks identified.\n- **Conclusion:** Processed through the model pipeline.`;
             } else {
-                return `Based on your prompt **"${prompt}"** and our active rolling memory context (retaining the last 5 interactions), here is the structured analysis:\n\n1. **Key Findings:** Processed successfully through the selected model pipeline.\n2. **Contextual Continuity:** Maintained memory state across previous turns.\n3. **Recommendation:** You can connect this UI layout directly to your backend n8n webhook or custom API endpoints for live production execution.`;
+                return `Based on your research query **"${prompt}"**, here is the structured analysis:\n\n1. **Key Findings:** Successfully evaluated through your selected model parameters.\n2. **Execution:** Ready to link directly to your backend n8n webhook or API pipelines.\n3. **Recommendation:** You can further refine your system directives from the left control panel.`;
             }
         }
 
