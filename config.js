@@ -9,7 +9,7 @@
 // };
 
 // Initialize and export Supabase Client
-export const supabaseClient = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+//export const supabaseClient = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 // ==========================================
 // 🔒 CORE INFRASTRUCTURE CONFIGURATION (DO NOT SHARE)
 // ==========================================
