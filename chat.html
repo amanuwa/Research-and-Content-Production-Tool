@@ -181,9 +181,8 @@
             { id: 'chat-1', title: 'Multimodal Video Pipeline Analysis', messages: [] }
         ];
         let activeChatId = 'chat-1';
-
-        function goBackToDashboard() {
-            alert("Returning to main dashboard view...");
+function goBackToDashboard() {
+            window.location.href = 'dashboard.html';
         }
 
         function startNewChat() {
