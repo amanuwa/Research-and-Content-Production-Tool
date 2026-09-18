@@ -152,7 +152,6 @@
             <h3 class="text-xs font-mono text-cyan-400 tracking-wider mb-6">// MULTI-PLATFORM DISTRIBUTION CHANNELS</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <!-- PLATFORM CARD TEMPLATE GENERATOR FUNCTIONALITY -->
                 <!-- 1. TikTok Panel -->
                 <div class="platform-card bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
                     <div class="flex items-center justify-between">
@@ -160,14 +159,10 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-white flex items-center justify-center rounded font-mono text-xs font-bold">TT</div>
                             <h4 class="font-mono text-sm text-gray-200">TikTok Channel</h4>
                         </div>
-                        <div class="flex space-x-1">
-                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
-                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
-                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Short-form video layout and captions feed.</p>
                     
-                    <!-- Multi-Media Container -->
                     <div class="media-container flex flex-col space-y-2">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
@@ -177,7 +172,6 @@
                         </div>
                     </div>
 
-                    <!-- Audio Container -->
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
@@ -212,10 +206,7 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-pink-400 flex items-center justify-center rounded font-mono text-xs font-bold">IG</div>
                             <h4 class="font-mono text-sm text-gray-200">Instagram Studio</h4>
                         </div>
-                        <div class="flex space-x-1">
-                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
-                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
-                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Feed post, story and carousel integration.</p>
                     
@@ -262,10 +253,7 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-blue-500 flex items-center justify-center rounded font-mono text-xs font-bold">FB</div>
                             <h4 class="font-mono text-sm text-gray-200">Facebook Page</h4>
                         </div>
-                        <div class="flex space-x-1">
-                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
-                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
-                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Page updates, community sharing and video links.</p>
                     
@@ -312,10 +300,7 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-cyan-400 flex items-center justify-center rounded font-mono text-xs font-bold">TW</div>
                             <h4 class="font-mono text-sm text-gray-200">Twitter / X Stream</h4>
                         </div>
-                        <div class="flex space-x-1">
-                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
-                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
-                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Character checked microblog and media attachments.</p>
                     
@@ -362,10 +347,7 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-sky-400 flex items-center justify-center rounded font-mono text-xs font-bold">TG</div>
                             <h4 class="font-mono text-sm text-gray-200">Telegram Channel</h4>
                         </div>
-                        <div class="flex space-x-1">
-                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
-                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
-                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Direct subscriber announcement feed stream.</p>
                     
@@ -412,10 +394,7 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-red-500 flex items-center justify-center rounded font-mono text-xs font-bold">YT</div>
                             <h4 class="font-mono text-sm text-gray-200">YouTube Studio</h4>
                         </div>
-                        <div class="flex space-x-1">
-                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-red-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
-                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
-                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-red-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Video descriptions, tags and community posts.</p>
                     
@@ -488,7 +467,7 @@
             container.innerHTML = `<audio controls class="w-full h-8"><source src="${url}" type="audio/mpeg">Your browser does not support audio element.</audio>`;
         }
 
-        // 3. Add Multi-Image & Multi-Audio input fields dynamically inside a platform card
+        // 3. Add Multi-Image input fields dynamically inside a platform card
         function addMediaInput(btn) {
             const card = btn.closest('.platform-card');
             const mediaContainer = card.querySelector('.media-container');
@@ -499,18 +478,6 @@
                 <button onclick="this.parentElement.remove()" class="bg-red-900/30 text-red-400 hover:bg-red-900/60 text-xs px-2 py-2 rounded">✕</button>
             `;
             mediaContainer.insertBefore(newInputRow, card.querySelector('.image-display-container'));
-        }
-
-        function addAudioInput(btn) {
-            const card = btn.closest('.platform-card');
-            const audioContainer = card.querySelector('.audio-container');
-            const newInputRow = document.createElement('div');
-            newInputRow.className = "flex items-center space-x-2 mt-2";
-            newInputRow.innerHTML = `
-                <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                <button onclick="this.parentElement.remove()" class="bg-red-900/30 text-red-400 hover:bg-red-900/60 text-xs px-2 py-2 rounded">✕</button>
-            `;
-            audioContainer.insertBefore(newInputRow, card.querySelector('.audio-display-container'));
         }
 
         // 4. Render Card Previews
