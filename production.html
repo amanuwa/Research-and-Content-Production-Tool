@@ -111,12 +111,8 @@
                 <!-- Image URL Input & Render Panel -->
                 <div class="flex flex-col space-y-2">
                     <label class="text-xs font-mono text-gray-400">FEATURED IMAGE / MEDIA URL</label>
-                    
-                    <!-- Text input for public URL -->
                     <input type="text" id="featuredImageUrl" class="w-full bg-[#0b0f19] border border-gray-800 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="https://..." oninput="handleFeaturedImageInput(this)">
-
-                    <!-- Render Preview Panel -->
-                    <div class="border-2 border-gray-800 rounded-lg p-2 text-center bg-[#0b0f19] h-36 flex items-center justify-center overflow-hidden">
+                    <div class="border-2 border-gray-800 rounded-lg p-2 text-center bg-[#0b0f19] h-32 flex items-center justify-center overflow-hidden">
                         <div id="imagePreviewContainer" class="w-full h-full flex flex-col items-center justify-center space-y-1 text-gray-500">
                             <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -126,15 +122,24 @@
                     </div>
                 </div>
 
+                <!-- Audio URL Input & Player Panel -->
+                <div class="flex flex-col space-y-2">
+                    <label class="text-xs font-mono text-gray-400">AUDIO TRACK URL (OPTIONAL)</label>
+                    <input type="text" id="featuredAudioUrl" class="w-full bg-[#0b0f19] border border-gray-800 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="https://... (mp3, wav)" oninput="handleFeaturedAudioInput(this)">
+                    <div id="audioPreviewContainer" class="bg-[#0b0f19] border border-gray-800 rounded p-2 text-center text-xs text-gray-500 font-mono">
+                        No audio track attached
+                    </div>
+                </div>
+
                 <!-- Bigger Text Box for Main Text Content -->
                 <div class="flex flex-col space-y-1 flex-grow">
                     <label for="postContent" class="text-xs font-mono text-gray-400">MAIN CONTENT TEXT</label>
-                    <textarea id="postContent" rows="6" placeholder="Type or paste main post text here..." 
+                    <textarea id="postContent" rows="4" placeholder="Type or paste main post text here..." 
                               class="px-3 py-2 bg-[#0b0f19] border border-gray-800 rounded text-gray-200 focus:outline-none focus:border-cyan-500 text-sm font-sans resize-y"></textarea>
                 </div>
 
                 <!-- Distribute Button -->
-                <div class="mt-4">
+                <div class="mt-2">
                     <button onclick="distributeContent()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-black font-mono text-xs font-bold py-3 rounded transition shadow-lg flex items-center justify-center space-x-2">
                         <span>⚡ DISTRIBUTE CONTENT TO ALL PLATFORMS</span>
                     </button>
@@ -147,6 +152,7 @@
             <h3 class="text-xs font-mono text-cyan-400 tracking-wider mb-6">// MULTI-PLATFORM DISTRIBUTION CHANNELS</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
+                <!-- PLATFORM CARD TEMPLATE GENERATOR FUNCTIONALITY -->
                 <!-- 1. TikTok Panel -->
                 <div class="platform-card bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
                     <div class="flex items-center justify-between">
@@ -154,7 +160,10 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-white flex items-center justify-center rounded font-mono text-xs font-bold">TT</div>
                             <h4 class="font-mono text-sm text-gray-200">TikTok Channel</h4>
                         </div>
-                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                        <div class="flex space-x-1">
+                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
+                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Short-form video layout and captions feed.</p>
                     
@@ -163,8 +172,18 @@
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
                         </div>
-                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div class="image-display-container relative w-full h-24 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <!-- Audio Container -->
+                    <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        </div>
+                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
+                            No audio attached
                         </div>
                     </div>
 
@@ -174,7 +193,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
+                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('TikTok', this)" class="bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -193,17 +212,28 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-pink-400 flex items-center justify-center rounded font-mono text-xs font-bold">IG</div>
                             <h4 class="font-mono text-sm text-gray-200">Instagram Studio</h4>
                         </div>
-                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                        <div class="flex space-x-1">
+                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
+                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Feed post, story and carousel integration.</p>
                     
-                    <!-- Multi-Media Container -->
                     <div class="media-container flex flex-col space-y-2">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-pink-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
                         </div>
-                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div class="image-display-container relative w-full h-24 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        </div>
+                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
+                            No audio attached
                         </div>
                     </div>
 
@@ -213,7 +243,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none resize-none"></textarea>
+                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Instagram', this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -232,17 +262,28 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-blue-500 flex items-center justify-center rounded font-mono text-xs font-bold">FB</div>
                             <h4 class="font-mono text-sm text-gray-200">Facebook Page</h4>
                         </div>
-                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                        <div class="flex space-x-1">
+                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
+                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Page updates, community sharing and video links.</p>
                     
-                    <!-- Multi-Media Container -->
                     <div class="media-container flex flex-col space-y-2">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-blue-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
                         </div>
-                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div class="image-display-container relative w-full h-24 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        </div>
+                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
+                            No audio attached
                         </div>
                     </div>
 
@@ -252,7 +293,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none resize-none"></textarea>
+                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Facebook', this)" class="bg-gray-900 hover:bg-gray-800 text-blue-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -271,17 +312,28 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-cyan-400 flex items-center justify-center rounded font-mono text-xs font-bold">TW</div>
                             <h4 class="font-mono text-sm text-gray-200">Twitter / X Stream</h4>
                         </div>
-                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                        <div class="flex space-x-1">
+                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
+                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Character checked microblog and media attachments.</p>
                     
-                    <!-- Multi-Media Container -->
                     <div class="media-container flex flex-col space-y-2">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
                         </div>
-                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div class="image-display-container relative w-full h-24 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        </div>
+                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
+                            No audio attached
                         </div>
                     </div>
 
@@ -291,7 +343,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
+                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Twitter', this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -310,17 +362,28 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-sky-400 flex items-center justify-center rounded font-mono text-xs font-bold">TG</div>
                             <h4 class="font-mono text-sm text-gray-200">Telegram Channel</h4>
                         </div>
-                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                        <div class="flex space-x-1">
+                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
+                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Direct subscriber announcement feed stream.</p>
                     
-                    <!-- Multi-Media Container -->
                     <div class="media-container flex flex-col space-y-2">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-sky-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
                         </div>
-                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div class="image-display-container relative w-full h-24 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        </div>
+                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
+                            No audio attached
                         </div>
                     </div>
 
@@ -330,7 +393,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none resize-none"></textarea>
+                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Telegram', this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -349,17 +412,28 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-red-500 flex items-center justify-center rounded font-mono text-xs font-bold">YT</div>
                             <h4 class="font-mono text-sm text-gray-200">YouTube Studio</h4>
                         </div>
-                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-red-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                        <div class="flex space-x-1">
+                            <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-red-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Image</button>
+                            <button onclick="addAudioInput(this)" class="bg-gray-900 hover:bg-gray-800 text-green-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Audio</button>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Video descriptions, tags and community posts.</p>
                     
-                    <!-- Multi-Media Container -->
                     <div class="media-container flex flex-col space-y-2">
                         <div class="flex items-center space-x-2">
                             <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-red-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
                         </div>
-                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                        <div class="image-display-container relative w-full h-24 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        </div>
+                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
+                            No audio attached
                         </div>
                     </div>
 
@@ -369,7 +443,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none resize-none"></textarea>
+                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('YouTube', this)" class="bg-gray-900 hover:bg-gray-800 text-red-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -387,11 +461,10 @@
 
     <!-- JavaScript Handlers -->
     <script>
-        // 1. Handle Featured Image Live Rendering
+        // 1. Featured Image Live Rendering
         function handleFeaturedImageInput(input) {
             const url = input.value.trim();
             const container = document.getElementById('imagePreviewContainer');
-
             if (!url) {
                 container.innerHTML = `
                     <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -401,15 +474,24 @@
                 `;
                 return;
             }
-
             container.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load image URL</span>';">`;
         }
 
-        // 2. Add Multi-Image input field dynamically inside a platform card
+        // 2. Featured Audio Live Rendering
+        function handleFeaturedAudioInput(input) {
+            const url = input.value.trim();
+            const container = document.getElementById('audioPreviewContainer');
+            if (!url) {
+                container.innerHTML = `No audio track attached`;
+                return;
+            }
+            container.innerHTML = `<audio controls class="w-full h-8"><source src="${url}" type="audio/mpeg">Your browser does not support audio element.</audio>`;
+        }
+
+        // 3. Add Multi-Image & Multi-Audio input fields dynamically inside a platform card
         function addMediaInput(btn) {
             const card = btn.closest('.platform-card');
             const mediaContainer = card.querySelector('.media-container');
-            
             const newInputRow = document.createElement('div');
             newInputRow.className = "flex items-center space-x-2 mt-2";
             newInputRow.innerHTML = `
@@ -419,59 +501,85 @@
             mediaContainer.insertBefore(newInputRow, card.querySelector('.image-display-container'));
         }
 
-        // 3. Render Card Image Preview from any of its inputs
+        function addAudioInput(btn) {
+            const card = btn.closest('.platform-card');
+            const audioContainer = card.querySelector('.audio-container');
+            const newInputRow = document.createElement('div');
+            newInputRow.className = "flex items-center space-x-2 mt-2";
+            newInputRow.innerHTML = `
+                <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                <button onclick="this.parentElement.remove()" class="bg-red-900/30 text-red-400 hover:bg-red-900/60 text-xs px-2 py-2 rounded">✕</button>
+            `;
+            audioContainer.insertBefore(newInputRow, card.querySelector('.audio-display-container'));
+        }
+
+        // 4. Render Card Previews
         function renderCardImage(input) {
             const card = input.closest('.platform-card');
             const displayContainer = card.querySelector('.image-display-container');
             const url = input.value.trim();
-
             if (!url) {
                 displayContainer.innerHTML = `<span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>`;
                 return;
             }
-
             displayContainer.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load preview</span>';">`;
         }
 
-        // 4. Distribute Content to All Platforms
+        function renderCardAudio(input) {
+            const card = input.closest('.platform-card');
+            const displayContainer = card.querySelector('.audio-display-container');
+            const url = input.value.trim();
+            if (!url) {
+                displayContainer.innerHTML = `No audio attached`;
+                return;
+            }
+            displayContainer.innerHTML = `<audio controls class="w-full h-7"><source src="${url}" type="audio/mpeg">Audio not supported.</audio>`;
+        }
+
+        // 5. Distribute Content to All Platforms (Images + Audio + Title + Content)
         function distributeContent() {
             const title = document.getElementById('postTitle').value;
             const imageUrl = document.getElementById('featuredImageUrl').value;
+            const audioUrl = document.getElementById('featuredAudioUrl').value;
             const content = document.getElementById('postContent').value;
 
             const platformCards = document.querySelectorAll('.platform-card');
 
             platformCards.forEach(card => {
-                // Set Title
                 const titleInput = card.querySelector('.platform-title');
                 if (titleInput) titleInput.value = title;
 
-                // Set Description / Body
                 const bodyInput = card.querySelector('.platform-body');
                 if (bodyInput) bodyInput.value = content;
 
-                // Set Media URL and Preview Image
+                // Handle Image
                 const firstMediaInput = card.querySelector('.media-url-input');
                 const displayContainer = card.querySelector('.image-display-container');
-
-                if (firstMediaInput && imageUrl) {
-                    firstMediaInput.value = imageUrl;
-                }
-
+                if (firstMediaInput && imageUrl) firstMediaInput.value = imageUrl;
                 if (displayContainer && imageUrl) {
                     displayContainer.innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load preview</span>';">`;
                 }
+
+                // Handle Audio
+                const firstAudioInput = card.querySelector('.audio-url-input');
+                const audioDisplayContainer = card.querySelector('.audio-display-container');
+                if (firstAudioInput && audioUrl) firstAudioInput.value = audioUrl;
+                if (audioDisplayContainer && audioUrl) {
+                    audioDisplayContainer.innerHTML = `<audio controls class="w-full h-7"><source src="${audioUrl}" type="audio/mpeg">Audio not supported.</audio>`;
+                }
             });
 
-            alert('Content successfully distributed to all platforms!');
+            alert('Content, Media, and Audio tracks successfully distributed to all platforms!');
         }
 
-        // 5. Utilities
+        // 6. Utilities
         function clearWorkspace() {
             document.getElementById('postTitle').value = '';
             document.getElementById('featuredImageUrl').value = '';
+            document.getElementById('featuredAudioUrl').value = '';
             document.getElementById('postContent').value = '';
             handleFeaturedImageInput({ value: '' });
+            handleFeaturedAudioInput({ value: '' });
             document.getElementById('a4Content').innerHTML = `
                 <div class="text-center text-gray-400 py-32 italic font-sans text-base">
                     Insert a file or write content in the editor to populate workspace.
