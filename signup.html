@@ -10,56 +10,35 @@
             margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
             background-color: #02040e; position: relative; overflow-x: hidden; overflow-y: auto;
         }
-        .cyber-backdrop-container {
-            position: fixed; inset: 0; z-index: 0;
-            background: radial-gradient(circle at center, #0a192f 0%, #02040e 100%);
-            pointer-events: none;
-        }
-        .hud-overlay {
-            position: absolute; inset: 0;
-            background-image: 
-                linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
-            background-size: 40px 40px; z-index: 1; pointer-events: none;
-        }
-        .scanline {
-            position: absolute; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, transparent, #10b981, #00f2fe, #10b981, transparent);
-            box-shadow: 0 0 15px #10b981, 0 0 30px #00f2fe; z-index: 4;
-            animation: scanning 4s ease-in-out infinite; pointer-events: none;
-        }
-        @keyframes scanning {
-            0% { top: 0%; opacity: 0.2; }
-            50% { top: 100%; opacity: 1; }
-            100% { top: 0%; opacity: 0.2; }
+        #cyberCanvas {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
         }
         .app-interface { position: relative; z-index: 10; }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen py-10">
 
-    <div class="cyber-backdrop-container">
-        <div class="hud-overlay"></div>
-        <div class="scanline"></div>
-    </div>
+    <!-- Holographic Data Transfer Warp Background -->
+    <canvas id="cyberCanvas"></canvas>
 
-    <div class="app-interface w-full max-w-md p-8 bg-slate-900/80 backdrop-blur-md rounded-2xl shadow-2xl border border-emerald-500/30">
-        <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center tracking-wider">Create Secure Account</h2>
+    <!-- Main Content Box -->
+    <div class="app-interface w-full max-w-md p-8 bg-slate-900/85 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-500/30 shadow-blue-900/20">
+        <h2 class="text-2xl font-bold mb-6 text-blue-400 text-center tracking-wider">Create Secure Account</h2>
         
         <form id="signup-form" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Full Name / Organization Name</label>
-                <input type="text" id="fullName" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                <input type="text" id="fullName" required class="w-full px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-white">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
-                <input type="email" id="email" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                <input type="email" id="email" required class="w-full px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-white">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Account Tier</label>
-                <select id="account-tier" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                <select id="account-tier" class="w-full px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-white">
                     <option value="Governmental Authority (State Tier)">Governmental Authority (State Tier)</option>
                     <option value="Enterprise Tier">Enterprise Tier</option>
                     <option value="Standard Tier">Standard Tier</option>
@@ -68,22 +47,86 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Password</label>
-                <input type="password" id="password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                <input type="password" id="password" required minlength="12" class="w-full px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-white">
                 <p class="text-xs text-slate-400 mt-1">Must contain uppercase, lowercase, number, and special character.</p>
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-slate-300 mb-1">Confirm Password</label>
-                <input type="password" id="confirm-password" required minlength="12" class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
+                <input type="password" id="confirm-password" required minlength="12" class="w-full px-4 py-2 bg-slate-950 border border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-white">
             </div>
 
-            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-lg transition duration-200 text-white shadow-lg shadow-emerald-900/40">Register Secure Account</button>
+            <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-500 font-semibold rounded-lg transition duration-200 text-white shadow-lg shadow-blue-900/40">Register Secure Account</button>
         </form>
 
         <div class="mt-6 text-center">
-            <a href="index.html" class="text-sm text-emerald-400 hover:underline">Already have an account? Sign In</a>
+            <a href="index.html" class="text-sm text-blue-400 hover:underline">Already have an account? Sign In</a>
         </div>
     </div>
+
+    <!-- Holographic Data Stream Animation Script -->
+    <script>
+        const canvas = document.getElementById('cyberCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const streams = [];
+        const numStreams = 60;
+
+        for (let i = 0; i < numStreams; i++) {
+            streams.push({
+                x: (Math.random() - 0.5) * width * 2,
+                y: (Math.random() - 0.5) * height * 2,
+                z: Math.random() * width,
+                speed: Math.random() * 4 + 2
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(2, 4, 14, 0.25)';
+            ctx.fillRect(0, 0, width, height);
+
+            const cx = width / 2;
+            const cy = height / 2;
+
+            streams.forEach(s => {
+                s.z -= s.speed;
+                if (s.z <= 0) {
+                    s.z = width;
+                    s.x = (Math.random() - 0.5) * width * 2;
+                    s.y = (Math.random() - 0.5) * height * 2;
+                }
+
+                const k = 300 / s.z;
+                const px = s.x * k + cx;
+                const py = s.y * k + cy;
+
+                const prevK = 300 / (s.z + s.speed * 8);
+                const prevPx = s.x * prevK + cx;
+                const prevPy = s.y * prevK + cy;
+
+                if (px >= 0 && px <= width && py >= 0 && py <= height) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevPx, prevPy);
+                    ctx.lineTo(px, py);
+                    const alpha = 1 - s.z / width;
+                    ctx.strokeStyle = `rgba(0, 242, 254, ${alpha})`;
+                    ctx.lineWidth = k * 2;
+                    ctx.stroke();
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 
     <script type="module">
         import { supabase, DEV_MODE_OVERRIDE } from './config.js';
