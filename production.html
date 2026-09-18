@@ -126,9 +126,7 @@
                 <div class="flex flex-col space-y-2">
                     <label class="text-xs font-mono text-gray-400">AUDIO TRACK URL (OPTIONAL)</label>
                     <input type="text" id="featuredAudioUrl" class="w-full bg-[#0b0f19] border border-gray-800 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="https://... (mp3, wav)" oninput="handleFeaturedAudioInput(this)">
-                    <div id="audioPreviewContainer" class="bg-[#0b0f19] border border-gray-800 rounded p-2 text-center text-xs text-gray-500 font-mono">
-                        No audio track attached
-                    </div>
+                    <div id="audioPreviewContainer" class="hidden bg-[#0b0f19] border border-gray-800 rounded p-2 text-center text-xs text-gray-500 font-mono"></div>
                 </div>
 
                 <!-- Bigger Text Box for Main Text Content -->
@@ -173,12 +171,8 @@
                     </div>
 
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                        </div>
-                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
-                            No audio attached
-                        </div>
+                        <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        <div class="audio-display-container hidden"></div>
                     </div>
 
                     <div>
@@ -187,7 +181,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
+                        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('TikTok', this)" class="bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -220,12 +214,8 @@
                     </div>
 
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                        </div>
-                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
-                            No audio attached
-                        </div>
+                        <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        <div class="audio-display-container hidden"></div>
                     </div>
 
                     <div>
@@ -234,7 +224,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none resize-none"></textarea>
+                        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Instagram', this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -267,12 +257,8 @@
                     </div>
 
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                        </div>
-                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
-                            No audio attached
-                        </div>
+                        <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        <div class="audio-display-container hidden"></div>
                     </div>
 
                     <div>
@@ -281,7 +267,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none resize-none"></textarea>
+                        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Facebook', this)" class="bg-gray-900 hover:bg-gray-800 text-blue-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -314,12 +300,8 @@
                     </div>
 
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                        </div>
-                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
-                            No audio attached
-                        </div>
+                        <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        <div class="audio-display-container hidden"></div>
                     </div>
 
                     <div>
@@ -328,7 +310,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
+                        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Twitter', this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -361,12 +343,8 @@
                     </div>
 
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                        </div>
-                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
-                            No audio attached
-                        </div>
+                        <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        <div class="audio-display-container hidden"></div>
                     </div>
 
                     <div>
@@ -375,7 +353,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none resize-none"></textarea>
+                        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('Telegram', this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -408,12 +386,8 @@
                     </div>
 
                     <div class="audio-container flex flex-col space-y-2 pt-1 border-t border-gray-800">
-                        <div class="flex items-center space-x-2">
-                            <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
-                        </div>
-                        <div class="audio-display-container bg-gray-900 border border-gray-700 rounded p-2 text-center text-[11px] text-gray-500 font-mono">
-                            No audio attached
-                        </div>
+                        <input type="text" class="audio-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-green-500 outline-none" placeholder="Paste audio track URL..." oninput="renderCardAudio(this)">
+                        <div class="audio-display-container hidden"></div>
                     </div>
 
                     <div>
@@ -422,7 +396,7 @@
                     </div>
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
-                        <textarea rows="2" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none resize-none"></textarea>
+                        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none resize-none"></textarea>
                     </div>
                     <div class="flex items-center space-x-2 pt-2">
                         <button onclick="publishTo('YouTube', this)" class="bg-gray-900 hover:bg-gray-800 text-red-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
@@ -461,9 +435,11 @@
             const url = input.value.trim();
             const container = document.getElementById('audioPreviewContainer');
             if (!url) {
-                container.innerHTML = `No audio track attached`;
+                container.innerHTML = '';
+                container.classList.add('hidden');
                 return;
             }
+            container.classList.remove('hidden');
             container.innerHTML = `<audio controls class="w-full h-8"><source src="${url}" type="audio/mpeg">Your browser does not support audio element.</audio>`;
         }
 
@@ -497,9 +473,11 @@
             const displayContainer = card.querySelector('.audio-display-container');
             const url = input.value.trim();
             if (!url) {
-                displayContainer.innerHTML = `No audio attached`;
+                displayContainer.innerHTML = '';
+                displayContainer.classList.add('hidden');
                 return;
             }
+            displayContainer.classList.remove('hidden');
             displayContainer.innerHTML = `<audio controls class="w-full h-7"><source src="${url}" type="audio/mpeg">Audio not supported.</audio>`;
         }
 
@@ -532,6 +510,7 @@
                 const audioDisplayContainer = card.querySelector('.audio-display-container');
                 if (firstAudioInput && audioUrl) firstAudioInput.value = audioUrl;
                 if (audioDisplayContainer && audioUrl) {
+                    audioDisplayContainer.classList.remove('hidden');
                     audioDisplayContainer.innerHTML = `<audio controls class="w-full h-7"><source src="${audioUrl}" type="audio/mpeg">Audio not supported.</audio>`;
                 }
             });
