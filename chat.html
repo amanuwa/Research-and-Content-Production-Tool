@@ -4,261 +4,382 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Research Studio</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
 
     <!-- Top Navigation Bar -->
     <header class="bg-slate-900 border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0">
         <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                <i class="fa-solid fa-brain text-white text-sm"></i>
+            <div class="bg-brand-600 p-2 rounded-xl text-white shadow-lg shadow-brand-600/20">
+                <i class="fa-solid fa-brain text-xl"></i>
             </div>
             <div>
-                <h1 class="font-bold text-base tracking-wide text-slate-100">AI Research Studio</h1>
-                <p class="text-xs text-slate-400">Multimodal Assistant &bull; 5-Chat Rolling Memory</p>
+                <h1 class="font-bold text-lg tracking-wide text-white">AI Research Studio</h1>
+                <p class="text-xs text-slate-400">Multimodal Assistant &bull; 5-Chat Rolling Memory Window</p>
             </div>
         </div>
 
         <div class="flex items-center space-x-4">
             <!-- Memory Tracker Badge -->
-            <div id="memoryBadge" class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-full text-xs font-medium text-slate-300">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Active Memory: <strong id="memoryCount" class="text-cyan-400">0</strong> / 5 chats</span>
+            <div class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 px-3 py-1.5 rounded-full">
+                <div class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div>
+                <span class="text-xs text-slate-300 font-medium">Memory Window: <span id="memory-count" class="text-brand-400 font-bold">0</span> / 5</span>
             </div>
-            <button onclick="clearChat()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center space-x-1.5">
-                <i class="fa-solid fa-rotate-right"></i>
+
+            <!-- Clear Chat Button -->
+            <button onclick="clearChat()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-trash-can"></i>
                 <span>Reset Session</span>
             </button>
         </div>
     </header>
 
     <!-- Main Workspace Container -->
-    <main class="flex-1 flex overflow-hidden">
-        
-        <!-- Chat History & Messages Area -->
-        <section class="flex-1 flex flex-col justify-between bg-slate-950 relative overflow-hidden">
+    <div class="flex-1 flex overflow-hidden">
+
+        <!-- Sidebar / Recent Context Panel -->
+        <aside class="w-72 bg-slate-900/60 border-r border-slate-800 hidden md:flex flex-col p-4 shrink-0">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Research Settings</h2>
             
-            <!-- Scrollable Messages Container -->
-            <div id="chatContainer" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-4xl mx-auto w-full">
-                <!-- Welcome State -->
-                <div id="welcomeState" class="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
-                    <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 shadow-xl">
-                        <i class="fa-solid fa-sparkles text-cyan-400 text-2xl"></i>
-                    </div>
-                    <h2 class="text-xl font-semibold text-slate-200 mb-2">How can I assist your research today?</h2>
-                    <p class="text-sm max-w-md text-slate-400 mb-6">Upload research papers, data charts, or video clips alongside your questions. This session retains the last 5 contextual interactions in memory.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left w-full max-w-lg">
-                        <button onclick="presetQuery('Analyze this image/video dataset for anomalous statistical patterns.')" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800/80 text-xs text-slate-300 transition flex items-start space-x-2.5">
-                            <i class="fa-solid fa-chart-line text-cyan-400 mt-0.5"></i>
-                            <span>Analyze dataset charts or graphs for patterns.</span>
-                        </button>
-                        <button onclick="presetQuery('Summarize key takeaways and methodology from the attached media.')" class="p-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800/80 text-xs text-slate-300 transition flex items-start space-x-2.5">
-                            <i class="fa-solid fa-file-lines text-indigo-400 mt-0.5"></i>
-                            <span>Summarize methodologies from attached media.</span>
-                        </button>
-                    </div>
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 font-medium">Selected Model Pipeline</label>
+                    <select id="model-select" class="w-full bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 focus:outline-none focus:border-brand-500">
+                        <option value="groq-llama">Groq Llama 3.1 8B (Fast Multimodal)</option>
+                        <option value="deepseek-chat">DeepSeek Chat & Reasoning</option>
+                        <option value="gemini-pro">Gemini 1.5 Pro (Deep Context)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 font-medium">System Directive / Role</label>
+                    <textarea id="system-prompt" rows="3" class="w-full bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg p-2.5 focus:outline-none focus:border-brand-500 resize-none" placeholder="You are an advanced research assistant...">You are an expert multi-disciplinary research assistant specialized in analyzing text, media assets, and technical documentation.</textarea>
                 </div>
             </div>
 
-            <!-- Attachment Preview Bar -->
-            <div id="previewBar" class="hidden px-6 py-2 max-w-4xl mx-auto w-full flex items-center space-x-3">
-                <div class="relative bg-slate-900 border border-slate-800 rounded-lg p-2 flex items-center space-x-3 shadow-md">
-                    <div id="mediaPreviewContainer" class="w-12 h-12 rounded bg-slate-950 flex items-center justify-center overflow-hidden border border-slate-800">
-                        <!-- Dynamic thumbnail inserted here -->
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Active Memory Context</h2>
+            <div id="memory-sidebar-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 text-xs">
+                <div class="text-slate-500 italic p-2 text-center">No active history in current 5-chat window.</div>
+            </div>
+            
+            <div class="pt-3 border-t border-slate-800 text-slate-500 text-[10px] text-center">
+                Older messages automatically prune past index 5.
+            </div>
+        </aside>
+
+        <!-- Chat Area -->
+        <main class="flex-1 flex flex-col bg-slate-950 relative overflow-hidden">
+            
+            <!-- Messages Scroll Area -->
+            <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
+                <!-- Welcome Banner -->
+                <div class="max-w-2xl mx-auto text-center py-10 space-y-3">
+                    <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner">
+                        <i class="fa-solid fa-sparkles"></i>
                     </div>
-                    <div class="text-xs">
-                        <p id="fileName" class="font-medium text-slate-200 truncate max-w-xs">file_name.png</p>
-                        <p id="fileSize" class="text-slate-400">Attached Media</p>
+                    <h2 class="text-xl font-bold text-white">Welcome to AI Research Studio</h2>
+                    <p class="text-sm text-slate-400 max-w-md mx-auto">Upload images, reference videos, or paste text prompts. The system maintains an active rolling memory of your last 5 interactions for optimal research continuity.</p>
+                </div>
+            </div>
+
+            <!-- Floating Attachment Preview Box -->
+            <div id="attachment-preview-container" class="hidden px-6 pt-2 pb-0 flex items-center space-x-3 bg-slate-900/80 border-t border-slate-800">
+                <div class="relative inline-block bg-slate-800 p-1.5 rounded-lg border border-slate-700 flex items-center space-x-2">
+                    <div id="preview-thumb-container" class="w-12 h-12 rounded bg-slate-900 flex items-center justify-center overflow-hidden">
+                        <!-- Thumb injected via JS -->
                     </div>
-                    <button onclick="removeAttachment()" class="text-slate-400 hover:text-red-400 p-1.5 transition">
-                        <i class="fa-solid fa-xmark text-sm"></i>
+                    <div class="text-xs pr-4">
+                        <p id="preview-filename" class="font-medium text-slate-200 truncate max-w-[150px]">filename.ext</p>
+                        <p id="preview-filesize" class="text-[10px] text-slate-400">0 KB</p>
+                    </div>
+                    <button onclick="clearAttachment()" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-rose-500 shadow">
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Input Form Footer -->
-            <footer class="p-4 sm:p-6 bg-slate-950 border-t border-slate-900 shrink-0">
-                <div class="max-w-4xl mx-auto">
-                    <form id="chatForm" onsubmit="handleSendMessage(event)" class="relative bg-slate-900 border border-slate-800 rounded-2xl p-2 shadow-2xl focus-within:border-cyan-500/50 transition">
-                        
-                        <!-- Text Area Input -->
-                        <textarea id="userInput" rows="1" placeholder="Ask a research question or analyze attached images/videos..." 
-                            class="w-full bg-transparent text-slate-100 placeholder-slate-500 text-sm px-3 py-2 focus:outline-none resize-none max-h-32"
-                            onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); handleSendMessage(event); }"></textarea>
+            <!-- Input Bar -->
+            <div class="p-4 bg-slate-900 border-t border-slate-800">
+                <div class="max-w-4xl mx-auto flex items-end bg-slate-800 border border-slate-700 rounded-2xl p-2 focus-within:border-brand-500 shadow-xl transition">
+                    
+                    <!-- File Upload Button -->
+                    <label class="p-2.5 text-slate-400 hover:text-brand-400 cursor-pointer transition rounded-xl hover:bg-slate-700/50 flex items-center justify-center" title="Upload Image or Video">
+                        <i class="fa-solid fa-paperclip text-base"></i>
+                        <input type="file" id="media-upload" accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
+                    </label>
 
-                        <!-- Action Toolbar inside input box -->
-                        <div class="flex items-center justify-between px-2 pt-2 border-t border-slate-800/60 mt-1">
-                            <div class="flex items-center space-x-1">
-                                <!-- File Upload Trigger -->
-                                <input type="file" id="mediaInput" accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
-                                <button type="button" onclick="document.getElementById('mediaInput').click()" class="text-slate-400 hover:text-cyan-400 p-2 rounded-lg hover:bg-slate-800 transition text-sm flex items-center space-x-1.5" title="Attach Image or Video">
-                                    <i class="fa-solid fa-paperclip"></i>
-                                    <span class="text-xs hidden sm:inline">Attach Media</span>
-                                </button>
-                            </div>
+                    <!-- Prompt Textarea -->
+                    <textarea id="user-input" rows="1" onkeydown="handleKeydown(event)" placeholder="Ask a research question or analyze uploaded media..." class="flex-1 bg-transparent text-slate-100 text-sm p-2.5 focus:outline-none resize-none max-h-32 custom-scrollbar placeholder-slate-500"></textarea>
 
-                            <div class="flex items-center space-x-2">
-                                <span class="text-[10px] text-slate-500 hidden sm:inline">Shift + Enter for new line</span>
-                                <button type="submit" id="sendBtn" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-4 py-2 rounded-xl text-xs transition flex items-center space-x-1.5 shadow-lg shadow-cyan-500/20 disabled:opacity-50">
-                                    <span>Send Query</span>
-                                    <i class="fa-solid fa-arrow-up text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    <!-- Send Button -->
+                    <button onclick="sendMessage()" id="send-btn" class="bg-brand-600 hover:bg-brand-500 text-white p-2.5 rounded-xl transition flex items-center justify-center shadow-lg shadow-brand-600/20 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-arrow-up text-sm"></i>
+                    </button>
                 </div>
-            </footer>
-        </section>
-    </main>
+                <div class="text-center mt-2">
+                    <span class="text-[10px] text-slate-500">Press Enter to send, Shift + Enter for new line. Supports Images & Videos.</span>
+                </div>
+            </div>
+        </main>
+    </div>
 
-    <!-- Client-side App Logic -->
+    <!-- Application Script -->
     <script>
-        let chatMemory = []; // Stores max last 5 turns
-        let attachedFile = null;
+        let chatMemory = []; // Holds max 5 items: { role, content, mediaType, mediaUrl, fileName }
+        let currentAttachment = null; // { type: 'image'|'video', url: '', name: '', size: '' }
 
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            attachedFile = {
-                file: file,
-                name: file.name,
-                type: file.type.startsWith('image') ? 'image' : 'video',
-                url: URL.createObjectURL(file),
-                size: (file.size / (1024*1024)).toFixed(2) + ' MB'
-            };
+            const isImage = file.type.startsWith('image/');
+            const isVideo = file.type.startsWith('video/');
 
-            const container = document.getElementById('mediaPreviewContainer');
-            if (attachedFile.type === 'image') {
-                container.innerHTML = `<img src="${attachedFile.url}" class="w-full h-full object-cover">`;
-            } else {
-                container.innerHTML = `<i class="fa-solid fa-file-video text-cyan-400 text-lg"></i>`;
+            if (!isImage && !isVideo) {
+                alert('Please upload a valid image or video file.');
+                return;
             }
 
-            document.getElementById('fileName').innerText = attachedFile.name;
-            document.getElementById('fileSize').innerText = attachedFile.size;
-            document.getElementById('previewBar').classList.remove('hidden');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentAttachment = {
+                    type: isImage ? 'image' : 'video',
+                    url: e.target.result,
+                    name: file.name,
+                    size: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+                };
+
+                renderAttachmentPreview();
+            };
+            reader.readAsDataURL(file);
         }
 
-        function removeAttachment() {
-            attachedFile = null;
-            document.getElementById('mediaInput').value = '';
-            document.getElementById('previewBar').classList.add('hidden');
+        function renderAttachmentPreview() {
+            const container = document.getElementById('attachment-preview-container');
+            const thumbContainer = document.getElementById('preview-thumb-container');
+            const nameEl = document.getElementById('preview-filename');
+            const sizeEl = document.getElementById('preview-filesize');
+
+            if (!currentAttachment) {
+                container.classList.add('hidden');
+                return;
+            }
+
+            container.classList.remove('hidden');
+            nameEl.textContent = currentAttachment.name;
+            sizeEl.textContent = currentAttachment.size;
+
+            if (currentAttachment.type === 'image') {
+                thumbContainer.innerHTML = `<img src="${currentAttachment.url}" class="w-full h-full object-cover">`;
+            } else {
+                thumbContainer.innerHTML = `<video src="${currentAttachment.url}" class="w-full h-full object-cover"></video>`;
+            }
         }
 
-        function presetQuery(text) {
-            document.getElementById('userInput').value = text;
-            handleSendMessage(new Event('submit'));
+        function clearAttachment() {
+            currentAttachment = null;
+            document.getElementById('media-upload').value = '';
+            document.getElementById('attachment-preview-container').classList.add('hidden');
         }
 
-        function updateMemoryBadge() {
-            document.getElementById('memoryCount').innerText = chatMemory.length;
+        function handleKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function updateMemoryDisplay() {
+            const countEl = document.getElementById('memory-count');
+            countEl.textContent = chatMemory.length;
+
+            const sidebarList = document.getElementById('memory-sidebar-list');
+            if (chatMemory.length === 0) {
+                sidebarList.innerHTML = `<div class="text-slate-500 italic p-2 text-center">No active history in current 5-chat window.</div>`;
+                return;
+            }
+
+            sidebarList.innerHTML = chatMemory.map((item, idx) => `
+                <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700/50">
+                    <div class="flex justify-between items-center text-[10px] text-slate-400 mb-1">
+                        <span class="font-semibold text-brand-400">#${idx + 1} (${item.role})</span>
+                        <span>${item.mediaType ? item.mediaType.toUpperCase() : 'TEXT'}</span>
+                    </div>
+                    <p class="text-slate-300 truncate">${item.content}</p>
+                </div>
+            `).join('');
         }
 
         function clearChat() {
             chatMemory = [];
-            updateMemoryBadge();
-            document.getElementById('chatContainer').innerHTML = `
-                <div id="welcomeState" class="h-full flex flex-col items-center justify-center text-center p-8 text-slate-400">
-                    <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 shadow-xl">
-                        <i class="fa-solid fa-sparkles text-cyan-400 text-2xl"></i>
+            document.getElementById('chat-container').innerHTML = `
+                <div class="max-w-2xl mx-auto text-center py-10 space-y-3">
+                    <div class="w-12 h-12 bg-brand-600/20 border border-brand-500/30 text-brand-400 rounded-2xl flex items-center justify-center mx-auto text-xl shadow-inner">
+                        <i class="fa-solid fa-sparkles"></i>
                     </div>
-                    <h2 class="text-xl font-semibold text-slate-200 mb-2">Session Reset</h2>
-                    <p class="text-sm max-w-md text-slate-400 mb-6">Memory has been cleared. Start a new research conversation below.</p>
-                </div>`;
-            removeAttachment();
+                    <h2 class="text-xl font-bold text-white">Session Reset</h2>
+                    <p class="text-sm text-slate-400 max-w-md mx-auto">Memory window cleared. Ready for new research queries.</p>
+                </div>
+            `;
+            updateMemoryDisplay();
+            clearAttachment();
         }
 
-        async function handleSendMessage(event) {
-            event.preventDefault();
-            const inputField = document.getElementById('userInput');
-            const promptText = inputField.value.trim();
-            if (!promptText && !attachedFile) return;
+        async function sendMessage() {
+            const inputEl = document.getElementById('user-input');
+            const text = inputEl.value.trim();
 
-            // Hide welcome state if present
-            const welcome = document.getElementById('welcomeState');
-            if (welcome) welcome.remove();
+            if (!text && !currentAttachment) return;
 
-            const currentAttachment = attachedFile;
-            inputField.value = '';
-            removeAttachment();
+            const userMessage = {
+                role: 'user',
+                content: text || '[Media Attachment Analysis]',
+                mediaType: currentAttachment ? currentAttachment.type : null,
+                mediaUrl: currentAttachment ? currentAttachment.url : null,
+                fileName: currentAttachment ? currentAttachment.name : null
+            };
 
-            // Append User Message
-            appendMessage('user', promptText, currentAttachment);
+            // Push to rolling memory (keep max 5 items)
+            chatMemory.push(userMessage);
+            if (chatMemory.length > 5) {
+                chatMemory.shift(); // Remove oldest to maintain 5-chat sliding memory
+            }
 
-            // Push to rolling memory (max 5)
-            chatMemory.push({ role: 'user', content: promptText });
-            if (chatMemory.length > 5) chatMemory.shift();
-            updateMemoryBadge();
+            inputEl.value = '';
+            const attachedCopy = currentAttachment;
+            clearAttachment();
+            updateMemoryDisplay();
 
-            // Simulate AI Thinking State
-            const typingId = appendTypingIndicator();
+            appendMessageToUI(userMessage);
 
-            // Simulate response delay & generation
+            // Simulate AI response thinking state
+            const loadingId = appendLoadingIndicator();
+
+            // Simulate model reasoning delay
             setTimeout(() => {
-                document.getElementById(typingId).remove();
-                
-                let responseContent = generateMockResponse(promptText, currentAttachment);
-                appendMessage('assistant', responseContent);
+                removeLoadingIndicator(loadingId);
 
-                // Push assistant reply to memory
-                chatMemory.push({ role: 'assistant', content: responseContent });
-                if (chatMemory.length > 5) chatMemory.shift();
-                updateMemoryBadge();
+                const aiResponseText = generateSimulatedResponse(userMessage.content, userMessage.mediaType);
+                const aiMessage = {
+                    role: 'assistant',
+                    content: aiResponseText,
+                    mediaType: null,
+                    mediaUrl: null
+                };
+
+                chatMemory.push(aiMessage);
+                if (chatMemory.length > 5) {
+                    chatMemory.shift();
+                }
+
+                updateMemoryDisplay();
+                appendMessageToUI(aiMessage);
             }, 1200);
         }
 
-        function appendMessage(role, text, attachment = null) {
-            const container = document.getElementById('chatContainer');
-            const isUser = role === 'user';
-            
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'} w-full`;
+        function appendMessageToUI(msg) {
+            const container = document.getElementById('chat-container');
+            const isUser = msg.role === 'user';
 
-            let attachmentHtml = '';
-            if (attachment) {
-                if (attachment.type === 'image') {
-                    attachmentHtml = `<div class="mb-3 rounded-lg overflow-hidden max-w-xs border border-slate-700/50"><img src="${attachment.url}" class="w-full object-cover"></div>`;
-                } else {
-                    attachmentHtml = `<div class="mb-3 flex items-center space-x-2 bg-slate-900/80 p-2.5 rounded-lg border border-slate-700/50 text-xs"><i class="fa-solid fa-video text-cyan-400"></i><span class="truncate">${attachment.name}</span></div>`;
-                }
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex items-start space-x-3 max-w-3xl ${isUser ? 'ml-auto flex-row-reverse space-x-reverse' : ''}`;
+
+            let mediaHtml = '';
+            if (msg.mediaType === 'image') {
+                mediaHtml = `<div class="mb-2 rounded-lg overflow-hidden border border-slate-700 max-w-xs"><img src="${msg.mediaUrl}" class="w-full object-cover"></div>`;
+            } else if (msg.mediaType === 'video') {
+                mediaHtml = `<div class="mb-2 rounded-lg overflow-hidden border border-slate-700 max-w-xs"><video src="${msg.mediaUrl}" controls class="w-full object-cover"></video></div>`;
             }
 
-            msgDiv.innerHTML = `
-                <div class="max-w-2xl rounded-2xl p-4 text-sm ${isUser ? 'bg-cyan-600 text-white rounded-br-none shadow-lg shadow-cyan-900/20' : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-bl-none shadow-xl'}">
-                    ${attachmentHtml}
-                    <div class="leading-relaxed whitespace-pre-wrap">${escapeHtml(text)}</div>
-                    <div class="mt-2 text-[10px] ${isUser ? 'text-cyan-200' : 'text-slate-500'} text-right">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            wrapper.innerHTML = `
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isUser ? 'bg-brand-600 text-white shadow-md' : 'bg-slate-800 border border-slate-700 text-brand-400'}">
+                    <i class="fa-solid ${isUser ? 'fa-user' : 'fa-brain'} text-xs"></i>
+                </div>
+                <div class="flex-1 space-y-1">
+                    <div class="flex items-center space-x-2 ${isUser ? 'justify-end' : ''}">
+                        <span class="text-xs font-semibold text-slate-400">${isUser ? 'You' : 'Research Studio AI'}</span>
+                    </div>
+                    <div class="${isUser ? 'bg-brand-600 text-white rounded-2xl rounded-tr-none' : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-2xl rounded-tl-none'} p-4 text-sm shadow-sm">
+                        ${mediaHtml}
+                        <div class="leading-relaxed markdown-body">${isUser ? escapeHtml(msg.content) : marked.parse(msg.content)}</div>
+                    </div>
                 </div>
             `;
-            container.appendChild(msgDiv);
+
+            container.appendChild(wrapper);
             container.scrollTop = container.scrollHeight;
         }
 
-        function appendTypingIndicator() {
-            const container = document.getElementById('chatContainer');
-            const id = 'typing-' + Date.now();
-            const div = document.createElement('div');
-            div.id = id;
-            div.className = 'flex justify-start w-full';
-            div.innerHTML = `
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-bl-none p-4 text-sm flex items-center space-x-2 shadow-xl">
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce"></span>
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]"></span>
-                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]"></span>
+        function appendLoadingIndicator() {
+            const container = document.getElementById('chat-container');
+            const id = 'loading-' + Date.now();
+            const wrapper = document.createElement('div');
+            wrapper.id = id;
+            wrapper.className = 'flex items-start space-x-3 max-w-3xl';
+            wrapper.innerHTML = `
+                <div class="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 text-brand-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-brain text-xs"></i>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 text-slate-400 p-4 rounded-2xl rounded-tl-none text-sm flex items-center space-x-2">
+                    <div class="w-2 h-2 rounded-full bg-brand-500 animate-bounce"></div>
+                    <div class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.2s]"></div>
+                    <div class="w-2 h-2 rounded-full bg-brand-500 animate-bounce [animation-delay:0.4s]"></div>
+                    <span class="text-xs ml-2">Analyzing context & memory window...</span>
                 </div>
             `;
-            container.appendChild(div);
+            container.appendChild(wrapper);
             container.scrollTop = container.scrollHeight;
             return id;
         }
 
-        function generateMockResponse(query, attachment) {
-            let contextNote = attachment ? ` [Analyzed attached ${attachment.type}: ${attachment.name}]` : '';
-            let memoryContext = ` (Memory Context: tracking ${chatMemory.length}/5 recent turns)`;
-            return `Here is the comprehensive research breakdown for your request${contextNote}.${memoryContext}\n\n1. **Core Objective**: Evaluated parameters across provided multi-modal inputs and active context window.\n2. **Analysis Result**: Verified structured data points and cross-referenced with contextual history.\n3. **Recommendation**: Proceed with automated pipeline integration or refine parameters accordingly.`;
+        function removeLoadingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function generateSimulatedResponse(prompt, mediaType) {
+            if (mediaType === 'image') {
+                return `### Image Visual Analysis Report\n- **Primary Subject:** High-resolution asset detected.\n- **Composition:** Clean alignment with balanced lighting properties.\n- **Research Insight:** This asset aligns well with your ongoing 5-chat context window parameters.`;
+            } else if (mediaType === 'video') {
+                return `### Video Sequence Analysis\n- **Stream Data:** Multimodal frames successfully ingested.\n- **Motion Dynamics:** Stable transition frames with clear audio track parameters.\n- **Conclusion:** Synthesized into your active memory context for multi-turn processing.`;
+            } else {
+                return `Based on your prompt **"${prompt}"** and our active rolling memory context (retaining the last 5 interactions), here is the structured analysis:\n\n1. **Key Findings:** Processed successfully through the selected model pipeline.\n2. **Contextual Continuity:** Maintained memory state across previous turns.\n3. **Recommendation:** You can connect this UI layout directly to your backend n8n webhook or custom API endpoints for live production execution.`;
+            }
         }
 
         function escapeHtml(text) {
