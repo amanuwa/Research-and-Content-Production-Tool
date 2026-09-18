@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <script>
+    <!-- <script>
       //  const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 import { supabase, DEV_MODE_OVERRIDE } from './config.js';
         document.getElementById('signin-form').addEventListener('submit', async (e) => {
@@ -56,6 +56,27 @@ import { supabase, DEV_MODE_OVERRIDE } from './config.js';
                 window.location.href = 'dashboard.html';
             }
         });
-    </script>
+    </script> -->
+    <script type="module">
+    import { supabase, DEV_MODE_OVERRIDE } from './config.js';
+
+    document.getElementById('signin-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Use 'supabase' directly (matching the import)
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            alert('Sign-In Error: ' + error.message);
+        } else {
+            window.location.href = 'dashboard.html';
+        }
+    });
+</script>
 </body>
 </html>
