@@ -3,311 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriIntel - Global Agriculture Intelligence Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Europe Intelligence & News Dispatch</title>
     <style>
-        body { 
-            margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
-            background-color: #02040e; position: relative; overflow-x: hidden;
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --accent-color: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
-        #cyberCanvas {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-        .app-interface { position: relative; z-index: 10; }
-        /* Custom scrollbar for the white data workspace */
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Left Panel: Europe Continent & Country Thick Buttons --- */
+        .continent-panel {
+            width: 320px;
+            background-color: var(--panel-bg);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .continent-header {
+            padding: 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            background: #111827;
+            letter-spacing: 0.5px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        .country-list-container {
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        /* Custom scrollbar for clean appearance */
+        .country-list-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .country-list-container::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        /* Thick Continent Country Buttons */
+        .country-btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .country-btn:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .country-btn:active {
+            transform: translateY(0);
+        }
+
+        .country-btn::after {
+            content: "›";
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        /* --- Hot News Panel --- */
+        .news-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Small header styling */
+        .news-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Big Textfield Container */
+        .news-textarea-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .news-textarea {
+            width: 100%;
+            height: 220px;
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            color: var(--text-main);
+            font-size: 1rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .news-textarea:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        .dispatch-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .dispatch-btn {
+            background-color: var(--accent-color);
+            color: #0f172a;
+            border: none;
+            padding: 10px 20px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dispatch-btn:hover {
+            background-color: var(--accent-hover);
+        }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body>
 
-    <!-- Holographic Warp Background -->
-    <canvas id="cyberCanvas"></canvas>
-
-    <!-- Top Navigation Bar -->
-    <header class="app-interface w-full bg-slate-900/90 backdrop-blur-md border-b border-blue-500/30 px-6 py-4 flex justify-between items-center shadow-lg">
-        <div class="flex items-center space-x-3">
-            <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
-            <h1 class="text-xl font-bold text-blue-400 tracking-wide">AgriIntel <span class="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">Global Intelligence Matrix</span></h1>
+    <!-- Left Panel: Europe Continent -->
+    <aside class="continent-panel">
+        <div class="continent-header">🌍 Europe Continent</div>
+        <div class="country-list-container">
+            <button class="country-btn">Belgium</button>
+            <button class="country-btn">Finland</button>
+            <button class="country-btn">France</button>
+            <button class="country-btn">Germany</button>
+            <button class="country-btn">Ireland</button>
+            <button class="country-btn">Italy</button>
+            <button class="country-btn">Norway</button>
+            <button class="country-btn">Poland</button>
+            <button class="country-btn">Portugal</button>
+            <button class="country-btn">Russia</button>
+            <button class="country-btn">Spain</button>
+            <button class="country-btn">Sweden</button>
+            <button class="country-btn">Switzerland</button>
+            <button class="country-btn">Ukraine</button>
+            <button class="country-btn">United Kingdom</button>
         </div>
-        <div class="flex items-center space-x-4">
-            <span id="user-email" class="text-sm text-slate-400">Loading session...</span>
-            <button id="logout-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded-lg border border-slate-700 transition">Sign Out</button>
-        </div>
-    </header>
+    </aside>
 
-    <!-- Main Workspace Grid -->
-    <main class="app-interface flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-        
-        <!-- LEFT SIDEBAR: 7 Continents & Major Effective Countries -->
-        <div class="lg:col-span-1 bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-blue-500/30 shadow-xl space-y-3">
-            <h2 class="text-xs font-bold text-blue-400 uppercase tracking-widest px-2 mb-2">Global Regions</h2>
-            <div class="space-y-2 max-h-[75vh] overflow-y-auto pr-1">
-                
-                <!-- Africa -->
-                <div class="continent-group">
-                    <button onclick="toggleContinent('africa')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>🌍 Africa</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </button>
-                    <div id="continent-africa" class="hidden pl-4 pt-2 space-y-1">
-                        <button onclick="filterByRegion('Nigeria')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Nigeria</button>
-                        <button onclick="filterByRegion('Kenya')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Kenya</button>
-                        <button onclick="filterByRegion('South Africa')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• South Africa</button>
-                        <button onclick="filterByRegion('Ethiopia')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Ethiopia</button>
-                    </div>
-                </div>
-
-                <!-- North America -->
-                <div class="continent-group">
-                    <button onclick="toggleContinent('namerica')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>🌎 North America</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </button>
-                    <div id="continent-namerica" class="hidden pl-4 pt-2 space-y-1">
-                        <button onclick="filterByRegion('United States')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• United States</button>
-                        <button onclick="filterByRegion('Canada')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Canada</button>
-                        <button onclick="filterByRegion('Mexico')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Mexico</button>
-                    </div>
-                </div>
-
-                <!-- South America -->
-                <div class="continent-group">
-                    <button onclick="toggleContinent('samerica')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>🌎 South America</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </button>
-                    <div id="continent-samerica" class="hidden pl-4 pt-2 space-y-1">
-                        <button onclick="filterByRegion('Brazil')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Brazil</button>
-                        <button onclick="filterByRegion('Argentina')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Argentina</button>
-                    </div>
-                </div>
-
-                <!-- Europe -->
-                <div class="continent-group">
-                    <button onclick="toggleContinent('europe')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>🌍 Europe</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </button>
-                    <div id="continent-europe" class="hidden pl-4 pt-2 space-y-1">
-                        <button onclick="filterByRegion('Germany')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Germany</button>
-                        <button onclick="filterByRegion('France')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• France</button>
-                        <button onclick="filterByRegion('Ukraine')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Ukraine</button>
-                    </div>
-                </div>
-
-                <!-- Asia -->
-                <div class="continent-group">
-                    <button onclick="toggleContinent('asia')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>🌏 Asia</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </button>
-                    <div id="continent-asia" class="hidden pl-4 pt-2 space-y-1">
-                        <button onclick="filterByRegion('China')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• China</button>
-                        <button onclick="filterByRegion('India')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• India</button>
-                        <button onclick="filterByRegion('Indonesia')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Indonesia</button>
-                    </div>
-                </div>
-
-                <!-- Oceania -->
-                <div class="continent-group">
-                    <button onclick="toggleContinent('oceania')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>🌏 Oceania</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </button>
-                    <div id="continent-oceania" class="hidden pl-4 pt-2 space-y-1">
-                        <button onclick="filterByRegion('Australia')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• Australia</button>
-                        <button onclick="filterByRegion('New Zealand')" class="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition">• New Zealand</button>
-                    </div>
-                </div>
-
-                <!-- Antarctica -->
-                <div class="continent-group">
-                    <button onclick="filterByRegion('Antarctica')" class="w-full text-left px-4 py-3 bg-slate-800/90 hover:bg-blue-600/30 border border-slate-700 hover:border-blue-500 font-semibold text-sm rounded-xl transition flex justify-between items-center text-slate-200">
-                        <span>❄️ Antarctica</span>
-                    </button>
-                </div>
-
+    <!-- Main Workspace -->
+    <main class="main-content">
+        <!-- Hot News Panel -->
+        <section class="news-panel">
+            <h2 class="news-title">Global Hot News Intelligence Dispatch</h2>
+            <div class="news-textarea-wrapper">
+                <textarea class="news-textarea" placeholder="Enter or stream real-time intelligence dispatch summaries, policy updates, and agricultural developments across European sectors..."></textarea>
             </div>
-        </div>
-
-        <!-- RIGHT MAIN PANEL: Red Highlighted Action Panel + Scrollable White Dataset Workspace -->
-        <div class="lg:col-span-3 space-y-6">
-            
-            <!-- Red Highlighted Control Panel -->
-            <div class="bg-gradient-to-r from-red-950/80 via-slate-900/90 to-slate-900/90 backdrop-blur-md p-5 rounded-2xl border-2 border-red-500/50 shadow-2xl shadow-red-950/30 flex flex-col md:flex-row gap-4 justify-between items-center">
-                <div class="w-full">
-                    <span class="text-xs font-bold text-red-400 tracking-wider uppercase bg-red-950/80 px-2 py-0.5 rounded border border-red-500/40">Live Scraper Control</span>
-                    <h2 class="text-lg font-bold text-white mt-1">Global Hot News Intelligence Dispatch</h2>
-                </div>
-                <div class="w-full flex items-center space-x-2">
-                    <input type="text" id="hot-search-input" placeholder="Enter keywords, crop type, or policy..." class="w-full px-4 py-2.5 bg-slate-950 border border-red-500/40 rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none text-white text-sm placeholder-slate-500">
-                    <button onclick="triggerHotNewsFetch()" class="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg shadow-red-950/50 whitespace-nowrap">Get Hot News</button>
-                </div>
+            <div class="dispatch-meta">
+                <span>Status: Live feed connected</span>
+                <button class="dispatch-btn">Push Dispatch</button>
             </div>
-
-            <!-- Scrollable Unlimited White Space Dataset Workspace -->
-            <div class="bg-white text-slate-900 rounded-2xl shadow-2xl p-6 h-[65vh] flex flex-col border border-slate-300">
-                <div class="flex justify-between items-center pb-4 border-b border-slate-200 mb-4">
-                    <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-                        <span>📊 Scraped Dataset Feed</span>
-                        <span class="text-xs font-normal bg-slate-100 text-slate-600 px-2 py-0.5 rounded border border-slate-200">Live Web & Twitter Stream</span>
-                    </h3>
-                    <span id="result-count" class="text-xs text-slate-500 font-medium">Showing active records</span>
-                </div>
-
-                <!-- Scrollable Container -->
-                <div id="dataset-container" class="custom-scroll flex-1 overflow-y-auto space-y-4 pr-2">
-                    
-                    <!-- Dataset Item 1 -->
-                    <div class="dataset-card bg-slate-50 hover:bg-blue-50/50 p-4 rounded-xl border border-slate-200 transition shadow-sm" data-region="Brazil" data-source="web">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">South America • Brazil</span>
-                            <span class="text-xs text-slate-500">12 mins ago • Source: Embrapa Web Scrape</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-sm mb-1">Cerrado Soybean Yield Forecast Adjusted Following Extended Precipitation</h4>
-                        <p class="text-xs text-slate-600 mb-2">AI Summary: Recent satellite telemetry and regional meteorological telemetry indicate a favorable 4.2% output increase across Mato Grosso plots compared to last season.</p>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs">
-                            <a href="#" target="_blank" class="text-blue-600 font-semibold hover:underline">Access Full Report &rarr;</a>
-                            <span class="text-slate-400">ID: SCRAPE-BR-8921</span>
-                        </div>
-                    </div>
-
-                    <!-- Dataset Item 2 -->
-                    <div class="dataset-card bg-slate-50 hover:bg-blue-50/50 p-4 rounded-xl border border-slate-200 transition shadow-sm" data-region="United States" data-source="twitter">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200">North America • United States</span>
-                            <span class="text-xs text-slate-500">30 mins ago • Twitter / X AgroFeed</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-sm mb-1">Corn futures spike following USDA supply report updates.</h4>
-                        <p class="text-xs text-slate-600 mb-2">AI Summary: Export demands from Asian markets have driven immediate hedging strategies among Midwest commercial grain handlers.</p>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs">
-                            <a href="#" target="_blank" class="text-blue-600 font-semibold hover:underline">View Tweet Thread &rarr;</a>
-                            <span class="text-slate-400">ID: TWT-US-4401</span>
-                        </div>
-                    </div>
-
-                    <!-- Dataset Item 3 -->
-                    <div class="dataset-card bg-slate-50 hover:bg-blue-50/50 p-4 rounded-xl border border-slate-200 transition shadow-sm" data-region="Kenya" data-source="web">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">Africa • Kenya</span>
-                            <span class="text-xs text-slate-500">1 hour ago • Source: East African Agri-Review</span>
-                        </div>
-                        <h4 class="font-bold text-slate-900 text-sm mb-1">East African Fertilizer Subsidy Framework Restructured for Smallholders</h4>
-                        <p class="text-xs text-slate-600 mb-2">AI Summary: The Ministry of Agriculture has rolled out digital voucher programs targeting maize and tea growers in the Rift Valley to offset high import tariffs.</p>
-                        <div class="flex justify-between items-center pt-2 border-t border-slate-200 text-xs">
-                            <a href="#" target="_blank" class="text-blue-600 font-semibold hover:underline">Access Full Report &rarr;</a>
-                            <span class="text-slate-400">ID: SCRAPE-KE-1029</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
+        </section>
     </main>
 
-    <!-- Background Animation & UI Interaction Script -->
-    <script>
-        const canvas = document.getElementById('cyberCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        const streams = [];
-        for (let i = 0; i < 50; i++) {
-            streams.push({
-                x: (Math.random() - 0.5) * width * 2,
-                y: (Math.random() - 0.5) * height * 2,
-                z: Math.random() * width,
-                speed: Math.random() * 3 + 1.5
-            });
-        }
-
-        function animate() {
-            ctx.fillStyle = 'rgba(2, 4, 14, 0.25)';
-            ctx.fillRect(0, 0, width, height);
-            const cx = width / 2, cy = height / 2;
-
-            streams.forEach(s => {
-                s.z -= s.speed;
-                if (s.z <= 0) {
-                    s.z = width;
-                    s.x = (Math.random() - 0.5) * width * 2;
-                    s.y = (Math.random() - 0.5) * height * 2;
-                }
-                const k = 300 / s.z;
-                const px = s.x * k + cx, py = s.y * k + cy;
-                const prevK = 300 / (s.z + s.speed * 8);
-                const prevPx = s.x * prevK + cx, prevPy = s.y * prevK + cy;
-
-                if (px >= 0 && px <= width && py >= 0 && py <= height) {
-                    ctx.beginPath();
-                    ctx.moveTo(prevPx, prevPy);
-                    ctx.lineTo(px, py);
-                    ctx.strokeStyle = `rgba(0, 242, 254, ${1 - s.z / width})`;
-                    ctx.lineWidth = k * 1.5;
-                    ctx.stroke();
-                }
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // Toggle continent accordions
-        function toggleContinent(id) {
-            const el = document.getElementById('continent-' + id);
-            if (el) {
-                el.classList.toggle('hidden');
-            }
-        }
-
-        // Filter dataset by region/country
-        function filterByRegion(countryName) {
-            const cards = document.querySelectorAll('.dataset-card');
-            cards.forEach(card => {
-                const region = card.getAttribute('data-region');
-                if (region.toLowerCase() === countryName.toLowerCase()) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        // Hot news fetch trigger
-        function triggerHotNewsFetch() {
-            const query = document.getElementById('hot-search-input').value;
-            alert(`Fetching latest scraped intelligence streams for: "${query || 'Global Top Trends'}"...`);
-        }
-    </script>
-
-    <!-- Supabase Session Protection Module -->
-    <script type="module">
-        import { supabase } from './config.js';
-
-        async function checkUserSession() {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            if (!session) {
-                window.location.href = 'index.html';
-            } else {
-                document.getElementById('user-email').textContent = session.user.email;
-            }
-        }
-        checkUserSession();
-
-        document.getElementById('logout-btn').addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            window.location.href = 'index.html';
-        });
-    </script>
 </body>
 </html>
