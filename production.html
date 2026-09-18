@@ -1,1 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Production Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #94a3b8;
+        }
+        /* Custom A4 Paper Styling */
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: #ffffff;
+            color: #1f2937;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        /* Custom scrollbars for dark theme */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between">
 
+    <div>
+        <!-- Top Navigation Bar -->
+        <header class="border-b border-gray-800 bg-[#0b0f19] sticky top-0 z-50">
+            <div class="max-w-full px-6 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-cyan-400 font-mono text-xs tracking-wider">// JOURNALIST PREPARATION STUDIO</span>
+                </div>
+
+                <!-- Top Right Controls: Notifications & Logged-in User (Only User Name) -->
+                <div class="flex items-center space-x-6">
+                    <!-- Notifications Dropdown -->
+                    <div class="relative">
+                        <button id="notifBtn" onclick="toggleNotifications()" class="flex items-center space-x-2 bg-[#111827] hover:bg-gray-800 text-gray-300 px-3 py-1.5 rounded border border-gray-800 text-xs font-mono transition">
+                            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                            </svg>
+                            <span>NOTIFICATIONS</span>
+                            <span id="notifBadge" class="bg-cyan-500 text-black text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+                        </button>
+
+                        <!-- Notifications Dropdown Menu -->
+                        <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 bg-[#111827] border border-gray-800 rounded-lg shadow-2xl py-2 z-50">
+                            <div class="px-4 py-2 border-b border-gray-800 font-mono text-xs text-cyan-400">DRAFT INBOX (FILTERED: READ)</div>
+                            <div id="notifList" class="divide-y divide-gray-800 max-h-64 overflow-y-auto">
+                                <!-- Populated dynamically via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logged In User Name Display Only -->
+                    <div class="flex items-center space-x-2 border-l border-gray-800 pl-6">
+                        <span class="text-xs font-mono text-gray-400">ACTIVE:</span>
+                        <span id="loggedInUserDisplay" class="text-sm font-mono font-bold text-cyan-400">kenenisa</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="max-w-full px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- LEFT SIDE: A4 Paper Workspace (Span 7) -->
+            <section class="lg:col-span-7 flex flex-col space-y-4">
+                <div class="flex items-center justify-between bg-[#111827] p-3 rounded-lg border border-gray-800">
+                    <div class="flex items-center space-x-3">
+                        <!-- File Explorer Button for A4 Workspace -->
+                        <label class="cursor-pointer bg-[#1f2937] hover:bg-gray-700 text-gray-200 text-xs font-mono px-3 py-2 rounded border border-gray-700 flex items-center space-x-2 transition">
+                            <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                            </svg>
+                            <span>Insert File</span>
+                            <input type="file" id="localFileLoader" class="hidden" onchange="loadLocalFile(event)">
+                        </label>
+                        <span id="loadedFileName" class="text-xs font-mono text-gray-500">// Draft Workspace</span>
+<!-- Clear Workspace Button -->
+                        <button onclick="clearWorkspace()" class="bg-[#1f2937] hover:bg-red-900/40 text-gray-300 hover:text-red-400 text-xs font-mono px-3 py-2 rounded border border-gray-700 flex items-center space-x-2 transition">
+                            <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            <span>Clear</span>
+                        </button>
+                        
+                    </div>
+                  
+                </div>
+
+                <!-- Blank A4 Paper Area -->
+                <div class="overflow-x-auto pb-4">
+                <div id="a4Workspace" class="a4-paper flex flex-col justify-between max-h-[75vh] overflow-y-auto">
+                        <div id="a4Content" class="space-y-4">
+                            <div class="text-center text-gray-400 py-32 italic font-sans text-base">
+                                Select a draft from notifications or insert a file to populate workspace.
+                            </div>
+                        </div>
+                        <div class="text-xs text-gray-400 text-center pt-8 border-t border-gray-200 font-mono">
+                            PRODUCTION A4 PREVIEW WORKSPACE
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT SIDE: Content Editor Panel (Span 5) -->
+            <section class="lg:col-span-5 bg-[#111827] p-6 rounded-lg border border-gray-800 flex flex-col space-y-5">
+                <h2 class="text-xs font-mono text-cyan-400 tracking-wider border-b border-gray-800 pb-2">// CONTENT EDITOR PANEL</h2>
+
+                <!-- Title Text Box -->
+                <div class="flex flex-col space-y-1">
+                    <label for="postTitle" class="text-xs font-mono text-gray-400">TITLE</label>
+                    <input type="text" id="postTitle" placeholder="Enter post title..." 
+                           class="px-3 py-2 bg-[#0b0f19] border border-gray-800 rounded text-gray-200 focus:outline-none focus:border-cyan-500 text-sm font-sans">
+                </div>
+
+                <!-- Image Panel with File Explorer Button -->
+               <!-- Image Panel with URL input and File Explorer -->
+<!-- Image URL Input & Render Panel -->
+<div class="flex flex-col space-y-2">
+    <label class="text-xs font-mono text-gray-400">FEATURED IMAGE / MEDIA URL</label>
+    
+    <!-- Text input for public URL -->
+    <input type="text" class="media-url-input w-full bg-[#0b0f19] border border-gray-800 rounded p-2 text-xs text-white" placeholder="https://..." oninput="handleMediaUrlInput(this)">
+
+    <!-- Render Preview Panel -->
+    <div class="border-2 border-gray-800 rounded-lg p-2 text-center bg-[#0b0f19] h-36 flex items-center justify-center overflow-hidden">
+        <div id="imagePreviewContainer" class="w-full h-full flex flex-col items-center justify-center space-y-1 text-gray-500">
+            <svg class="w-6 h-6 text-cyan-400 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-xs font-mono">Image preview will render here</span>
+        </div>
+    </div>
+</div>
+
+                <!-- Bigger Text Box for Main Text Content -->
+                <div class="flex flex-col space-y-1 flex-grow">
+                    <label for="postContent" class="text-xs font-mono text-gray-400">MAIN CONTENT TEXT</label>
+                    <textarea id="postContent" rows="6" placeholder="Type or paste main post text here..." 
+                              class="px-3 py-2 bg-[#0b0f19] border border-gray-800 rounded text-gray-200 focus:outline-none focus:border-cyan-500 text-sm font-sans resize-y"></textarea>
+                </div>
+
+                <!-- Distribute Button -->
+             <div class="mt-4">
+    <button onclick="distributeContent()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-black font-mono text-xs font-bold py-3 rounded transition shadow-lg flex items-center justify-center space-x-2">
+        <span>⚡ DISTRIBUTE CONTENT TO ALL PLATFORMS</span>
+    </button>
+</div>
+            </section>
+        </main>
+
+        <!-- BOTTOM SECTION: 6 Distribution Panels (Scrolled down section) -->
+   <section class="max-w-full px-6 py-8 border-t border-gray-800 mt-12 bg-[#0b0f19]">
+    <h3 class="text-xs font-mono text-cyan-400 tracking-wider mb-6">// MULTI-PLATFORM DISTRIBUTION CHANNELS</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- 1. TikTok Panel -->
+        <div class="bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-white flex items-center justify-center rounded font-mono text-xs font-bold">TT</div>
+                    <h4 class="font-mono text-sm text-gray-200">TikTok Channel</h4>
+                </div>
+                <label class="flex items-center space-x-1.5 cursor-pointer text-[10px] font-mono text-gray-400">
+                   <input type="checkbox" class="multi-toggle accent-cyan-500 rounded bg-gray-900 border-gray-700" onchange="toggleMultiImageMode(this)">
+                    <span>Multi-Image</span>
+                </label>
+            </div>
+            <p class="text-xs text-gray-500 font-sans">Short-form video layout and captions feed.</p>
+<div class="flex flex-col space-y-2">
+    <!-- Container for dynamic URL input boxes -->
+    <div class="url-inputs-container flex flex-col space-y-1">
+        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="handleDynamicMediaInputs(this)">
+    </div>
+
+    <!-- "Add Image" button (hidden by default until Multi-Image checkbox is ticked) -->
+    <button type="button" class="add-image-btn hidden text-xs font-mono text-cyan-400 hover:text-cyan-300 self-start mt-1" onclick="addNewImageUrlBox(this)">+ Add Image (Up to 10)</button>
+
+    <!-- Image / Video Display Panel -->
+    <div class="image-display-container relative w-full h-48 bg-gray-900 border border-gray-700 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="openImageModalFromCard(this)">
+        <span class="placeholder-text text-xs text-gray-500 font-mono">Image/Video preview will render here</span>
+        <div id="imagePreviewContainer" class="w-full h-full flex items-center justify-center"></div>
+    </div>
+</div>
+
+            <div>
+                <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+                <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none">
+            </div>
+<!-- Insert it right here around line 320/321 -->
+        <div>
+            <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+            <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none overflow-y-auto max-h-32"></textarea>
+        </div>
+          <div>
+    <label class="text-[10px] font-mono text-gray-400 uppercase mb-1 block">Audio Track URL</label>
+    <input type="text" placeholder="Paste Google Drive audio URL..." class="audio-url-input w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 focus:border-cyan-500 outline-none" oninput="handleAudioUrlInput(this)">
+    
+    <!-- Audio player and duration display -->
+    <div class="flex items-center justify-between bg-gray-900/60 border border-gray-800 rounded p-1.5 mt-1">
+        <span class="audio-duration-display text-[11px] font-mono text-cyan-400">Duration: --:--</span>
+        <audio class="hidden-audio-player hidden" preload="metadata" onloadedmetadata="updateAudioDuration(this)"></audio>
+        <span class="text-[10px] font-mono text-gray-500">Auto-reads length</span>
+    </div>
+</div>
+
+            <div>
+                <label class="text-[10px] font-mono text-gray-400 uppercase">Tags</label>
+                <input type="text" placeholder="e.g. news, trending" class="platform-tags w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none">
+            </div>
+
+            <div class="flex items-center space-x-2 pt-2">
+                <button onclick="publishTo('TikTok', this)" class="bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish to TikTok</button>
+                <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none focus:border-cyan-500">
+                    <option value="">Select Account...</option>
+               <option value="tiktok account 1">tiktok account 1</option>
+               <option value="tiktok account 2">tiktok account 2</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 2. Instagram Panel -->
+<!-- Updated Instagram Studio Panel -->
+<div class="bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-pink-400 flex items-center justify-center rounded font-mono text-xs font-bold">IG</div>
+            <h4 class="font-mono text-sm text-gray-200">Instagram Studio</h4>
+        </div>
+        <label class="flex items-center space-x-1.5 cursor-pointer text-[10px] font-mono text-gray-400">
+            <input type="checkbox" class="multi-toggle accent-pink-500 rounded bg-gray-900 border-gray-700" onchange="toggleMultiImageMode(this)">
+            <span>Multi-Image</span>
+        </label>
+    </div>
+    <p class="text-xs text-gray-500 font-sans">Feed post, story and carousel integration.</p>
+
+    <div class="flex flex-col space-y-2">
+        <!-- Container for dynamic URL input boxes -->
+        <div class="url-inputs-container flex flex-col space-y-1">
+            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-pink-500 outline-none" placeholder="Paste image or video URL..." oninput="handleDynamicMediaInputs(this)">
+        </div>
+
+        <!-- "Add Image" button (hidden by default until Multi-Image checkbox is ticked) -->
+        <button type="button" class="add-image-btn hidden text-xs font-mono text-pink-400 hover:text-pink-300 self-start mt-1" onclick="addNewImageUrlBox(this)">+ Add Image (Up to 10)</button>
+
+        <!-- Image / Video Display Panel -->
+        <div class="image-display-container relative w-full h-48 bg-gray-900 border border-gray-700 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="openImageModalFromCard(this)">
+            <span class="placeholder-text text-xs text-gray-500 font-mono">Image/Video preview will render here</span>
+            <div id="imagePreviewContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+        <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none">
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none resize-none overflow-y-auto max-h-32"></textarea>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase mb-1 block">Audio Track URL</label>
+        <input type="text" placeholder="Paste Google Drive audio URL..." class="audio-url-input w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 focus:border-pink-500 outline-none" oninput="handleAudioUrlInput(this)">
+        
+        <div class="flex items-center justify-between bg-gray-900/60 border border-gray-800 rounded p-1.5 mt-1">
+            <span class="audio-duration-display text-[11px] font-mono text-pink-400">Duration: --:--</span>
+            <audio class="hidden-audio-player hidden" preload="metadata" onloadedmetadata="updateAudioDuration(this)"></audio>
+            <span class="text-[10px] font-mono text-gray-500">Auto-reads length</span>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Tags</label>
+        <input type="text" placeholder="e.g. photography, lifestyle" class="platform-tags w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none">
+    </div>
+
+    <div class="flex items-center space-x-2 pt-2">
+        <button onclick="publishTo('Instagram', this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish to Instagram</button>
+        <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none focus:border-pink-500">
+            <option value="">Select Account...</option>
+            <option value="account_1">instagram account 1</option>
+            <option value="account_2">instagram account 2</option>
+        </select>
+    </div>
+</div>
+        <!-- 3. Twitter / X Panel -->
+<!-- Updated Twitter / X Stream Panel -->
+<div class="bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-cyan-400 flex items-center justify-center rounded font-mono text-xs font-bold">TW</div>
+            <h4 class="font-mono text-sm text-gray-200">Twitter / X Stream</h4>
+        </div>
+        <label class="flex items-center space-x-1.5 cursor-pointer text-[10px] font-mono text-gray-400">
+            <input type="checkbox" class="multi-toggle accent-cyan-500 rounded bg-gray-900 border-gray-700" onchange="toggleMultiImageMode(this)">
+            <span>Multi-Image</span>
+        </label>
+    </div>
+    <p class="text-xs text-gray-500 font-sans">Character checked microblog and media attachments.</p>
+
+    <div class="flex flex-col space-y-2">
+        <!-- Container for dynamic URL input boxes -->
+        <div class="url-inputs-container flex flex-col space-y-1">
+            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="handleDynamicMediaInputs(this)">
+        </div>
+
+        <!-- "Add Image" button (hidden by default until Multi-Image checkbox is ticked) -->
+        <button type="button" class="add-image-btn hidden text-xs font-mono text-cyan-400 hover:text-cyan-300 self-start mt-1" onclick="addNewImageUrlBox(this)">+ Add Image (Up to 10)</button>
+
+        <!-- Image / Video Display Panel -->
+        <div class="image-display-container relative w-full h-48 bg-gray-900 border border-gray-700 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="openImageModalFromCard(this)">
+            <span class="placeholder-text text-xs text-gray-500 font-mono">Image/Video preview will render here</span>
+            <div id="imagePreviewContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+        <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none">
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none overflow-y-auto max-h-32"></textarea>
+    </div>
+        
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase mb-1 block">Audio Track URL</label>
+        <input type="text" placeholder="Paste Google Drive audio URL..." class="audio-url-input w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 focus:border-cyan-500 outline-none" oninput="handleAudioUrlInput(this)">
+        
+        <div class="flex items-center justify-between bg-gray-900/60 border border-gray-800 rounded p-1.5 mt-1">
+            <span class="audio-duration-display text-[11px] font-mono text-cyan-400">Duration: --:--</span>
+            <audio class="hidden-audio-player hidden" preload="metadata" onloadedmetadata="updateAudioDuration(this)"></audio>
+            <span class="text-[10px] font-mono text-gray-500">Auto-reads length</span>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Tags</label>
+        <input type="text" placeholder="e.g. breaking, update" class="platform-tags w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none">
+    </div>
+
+    <div class="flex items-center space-x-2 pt-2">
+        <button onclick="publishTo('Twitter', this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish to Twitter</button>
+        <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none focus:border-cyan-500">
+            <option value="">Select Account...</option>
+            <option value="account_1">twitter account 1</option>
+            <option value="account_2">twitter account 2</option>
+        </select>
+    </div>
+</div>
+        <!-- 4. Telegram Panel -->
+      <!-- Updated Telegram Panel -->
+<div class="bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-sky-400 flex items-center justify-center rounded font-mono text-xs font-bold">TG</div>
+            <h4 class="font-mono text-sm text-gray-200">Telegram Channel</h4>
+        </div>
+        <label class="flex items-center space-x-1.5 cursor-pointer text-[10px] font-mono text-gray-400">
+            <input type="checkbox" class="multi-toggle accent-sky-500 rounded bg-gray-900 border-gray-700" onchange="toggleMultiImageMode(this)">
+            <span>Multi-Image</span>
+        </label>
+    </div>
+    <p class="text-xs text-gray-500 font-sans">Direct subscriber announcement feed stream.</p>
+
+    <div class="flex flex-col space-y-2">
+        <!-- Container for dynamic URL input boxes -->
+        <div class="url-inputs-container flex flex-col space-y-1">
+            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-sky-500 outline-none" placeholder="Paste image or video URL..." oninput="handleDynamicMediaInputs(this)">
+        </div>
+
+        <!-- "Add Image" button (hidden by default until Multi-Image checkbox is ticked) -->
+        <button type="button" class="add-image-btn hidden text-xs font-mono text-sky-400 hover:text-sky-300 self-start mt-1" onclick="addNewImageUrlBox(this)">+ Add Image (Up to 10)</button>
+
+        <!-- Image / Video Display Panel -->
+        <div class="image-display-container relative w-full h-48 bg-gray-900 border border-gray-700 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="openImageModalFromCard(this)">
+            <span class="placeholder-text text-xs text-gray-500 font-mono">Image/Video preview will render here</span>
+            <div id="imagePreviewContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+        <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none">
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none resize-none overflow-y-auto max-h-32"></textarea>
+    </div>
+        
+    <!-- New Audio URL Input layout -->
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase mb-1 block">Audio Track URL</label>
+        <input type="text" placeholder="Paste Google Drive audio URL..." class="audio-url-input w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 focus:border-sky-500 outline-none" oninput="handleAudioUrlInput(this)">
+        
+        <div class="flex items-center justify-between bg-gray-900/60 border border-gray-800 rounded p-1.5 mt-1">
+            <span class="audio-duration-display text-[11px] font-mono text-sky-400">Duration: --:--</span>
+            <audio class="hidden-audio-player hidden" preload="metadata" onloadedmetadata="updateAudioDuration(this)"></audio>
+            <span class="text-[10px] font-mono text-gray-500">Auto-reads length</span>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Tags</label>
+        <input type="text" placeholder="e.g. announcement" class="platform-tags w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none">
+    </div>
+
+    <div class="flex items-center space-x-2 pt-2">
+        <button onclick="publishTo('Telegram', this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish to Telegram</button>
+        <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none focus:border-sky-500">
+            <option value="">Select Account...</option>
+            <option value="account_1">telegram channel 1</option>
+            <option value="account_2">telegram channel 2</option>
+        </select>
+    </div>
+</div>
+
+        <!-- 5. YouTube Panel -->
+<!-- Updated YouTube Studio Panel -->
+<div class="bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-red-500 flex items-center justify-center rounded font-mono text-xs font-bold">YT</div>
+            <h4 class="font-mono text-sm text-gray-200">YouTube Studio</h4>
+        </div>
+        <label class="flex items-center space-x-1.5 cursor-pointer text-[10px] font-mono text-gray-400">
+            <input type="checkbox" class="multi-toggle accent-red-500 rounded bg-gray-900 border-gray-700" onchange="toggleMultiImageMode(this)">
+            <span>Multi-Image</span>
+        </label>
+    </div>
+    <p class="text-xs text-gray-500 font-sans">Video descriptions, tags and community posts.</p>
+
+    <div class="flex flex-col space-y-2">
+        <!-- Container for dynamic URL input boxes -->
+        <div class="url-inputs-container flex flex-col space-y-1">
+            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-red-500 outline-none" placeholder="Paste image or video URL..." oninput="handleDynamicMediaInputs(this)">
+        </div>
+
+        <!-- "Add Image" button (hidden by default until Multi-Image checkbox is ticked) -->
+        <button type="button" class="add-image-btn hidden text-xs font-mono text-red-400 hover:text-red-300 self-start mt-1" onclick="addNewImageUrlBox(this)">+ Add Image (Up to 10)</button>
+
+        <!-- Image / Video Display Panel -->
+        <div class="image-display-container relative w-full h-48 bg-gray-900 border border-gray-700 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="openImageModalFromCard(this)">
+            <span class="placeholder-text text-xs text-gray-500 font-mono">Image/Video preview will render here</span>
+            <div id="imagePreviewContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+        <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none">
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none overflow-y-auto max-h-32"></textarea>
+    </div>
+        
+    <!-- New Audio URL Input layout -->
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase mb-1 block">Audio Track URL</label>
+        <input type="text" placeholder="Paste Google Drive audio URL..." class="audio-url-input w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 focus:border-red-500 outline-none" oninput="handleAudioUrlInput(this)">
+        
+        <div class="flex items-center justify-between bg-gray-900/60 border border-gray-800 rounded p-1.5 mt-1">
+            <span class="audio-duration-display text-[11px] font-mono text-red-500">Duration: --:--</span>
+            <audio class="hidden-audio-player hidden" preload="metadata" onloadedmetadata="updateAudioDuration(this)"></audio>
+            <span class="text-[10px] font-mono text-gray-500">Auto-reads length</span>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Tags</label>
+        <input type="text" placeholder="e.g. video, podcast" class="platform-tags w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none">
+    </div>
+
+    <div class="flex items-center space-x-2 pt-2">
+        <button onclick="publishTo('YouTube', this)" class="bg-gray-900 hover:bg-gray-800 text-red-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish to YouTube</button>
+        <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none focus:border-red-500">
+            <option value="">Select Account...</option>
+            <option value="account_1">youtube account 1</option>
+            <option value="account_2">youtube account 2</option>
+        </select>
+    </div>
+</div>
+
+        <!-- 6. Facebook Panel -->
+        <!-- Updated Facebook Page Panel -->
+<div class="bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-blue-500 flex items-center justify-center rounded font-mono text-xs font-bold">FB</div>
+            <h4 class="font-mono text-sm text-gray-200">Facebook Page</h4>
+        </div>
+        <label class="flex items-center space-x-1.5 cursor-pointer text-[10px] font-mono text-gray-400">
+            <input type="checkbox" class="multi-toggle accent-blue-500 rounded bg-gray-900 border-gray-700" onchange="toggleMultiImageMode(this)">
+            <span>Multi-Image</span>
+        </label>
+    </div>
+    <p class="text-xs text-gray-500 font-sans">Page updates, link previews, and media posts.</p>
+
+    <div class="flex flex-col space-y-2">
+        <!-- Container for dynamic URL input boxes -->
+        <div class="url-inputs-container flex flex-col space-y-1">
+            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-blue-500 outline-none" placeholder="Paste image or video URL..." oninput="handleDynamicMediaInputs(this)">
+        </div>
+
+        <!-- "Add Image" button (hidden by default until Multi-Image checkbox is ticked) -->
+        <button type="button" class="add-image-btn hidden text-xs font-mono text-blue-400 hover:text-blue-300 self-start mt-1" onclick="addNewImageUrlBox(this)">+ Add Image (Up to 10)</button>
+
+        <!-- Image / Video Display Panel -->
+        <div class="image-display-container relative w-full h-48 bg-gray-900 border border-gray-700 rounded-lg flex flex-col items-center justify-center overflow-hidden cursor-pointer" onclick="openImageModalFromCard(this)">
+            <span class="placeholder-text text-xs text-gray-500 font-mono">Image/Video preview will render here</span>
+            <div id="imagePreviewContainer" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+        <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none">
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+        <textarea rows="4" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none resize-none overflow-y-auto max-h-32"></textarea>
+    </div>
+        
+    <!-- New Audio URL Input layout -->
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase mb-1 block">Audio Track URL</label>
+        <input type="text" placeholder="Paste Google Drive audio URL..." class="audio-url-input w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 focus:border-blue-500 outline-none" oninput="handleAudioUrlInput(this)">
+        
+        <div class="flex items-center justify-between bg-gray-900/60 border border-gray-800 rounded p-1.5 mt-1">
+            <span class="audio-duration-display text-[11px] font-mono text-blue-500">Duration: --:--</span>
+            <audio class="hidden-audio-player hidden" preload="metadata" onloadedmetadata="updateAudioDuration(this)"></audio>
+            <span class="text-[10px] font-mono text-gray-500">Auto-reads length</span>
+        </div>
+    </div>
+
+    <div>
+        <label class="text-[10px] font-mono text-gray-400 uppercase">Tags</label>
+        <input type="text" placeholder="e.g. community, update" class="platform-tags w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none">
+    </div>
+
+    <div class="flex items-center space-x-2 pt-2">
+        <button onclick="publishTo('Facebook', this)" class="bg-gray-900 hover:bg-gray-800 text-blue-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish to Facebook</button>
+        <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none focus:border-blue-500">
+            <option value="">Select Account...</option>
+            <option value="account_1">Facebook Page (OBN English)</option>
+            <option value="account_2">Facebook Page (Afaan Oromoo)</option>
+        </select>
+    </div>
+</div>
+</section>
+    </div>
+
+    <!-- JavaScript Session and Interaction Logic -->
+  <script type="module">
+// Import gateway webhook or config variables from config.js
+import { supabase, N8N_Preparepage_GATEWAY_WEBHOOK } from './config.js';
+//import { postautomation } from './config.js';
+      import { postautomation } from './config.js'; 
+      import { GOOGLE_SCRIPT_URL } from './config.js';
+      //postautomation 
+// Global variable for the current logged-in user
+let currentLoggedInUser = "";
+
+// Function to load and display the logged-in user's name from session storage
+function loadLoggedUserName() {
+    const sessionData = localStorage.getItem('userSession');
+    if (!sessionData) return;
+
+    try {
+        const user = JSON.parse(sessionData);
+        const loggedInName = user.fullName || user.username || user.name || user.user_metadata?.full_name;
+
+        if (loggedInName) {
+            currentLoggedInUser = loggedInName;
+
+            // Update top-right display element
+            const nameEl = document.getElementById('loggedInUserDisplay');
+            if (nameEl) nameEl.innerText = loggedInName;
+        }
+    } catch (e) {
+        console.error("Error parsing user session for display:", e);
+    }
+}
+
+// Call session loader immediately when the script runs
+loadLoggedUserName();
+
+// Function to fetch and update drafts from Supabase database every 10 seconds
+// Function to fetch and update drafts from Supabase database every 10 seconds
+async function fetchDraftsFromSupabase() {
+    try {
+        let filteredDrafts = [];
+
+        if (supabase) {
+            // 1. Fetch titles/identifiers of items that have already been posted to the new archive table
+            const { data: postedData, error: postedError } = await supabase
+                .from('posted_content') // Update this to match your exact posted content table name if different
+                .select('title'); // or draft_name, depending on what identifier you store
+
+            if (postedError) {
+                console.error('Error fetching posted archive:', postedError.message);
+            }
+
+            // Create an array list of already-posted identifiers for filtering
+            const postedIdentifiers = postedData ? postedData.map(item => item.title || item.draft_name) : [];
+
+            // 2. Fetch unread/read drafts assigned to the current user
+            const { data, error } = await supabase
+                .from('editorial_submissions')
+                .select('*')
+                .eq('receiver_name', currentLoggedInUser)
+                .eq('status', 'read');
+
+            if (error) {
+                console.error('Supabase query error:', error.message);
+                return;
+            }
+
+            // 3. Filter out submissions whose titles already exist in the posted content archive table
+            const rawDrafts = data || [];
+            filteredDrafts = rawDrafts.filter(draft => {
+                const identifier = draft.title || `Submission from ${draft.sender_name}`;
+                return !postedIdentifiers.includes(identifier);
+            });
+
+        } else {
+            console.warn('Supabase client is not initialized.');
+        }
+
+        // Update Notification Badge count
+        document.getElementById('notifBadge').textContent = filteredDrafts.length;
+
+        // Render Notification List
+        const notifListEl = document.getElementById('notifList');
+        notifListEl.innerHTML = '';
+
+        if (filteredDrafts.length === 0) {
+            notifListEl.innerHTML = '<div class="px-4 py-3 text-xs font-mono text-gray-500 text-center">No read drafts found.</div>';
+        } else {
+            // Build list items safely (consolidated rendering loop)
+            filteredDrafts.forEach(draft => {
+                const item = document.createElement('div');
+                item.className = "px-4 py-3 hover:bg-gray-800 cursor-pointer transition border-b border-gray-800/50";
+                item.onclick = () => selectDraft(draft);
+                
+                const displayTitle = draft.title || `Submission from ${draft.sender_name}`;
+                const displayTime = draft.created_at ? new Date(draft.created_at).toLocaleTimeString() : "Recent";
+
+                item.innerHTML = `
+                    <p class="text-xs font-mono font-bold text-gray-200">${displayTitle}</p>
+                    <p class="text-[10px] font-mono text-gray-400 mt-1">SENDER: ${draft.sender_name} | TIME: ${displayTime}</p>
+                `;
+                notifListEl.appendChild(item);
+            });
+        }
+    } catch (err) {
+        console.error('Error fetching data:', err);
+    }
+}
+
+// Initialize Page on Load and set 10-second polling interval
+window.addEventListener('DOMContentLoaded', () => {
+    const nameEl = document.getElementById('loggedInUserDisplay');
+    if (nameEl) nameEl.textContent = currentLoggedInUser;
+
+    fetchDraftsFromSupabase();
+    setInterval(fetchDraftsFromSupabase, 10000);
+});
+
+// Toggle Notification Dropdown Visibility
+function toggleNotifications() {
+    const dropdown = document.getElementById('notifDropdown');
+    dropdown.classList.toggle('hidden');
+}
+window.toggleNotifications = toggleNotifications;
+
+// When a user selects a draft from notifications
+function selectDraft(draft) {
+    document.getElementById('notifDropdown').classList.add('hidden');
+
+    // Extract content from the 'pages' jsonb column safely
+    let pageContent = "";
+    if (draft.pages) {
+        if (Array.isArray(draft.pages)) {
+            pageContent = draft.pages.join("\n");
+        } else if (typeof draft.pages === 'string') {
+            pageContent = draft.pages;
+        } else {
+            pageContent = JSON.stringify(draft.pages);
+        }
+    }
+
+    const titleText = draft.title || `Editorial Submission (${draft.sender_name})`;
+
+    // Render onto left A4 workspace
+    const a4Content = document.getElementById('a4Content');
+    a4Content.innerHTML = `
+        <div class="border-b border-gray-200 pb-4 mb-4">
+            <span class="text-[10px] font-mono font-bold text-cyan-600 uppercase tracking-widest">// EDITORIAL SUBMISSION RECORD</span>
+            <h1 class="text-xl font-bold text-gray-900 mt-1 font-sans">${titleText}</h1>
+            <p class="text-xs text-gray-500 mt-1 font-mono">Sender: ${draft.sender_name} | Target Role: ${draft.target_role}</p>
+        </div>
+        <div class="prose max-w-none text-gray-800 text-sm leading-relaxed font-sans">
+            ${pageContent}
+        </div>
+    `;
+
+    // Automatically populate right editor panel text boxes
+    document.getElementById('postTitle').value = titleText;
+    
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = pageContent;
+    document.getElementById('postContent').value = tempDiv.textContent || tempDiv.innerText || pageContent;
+}
+window.selectDraft = selectDraft;
+
+// Initialize global cache and index trackers
+window.cardImageCache = window.cardImageCache || new Map();
+window.cardImageIndices = window.cardImageIndices || new Map();
+
+// 1. Define missing dynamic input handler
+window.handleDynamicMediaInputs = function(inputElement) {
+    const card = inputElement.closest('.bg-\\[\\#111827\\]') || inputElement.closest('div');
+    const inputElements = card.querySelectorAll('.media-url-input');
+    
+    let urls = [];
+    inputElements.forEach(inp => {
+        let val = inp.value.trim();
+        if (val) {
+            if (val.includes('drive.google.com')) {
+                const match = val.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) {
+                    val = `https://lh3.googleusercontent.com/d/${match[1]}`;
+                }
+            }
+            urls.push(val);
+        }
+    });
+
+    window.cardImageCache.set(card, { images: urls });
+    if (!window.cardImageIndices.has(card)) {
+        window.cardImageIndices.set(card, 0);
+    }
+
+    renderCardPreview(card, urls);
+};
+
+// 2. Define card preview render function
+window.renderCardPreview = function(card, urls) {
+    const previewContainer = card.querySelector('#imagePreviewContainer');
+    const placeholder = card.querySelector('.placeholder-text');
+    const multiCheckbox = card.querySelector('.multi-toggle') || card.querySelector('.multi-image-checkbox');
+    const isMulti = multiCheckbox ? multiCheckbox.checked : false;
+
+    if (!previewContainer) return;
+
+    if (urls.length === 0) {
+        if (placeholder) placeholder.classList.remove('hidden');
+        previewContainer.innerHTML = '';
+        return;
+    }
+
+    if (placeholder) placeholder.classList.add('hidden');
+
+    let currentIndex = window.cardImageIndices.get(card) || 0;
+    if (currentIndex >= urls.length) currentIndex = urls.length - 1;
+    if (currentIndex < 0) currentIndex = 0;
+    window.cardImageIndices.set(card, currentIndex);
+
+    const currentUrl = urls[currentIndex];
+    let mediaHtml = '';
+
+    if (currentUrl.match(/\.(mp4|webm|ogg|mov)$/i)) {
+        mediaHtml = `<video src="${currentUrl}" controls class="w-full h-full object-cover rounded cursor-pointer"></video>`;
+    } else {
+        mediaHtml = `<img src="${currentUrl}" class="w-full h-full object-cover rounded cursor-pointer" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load</span>';">`;
+    }
+
+    if (isMulti && urls.length > 1) {
+        previewContainer.innerHTML = `
+            <div class="relative w-full h-full flex items-center justify-center">
+                ${mediaHtml}
+                <button type="button" onclick="slideCardImages(event, this, -1)" class="absolute left-1 bg-black/70 text-white px-2 py-1 rounded-full text-xs hover:bg-black">&#10094;</button>
+                <button type="button" onclick="slideCardImages(event, this, 1)" class="absolute right-1 bg-black/70 text-white px-2 py-1 rounded-full text-xs hover:bg-black">&#10095;</button>
+                <span class="absolute bottom-1 right-2 bg-black/80 text-white text-[10px] px-1.5 py-0.5 rounded">${currentIndex + 1} / ${urls.length}</span>
+            </div>
+        `;
+    } else {
+        previewContainer.innerHTML = mediaHtml;
+    }
+};
+
+// 3. Define slide handler
+window.slideCardImages = function(event, btn, direction) {
+    event.stopPropagation();
+    const card = btn.closest('.bg-\\[\\#111827\\]') || btn.closest('div');
+    const data = window.cardImageCache.get(card);
+    if (!data || !data.images) return;
+
+    let currentIndex = window.cardImageIndices.get(card) || 0;
+    currentIndex += direction;
+    if (currentIndex >= data.images.length) currentIndex = 0;
+    if (currentIndex < 0) currentIndex = data.images.length - 1;
+
+    window.cardImageIndices.set(card, currentIndex);
+    renderCardPreview(card, data.images);
+};
+
+// 4. Modal Preview Handler
+window.openImageModalFromCard = function(container) {
+    const card = container.closest('.bg-\\[\\#111827\\]') || container.closest('div');
+    const data = window.cardImageCache.get(card);
+    if (!data || !data.images || data.images.length === 0) return;
+
+    let currentIndex = window.cardImageIndices.get(card) || 0;
+    let url = data.images[currentIndex];
+    
+    let modal = document.getElementById('globalImageModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'globalImageModal';
+        modal.className = 'fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4';
+        modal.innerHTML = `
+            <div class="relative max-w-4xl max-h-full flex items-center justify-center">
+                <button onclick="document.getElementById('globalImageModal').style.display='none'" class="absolute -top-10 right-0 text-white text-sm font-bold bg-gray-800 px-3 py-1 rounded hover:bg-gray-700">&times; Close</button>
+                <img id="modalFullImg" src="" class="max-w-full max-h-[85vh] object-contain rounded shadow-lg">
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    document.getElementById('modalFullImg').src = url;
+    modal.style.display = 'flex';
+};
+
+
+// Handle audio URL input, Google Drive conversion, and duration tracking
+window.handleAudioUrlInput = function(inputElement) {
+    let rawUrl = inputElement.value.trim();
+    const card = inputElement.closest('.bg-\\[\\#111827\\]') || inputElement.closest('div');
+    const audioPlayer = card.querySelector('.hidden-audio-player');
+    const durationDisplay = card.querySelector('.audio-duration-display');
+
+    if (!rawUrl) {
+        if (durationDisplay) durationDisplay.textContent = 'Duration: --:--';
+        if (audioPlayer) audioPlayer.src = '';
+        return;
+    }
+
+    // Convert Google Drive share links into direct links for Zapier
+    let directAudioUrl = rawUrl;
+    if (rawUrl.includes('drive.google.com')) {
+        const match = rawUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            directAudioUrl = `https://lh3.googleusercontent.com/d/${match[1]}`;
+        }
+    }
+
+    // Load into hidden audio element to read metadata/length
+    if (audioPlayer) {
+        audioPlayer.src = directAudioUrl;
+        audioPlayer.load();
+    }
+};
+
+// Automatically calculate and display track length once metadata loads
+window.updateAudioDuration = function(audioElement) {
+    const card = audioElement.closest('.bg-\\[\\#111827\\]') || audioElement.closest('div');
+    const durationDisplay = card.querySelector('.audio-duration-display');
+
+    if (isNaN(audioElement.duration)) return;
+
+    const minutes = Math.floor(audioElement.duration / 60);
+    const seconds = Math.floor(audioElement.duration % 60);
+    const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    if (durationDisplay) {
+        durationDisplay.textContent = `Duration: ${formattedTime}`;
+    }
+};
+
+// Automatically calculate and display track length once metadata loads
+window.updateAudioDuration = function(audioElement) {
+    const card = audioElement.closest('.bg-\\[\\#111827\\]') || audioElement.closest('div');
+    const durationDisplay = card.querySelector('.audio-duration-display');
+
+    if (isNaN(audioElement.duration)) return;
+
+    const minutes = Math.floor(audioElement.duration / 60);
+    const seconds = Math.floor(audioElement.duration % 60);
+    const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    if (durationDisplay) {
+        durationDisplay.textContent = `Duration: ${formattedTime}`;
+    }
+};
+
+
+
+// Global variable to hold the main editor's featured image data
+let mainEditorImageSrc = null;
+
+// Track main featured image selection from the editor panel file input
+// Track main featured image selection from the editor panel file input
+window.loadMainEditorImage = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        mainEditorImageSrc = e.target.result;
+        
+        // Find the image container or preview element in the top panel
+        const container = document.getElementById('imagePreviewContainer');
+        if (container) {
+            // Clear previous content and show the image preview
+            container.innerHTML = `
+                <img src="${mainEditorImageSrc}" class="w-full h-48 object-cover rounded-lg" alt="Featured Preview">
+            `;
+        }
+    };
+    reader.readAsDataURL(file);
+};
+
+// Distribute content from the main editor to all social media panels
+window.distributeContent = function() {
+    // 1. Grab values from the main editor panel
+    const mainTitleEl = document.getElementById('postTitle'); 
+    const mainBodyEl = document.getElementById('postContent'); 
+    const mainMediaInput = document.querySelector('.media-url-input');
+    
+    const titleText = mainTitleEl ? mainTitleEl.value : '';
+    const bodyText = mainBodyEl ? mainBodyEl.value : '';
+    let mainUrl = mainMediaInput ? mainMediaInput.value.trim() : '';
+
+    if (!titleText && !bodyText && !mainUrl) {
+        alert('Please fill out the title, content body, or provide a media URL first.');
+        return;
+    }
+
+    // Process Google Drive link conversion for the main media url if present
+    if (mainUrl.includes('drive.google.com')) {
+        const match = mainUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            mainUrl = `https://lh3.googleusercontent.com/d/${match[1]}`;
+        }
+    }
+
+    // 2. Loop through all social media distribution cards
+    const platformCards = document.querySelectorAll('.bg-\\[\\#111827\\]');
+
+    platformCards.forEach(card => {
+        // Fill Title
+        const platformTitleInput = card.querySelector('.platform-title');
+        if (platformTitleInput) platformTitleInput.value = titleText;
+
+        // Fill Description / Body
+        const platformBodyInput = card.querySelector('.platform-body');
+        if (platformBodyInput) platformBodyInput.value = bodyText;
+
+        // Fill Media URL Input on the Card
+        const cardMediaInput = card.querySelector('.media-url-input');
+        if (cardMediaInput) cardMediaInput.value = mainUrl;
+
+        // Apply Media & Platform-Specific Resizing/Aspect Ratio
+        if (mainUrl) {
+            const previewContainer = card.querySelector('#imagePreviewContainer') || card.querySelector('.image-display-container');
+            const placeholder = card.querySelector('.placeholder-text');
+            const badge = card.querySelector('.aspect-badge');
+
+            if (placeholder) {
+                placeholder.classList.add('hidden');
+            }
+            if (badge) {
+                badge.classList.remove('hidden');
+            }
+
+            // Render video or image based on file format extension
+            if (previewContainer) {
+                if (mainUrl.match(/\.(mp4|webm|ogg|mov)$/i)) {
+                    previewContainer.innerHTML = `<video src="${mainUrl}" controls class="w-full h-full object-cover rounded"></video>`;
+                } else {
+                    previewContainer.innerHTML = `<img src="${mainUrl}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load media preview</span>';">`;
+                }
+            }
+
+            // Safely find the heading or text describing the platform name for sizing
+            const headerEl = card.querySelector('h3') || card.querySelector('h4') || card.querySelector('.platform-name');
+            const headerText = headerEl ? headerEl.textContent.toLowerCase() : '';
+            
+            if (previewContainer) {
+                previewContainer.classList.remove('h-48', 'h-56', 'h-72');
+                
+                if (headerText.includes('tiktok') || headerText.includes('youtube')) {
+                    previewContainer.classList.add('h-72');
+                    if (badge) badge.textContent = "Resized: 9:16 Vertical";
+                } else if (headerText.includes('instagram')) {
+                    previewContainer.classList.add('h-56');
+                    if (badge) badge.textContent = "Resized: 1:1 Square";
+                } else {
+                    previewContainer.classList.add('h-48');
+                    if (badge) badge.textContent = "Resized: 16:9 Landscape";
+                }
+            }
+
+            // Save to cache for publishing
+            cardImageCache.set(card, { images: [mainUrl] });
+        }
+    });
+
+    alert('Content, media URL, and frames successfully distributed and resized!');
+};
+// Individual platform publish action
+window.publishTo = function(platform) {
+    const title = document.getElementById('postTitle').value;
+    if(!title) {
+        alert('Please fill out the content editor before publishing.');
+        return;
+    }
+    alert(`Successfully queued post "${title}" for distribution on ${platform}! (Webhook Gateway: ${N8N_Preparepage_GATEWAY_WEBHOOK})`);
+};
+
+      window.clearWorkspace = function() {
+    // Reset A4 paper back to empty state
+    const a4Content = document.getElementById('a4Content');
+    a4Content.innerHTML = `
+        <div class="text-center text-gray-400 py-32 italic font-sans text-base">
+            Select a draft from notifications or insert a file to populate workspace.
+        </div>
+    `;
+
+    // Clear file name display
+    const fileNameEl = document.getElementById('loadedFileName');
+    if (fileNameEl) fileNameEl.textContent = "// Draft Workspace";
+
+    // Clear right-side content editor text boxes
+    const postTitleEl = document.getElementById('postTitle');
+    const postContentEl = document.getElementById('postContent');
+    if (postTitleEl) postTitleEl.value = '';
+    if (postContentEl) postContentEl.value = '';
+          // Toggle multi-select property on file input based on checkbox
+
+};
+      
+
+// Handle Audio file name update inside textfield
+window.loadAudioFileCompact = function(event, inputElement) {
+    const file = event.target.files[0];
+    const card = inputElement.closest('.bg-\\[\\#111827\\]');
+    const audioInput = card.querySelector('.audio-filename-input');
+    
+    if (file) {
+        audioInput.value = file.name;
+        audioInput.classList.remove('text-gray-400');
+        audioInput.classList.add('text-cyan-400');
+    }
+};
+// Open Image Inspection Modal
+window.openImageModal = function(containerElement) {
+    const img = containerElement.querySelector('.preview-img');
+    if (!img || img.classList.contains('hidden') || !img.src) return;
+
+    const card = containerElement.closest('.bg-\\[\\#111827\\]');
+    const headerEl = card.querySelector('h3') || card.querySelector('h4') || card.querySelector('.platform-name');
+    const platformName = headerEl ? headerEl.textContent : 'Platform';
+
+    const modal = document.getElementById('imagePreviewModal');
+    const modalTitle = document.getElementById('modalPlatformTitle');
+    const modalContainer = document.getElementById('modalImageContainer');
+    const dimText = document.getElementById('modalImageDimensions');
+
+    modalTitle.textContent = `Inspecting Fit for: ${platformName}`;
+    
+    // Create an image object to measure native dimensions
+    const measureImg = new Image();
+    measureImg.src = img.src;
+    measureImg.onload = function() {
+        dimText.textContent = `Original File Resolution: ${measureImg.naturalWidth} x ${measureImg.naturalHeight} pixels`;
+    };
+
+    // Set modal container height/style based on platform for realistic preview
+    modalContainer.className = "w-full flex items-center justify-center overflow-hidden bg-black/50 rounded border border-gray-800 ";
+    if (platformName.toLowerCase().includes('tiktok') || platformName.toLowerCase().includes('youtube')) {
+        modalContainer.classList.add('h-96'); // Tall vertical container check
+    } else if (platformName.toLowerCase().includes('instagram')) {
+        modalContainer.classList.add('h-80'); // Square-ish check
+    } else {
+        modalContainer.classList.add('h-64'); // Landscape check
+    }
+
+    modalContainer.innerHTML = `<img src="${img.src}" class="w-full h-full object-contain" alt="Modal Preview">`;
+    modal.classList.remove('hidden');
+};
+
+// Close Modal
+window.closeImageModal = function() {
+    const modal = document.getElementById('imagePreviewModal');
+    if (modal) modal.classList.add('hidden');
+};
+// Handle Publish action with account dropdown and field values
+// Handle Publish action with account dropdown and field values
+// Adjust path to config.js if needed
+      // Toggle visibility of the "+ Add Image" button and manage extra input boxes
+window.toggleMultiImageMode = function(checkbox) {
+    const card = checkbox.closest('.bg-\\[\\#111827\\]') || checkbox.closest('div');
+    const addBtn = card.querySelector('.add-image-btn');
+    const inputsContainer = card.querySelector('.url-inputs-container');
+
+    if (checkbox.checked) {
+        if (addBtn) addBtn.classList.remove('hidden');
+    } else {
+        if (addBtn) addBtn.classList.add('hidden');
+        // Remove extra input boxes when multi-image is unticked, leaving only the first one
+        if (inputsContainer) {
+            const inputs = inputsContainer.querySelectorAll('input');
+            inputs.forEach((inp, idx) => {
+                if (idx > 0) inp.parentElement.remove();
+            });
+            if (inputs.length > 0) {
+                handleDynamicMediaInputs(inputs[0]);
+            }
+        }
+    }
+};
+
+// Dynamically add a new URL input box (up to 10 max)
+window.addNewImageUrlBox = function(button) {
+    const card = button.closest('.bg-\\[\\#111827\\]') || button.closest('div');
+    const inputsContainer = card.querySelector('.url-inputs-container');
+    const currentInputs = inputsContainer.querySelectorAll('input');
+
+    if (currentInputs.length >= 10) {
+        alert('Maximum limit of 10 image URLs reached.');
+        return;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex items-center space-x-1 mt-1';
+    wrapper.innerHTML = `
+        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste next image URL..." oninput="handleDynamicMediaInputs(this)">
+        <button type="button" onclick="removeImageUrlBox(this)" class="text-red-400 hover:text-red-300 px-2 text-xs font-bold">&times;</button>
+    `;
+    inputsContainer.appendChild(wrapper);
+};
+
+// Remove an individual URL input box
+window.removeImageUrlBox = function(deleteBtn) {
+    const wrapper = deleteBtn.parentElement;
+    const card = wrapper.closest('.bg-\\[\\#111827\\]') || wrapper.closest('div');
+    wrapper.remove();
+    const firstInput = card.querySelector('.media-url-input');
+    if (firstInput) handleDynamicMediaInputs(firstInput);
+};
+
+window.publishTo = async function(platformName, buttonElement) {
+    // 1. Double-click prevention & processing lock
+    if (buttonElement.dataset.submitting === "true") {
+        alert("Please wait! Your post is already being processed. Do not click multiple times.");
+        return;
+    }
+
+    const card = buttonElement.closest('.bg-\\[\\#111827\\]') || buttonElement.closest('div');
+
+    // Lock the button instantly
+    buttonElement.dataset.submitting = "true";
+    buttonElement.disabled = true;
+    const originalText = buttonElement.innerText;
+    buttonElement.innerText = "Processing...";
+    buttonElement.style.opacity = "0.6";
+    buttonElement.style.cursor = "not-allowed";
+
+    try {
+        const title = card.querySelector('.platform-title').value;
+        let description = card.querySelector('.platform-body')?.value || '';
+        const tags = card.querySelector('.platform-tags').value;
+        const selectedAccount = card.querySelector('.account-select').value; 
+
+        // Robust Google Drive Link Converter for Buffer & Zapier
+        function getBufferDownloadUrl(url) {
+            if (!url) return '';
+            let fileId = '';
+            
+            if (url.includes('/d/')) {
+                const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) fileId = match[1];
+            } else if (url.includes('id=')) {
+                const match = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (match && match[1]) fileId = match[1];
+            }
+            
+            if (fileId) {
+                return `https://drive.google.com/uc?export=view&id=${fileId}`;
+            }
+            return url;
+        }
+
+        // Clean up description text to prevent run-on formatting
+        description = description
+            .replace(/([a-z])([A-Z])/g, '$1 $2')
+            .replace(/Scraped Segment/g, '\n\n• Scraped Segment: ')
+            .trim();
+
+        // Process Audio URL
+        const audioInput = card.querySelector('.audio-url-input');
+        let audioUrl = audioInput ? audioInput.value.trim() : '';
+        audioUrl = getBufferDownloadUrl(audioUrl); 
+
+        // Check if Multi-Image/Carousel is enabled
+        const multiCheckbox = card.querySelector('.multi-toggle') || card.querySelector('.multi-image-checkbox');
+        const isMulti = multiCheckbox ? multiCheckbox.checked : false;
+
+        // Collect and convert all media URLs (Images or Videos)
+        const inputElements = card.querySelectorAll('.media-url-input');
+        let urls = [];
+
+        inputElements.forEach(inp => {
+            let val = inp.value.trim();
+            if (val) {
+                urls.push(getBufferDownloadUrl(val));
+            }
+        });
+
+        let finalMediaValue = '';
+        let calculatedDataType = 'video'; // default fallback
+
+        if (urls.length > 0) {
+            const firstUrl = urls[0].toLowerCase();
+            const isVideoFile = firstUrl.includes('.mp4') || firstUrl.includes('.mov') || firstUrl.includes('.quicktime') || firstUrl.includes('video');
+
+            if (isMulti || urls.length > 1) {
+                finalMediaValue = urls.join(', '); 
+                calculatedDataType = 'multiple image';
+            } else if (!isVideoFile && (firstUrl.includes('.jpg') || firstUrl.includes('.png') || firstUrl.includes('.jpeg') || firstUrl.includes('image') || firstUrl.includes('uc?export=view'))) {
+                finalMediaValue = urls[0];
+                calculatedDataType = 'single image';
+            } else {
+                if (isMulti) {
+                    finalMediaValue = urls.join(', ');
+                    calculatedDataType = 'multiple image';
+                } else if (urls.length === 1 && !isVideoFile) {
+                    finalMediaValue = urls[0];
+                    calculatedDataType = 'single image';
+                } else {
+                    finalMediaValue = urls[0];
+                    calculatedDataType = 'video';
+                }
+            }
+        }
+
+        if (!selectedAccount) {
+            alert(`Please select an account to publish to ${platformName}.`);
+            return;
+        }
+
+        if (!title) {
+            alert('Please enter a post title.');
+            return;
+        }
+
+        // Check Supabase for duplicates (Title + Description)
+        try {
+            const { data: existingPosts, error: checkError } = await supabase
+                .from('posted_content')
+                .select('title, description')
+                .eq('title', title.trim())
+                .eq('description', description)
+                .limit(1);
+
+            if (checkError) {
+                console.error('Error checking duplicate posts:', checkError);
+            } else if (existingPosts && existingPosts.length > 0) {
+                alert(`Duplicate Warning: A post with this exact title and description has already been posted or queued!`);
+                return; 
+            }
+        } catch (err) {
+            console.error('Supabase check failed:', err);
+        }
+
+        // 1. Construct Payload for Webhook (Sends 'dataType' to Google Sheet / Zapier)
+        const payload = {
+            platform: platformName,
+            account: selectedAccount,
+            title: title.trim(),
+            mediaUrl: finalMediaValue,
+            dataType: calculatedDataType, 
+            description: description,
+            tags: tags.trim(),
+            audio: audioUrl,
+            timestamp: new Date().toISOString()
+        };
+console.log(payload);
+        await fetch(postautomation, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        // 2. Insert log into Supabase table (Sends 'dataType' to Supabase table as well)
+        // Note: Make sure you have a column named `data_type` or `dataType` in your Supabase table, 
+        // or match the key name exactly to what your Supabase table column is called!
+        const { error: insertError } = await supabase
+            .from('posted_content')
+            .insert([{
+                title: title.trim(),
+                "video url/ image": finalMediaValue,
+                dataType: calculatedDataType, // Added here for Supabase
+                description: description,
+                tags: tags.trim(),
+                status: "posted",
+                audio: audioUrl,
+                date: new Date().toISOString()
+            }]);
+
+        if (insertError) {
+            console.error('Error saving to posted_content table:', insertError);
+        }
+
+        alert(`Successfully queued post for ${platformName}!`);
+    } catch (error) {
+        console.error('Webhook connection error:', error);
+        alert('Failed to connect to the workflow.');
+    } finally {
+        // Always unlock the button whether it succeeds or fails
+        buttonElement.dataset.submitting = "false";
+        buttonElement.disabled = false;
+        buttonElement.innerText = originalText;
+        buttonElement.style.opacity = "1";
+        buttonElement.style.cursor = "pointer";
+    }
+};
+
+window.handleMediaUrlInput = function(inputElement) {
+    let url = inputElement.value.trim();
+    const card = inputElement.closest('.bg-\\[\\#111827\\]') || inputElement.closest('div');
+    const previewContainer = card.querySelector('#imagePreviewContainer');
+
+    if (!url) {
+        previewContainer.innerHTML = `
+            <svg class="w-6 h-6 text-cyan-400 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="text-xs font-mono text-gray-500">Image preview will render here</span>
+        `;
+        cardImageCache.delete(card);
+        return;
+    }
+
+    // Automatically convert standard Google Drive share links into direct image view links
+    if (url.includes('drive.google.com')) {
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            url = `https://lh3.googleusercontent.com/d/${match[1]}`;
+        }
+    }
+
+    // Render preview instantly
+    if (url.match(/\.(mp4|webm|ogg|mov)$/i)) {
+        previewContainer.innerHTML = `<video src="${url}" controls class="w-full h-full object-cover rounded"></video>`;
+    } else {
+        previewContainer.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load. Ensure Drive sharing is set to public.</span>';">`;
+    }
+
+    // Save direct URL to cache and payload for Zapier
+    cardImageCache.set(card, { images: [url] });
+};
+</script>
+    <!-- Full-Screen Image Inspection Modal -->
+<div id="imagePreviewModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+    <div class="relative max-w-2xl w-full bg-[#111827] border border-gray-700 rounded-lg p-4 flex flex-col items-center">
+        <button onclick="closeImageModal()" class="absolute top-2 right-3 text-gray-400 hover:text-white text-lg font-mono">✕</button>
+        <h3 id="modalPlatformTitle" class="text-cyan-400 font-mono text-xs mb-2 uppercase">Platform Preview</h3>
+        <div id="modalImageContainer" class="w-full flex items-center justify-center overflow-hidden bg-black/50 rounded border border-gray-800">
+            <!-- Dynamic Preview Image Goes Here -->
+        </div>
+        <p id="modalImageDimensions" class="text-[10px] font-mono text-gray-400 mt-2">Dimensions: Loading...</p>
+    </div>
+</div>
+</body>
+</html>
