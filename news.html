@@ -1,1 +1,224 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriIntel - Global Agriculture Intelligence Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
+            background-color: #02040e; position: relative; overflow-x: hidden; overflow-y: auto;
+        }
+        #cyberCanvas {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        }
+        .app-interface { position: relative; z-index: 10; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Holographic Data Transfer Warp Background -->
+    <canvas id="cyberCanvas"></canvas>
+
+    <!-- Top Navigation Bar -->
+    <header class="app-interface w-full bg-slate-900/80 backdrop-blur-md border-b border-blue-500/30 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
+            <h1 class="text-xl font-bold text-blue-400 tracking-wide">AgriIntel <span class="text-xs px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40">Private Consultant Feed</span></h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="user-email" class="text-sm text-slate-400">Loading session...</span>
+            <button id="logout-btn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm rounded-lg border border-slate-700 transition">Sign Out</button>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Body -->
+    <main class="app-interface flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+        
+        <!-- Search & Filter Control Panel -->
+        <div class="bg-slate-900/80 backdrop-blur-md p-4 rounded-2xl border border-blue-500/30 shadow-xl flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div class="w-full md:w-2/3 relative">
+                <input type="text" id="search-input" placeholder="Search global agriculture news, crops, policies, or Twitter insights..." class="w-full px-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-white text-sm placeholder-slate-500">
+            </div>
+            <div class="w-full md:w-auto flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0">
+                <button onclick="filterNews('all')" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg shadow">All Feeds</button>
+                <button onclick="filterNews('web')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg border border-slate-700">Web Scrapes</button>
+                <button onclick="filterNews('twitter')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg border border-slate-700">Twitter / X</button>
+            </div>
+        </div>
+
+        <!-- Content Grid Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left & Center: Hot News Feed (2 Columns) -->
+            <div class="lg:col-span-2 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-white flex items-center space-x-2">
+                        <span>🔥 Hot Agricultural Intelligence</span>
+                    </h2>
+                    <span class="text-xs text-blue-400 bg-blue-950/50 px-2 py-1 rounded border border-blue-800/50">Live n8n Webhook Sync</span>
+                </div>
+
+                <!-- News Items Container -->
+                <div id="news-container" class="space-y-4">
+                    <!-- Sample News Item 1 -->
+                    <div class="news-card bg-slate-900/80 backdrop-blur-md p-5 rounded-xl border border-slate-800 hover:border-blue-500/50 transition shadow-lg" data-source="web">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Supply Chain</span>
+                            <span class="text-xs text-slate-500">10 mins ago • Source: Reuters Agri</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-100 mb-1">Global Fertilizer Export Restrictions Shift European Supply Routes</h3>
+                        <p class="text-xs text-slate-400 mb-3">AI Summary: Recent trade policy adjustments in key exporting regions are driving up input costs for private grain producers across Central Europe.</p>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-800/80">
+                            <a href="#" target="_blank" class="text-xs text-blue-400 hover:underline">Read Full Article &rarr;</a>
+                            <button onclick="saveNote(this)" class="text-xs text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded">Bookmark</button>
+                        </div>
+                    </div>
+
+                    <!-- Sample News Item 2 -->
+                    <div class="news-card bg-slate-900/80 backdrop-blur-md p-5 rounded-xl border border-slate-800 hover:border-blue-500/50 transition shadow-lg" data-source="twitter">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">Twitter / X Expert</span>
+                            <span class="text-xs text-slate-500">25 mins ago • @AgTechInsider</span>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-100 mb-1">Drought monitoring sensors showing early stress indicators in Midwest corn belts.</h3>
+                        <p class="text-xs text-slate-400 mb-3">AI Summary: Field telemetry reports a 14% drop in moisture retention compared to Q3 historical averages, prompting immediate irrigation adjustments.</p>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-800/80">
+                            <a href="#" target="_blank" class="text-xs text-blue-400 hover:underline">View Tweet Thread &rarr;</a>
+                            <button onclick="saveNote(this)" class="text-xs text-slate-400 hover:text-white px-2 py-1 bg-slate-800 rounded">Bookmark</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Consultant Dossier & Quick Actions -->
+            <div class="space-y-6">
+                <div class="bg-slate-900/80 backdrop-blur-md p-5 rounded-xl border border-blue-500/30 shadow-xl space-y-4">
+                    <h3 class="text-sm font-bold text-blue-400 tracking-wider uppercase">Consultant Action Panel</h3>
+                    <p class="text-xs text-slate-400">Quickly compile saved intelligence items into a client advisory brief.</p>
+                    <div class="space-y-2">
+                        <button onclick="alert('Exporting briefing summary package...')" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition shadow">Export Client Briefing</button>
+                        <button onclick="alert('Webhook pipeline refreshed.')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg border border-slate-700 transition">Test n8n Webhook Sync</button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 backdrop-blur-md p-5 rounded-xl border border-slate-800 shadow-xl space-y-3">
+                    <h3 class="text-sm font-bold text-slate-300 tracking-wider uppercase">System Health</h3>
+                    <div class="flex justify-between text-xs text-slate-400">
+                        <span>Database Status:</span>
+                        <span class="text-emerald-400 font-semibold">Connected</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-slate-400">
+                        <span>Active Scrapers:</span>
+                        <span class="text-blue-400 font-semibold">Running (Apify / Firecrawl)</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Background Animation & Auth Script -->
+    <script>
+        const canvas = document.getElementById('cyberCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const streams = [];
+        for (let i = 0; i < 50; i++) {
+            streams.push({
+                x: (Math.random() - 0.5) * width * 2,
+                y: (Math.random() - 0.5) * height * 2,
+                z: Math.random() * width,
+                speed: Math.random() * 3 + 1.5
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(2, 4, 14, 0.25)';
+            ctx.fillRect(0, 0, width, height);
+            const cx = width / 2, cy = height / 2;
+
+            streams.forEach(s => {
+                s.z -= s.speed;
+                if (s.z <= 0) {
+                    s.z = width;
+                    s.x = (Math.random() - 0.5) * width * 2;
+                    s.y = (Math.random() - 0.5) * height * 2;
+                }
+                const k = 300 / s.z;
+                const px = s.x * k + cx, py = s.y * k + cy;
+                const prevK = 300 / (s.z + s.speed * 8);
+                const prevPx = s.x * prevK + cx, prevPy = s.y * prevK + cy;
+
+                if (px >= 0 && px <= width && py >= 0 && py <= height) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevPx, prevPy);
+                    ctx.lineTo(px, py);
+                    ctx.strokeStyle = `rgba(0, 242, 254, ${1 - s.z / width})`;
+                    ctx.lineWidth = k * 1.5;
+                    ctx.stroke();
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Simple tab filter function
+        function filterNews(type) {
+            const cards = document.querySelectorAll('.news-card');
+            cards.forEach(card => {
+                if (type === 'all' || card.dataset.source === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function saveNote(btn) {
+            btn.textContent = 'Bookmarked ✓';
+            btn.classList.add('bg-blue-600', 'text-white');
+        }
+
+        // Live search filter
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.news-card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        });
+    </script>
+
+    <!-- Supabase Session Protection Module -->
+    <script type="module">
+        import { supabase } from './config.js';
+
+        async function checkUserSession() {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'index.html';
+            } else {
+                document.getElementById('user-email').textContent = session.user.email;
+            }
+        }
+        checkUserSession();
+
+        document.getElementById('logout-btn').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
