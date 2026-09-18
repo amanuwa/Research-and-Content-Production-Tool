@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research & Content Production Tool - Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-<style>
+    <style>
         body {
             background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
             background-size: cover;
@@ -37,15 +35,15 @@
         </div>
     </div>
 
-    <!-- <script>
-      //  const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-import { supabase, DEV_MODE_OVERRIDE } from './config.js';
+    <script type="module">
+        import { supabase, DEV_MODE_OVERRIDE } from './config.js';
+
         document.getElementById('signin-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
+            const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password
             });
@@ -56,27 +54,6 @@ import { supabase, DEV_MODE_OVERRIDE } from './config.js';
                 window.location.href = 'dashboard.html';
             }
         });
-    </script> -->
-    <script type="module">
-    import { supabase, DEV_MODE_OVERRIDE } from './config.js';
-
-    document.getElementById('signin-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        // Use 'supabase' directly (matching the import)
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        });
-
-        if (error) {
-            alert('Sign-In Error: ' + error.message);
-        } else {
-            window.location.href = 'dashboard.html';
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
