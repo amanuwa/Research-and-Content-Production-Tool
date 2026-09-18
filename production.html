@@ -56,7 +56,13 @@
                 </div>
 
                 <!-- Top Right Controls: Logged-in User Only -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-3">
+                    <button onclick="openHistoryModal()" class="bg-[#1f2937] hover:bg-gray-700 text-gray-300 text-xs font-mono px-3 py-1.5 rounded border border-gray-700 flex items-center space-x-1.5 transition">
+        <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>History</span>
+    </button>
                     <span id="loggedInUserDisplay" class="text-sm font-mono font-bold text-cyan-400">Amanuel Bekele</span>
                 </div>
             </div>
