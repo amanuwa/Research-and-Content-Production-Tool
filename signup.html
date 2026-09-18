@@ -54,8 +54,8 @@
     </div>
 
     <script>
-        const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-
+     //   const supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+import { supabase, DEV_MODE_OVERRIDE } from './config.js';
         function validatePassword(password) {
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{12,}$/;
             return regex.test(password);
