@@ -142,7 +142,7 @@
             </section>
         </main>
 
-        <!-- BOTTOM SECTION: 6 Distribution Panels -->
+        <!-- BOTTOM SECTION: Distribution Panels -->
         <section class="max-w-full px-6 py-8 border-t border-gray-800 mt-12 bg-[#0b0f19]">
             <h3 class="text-xs font-mono text-cyan-400 tracking-wider mb-6">// MULTI-PLATFORM DISTRIBUTION CHANNELS</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -154,14 +154,20 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-white flex items-center justify-center rounded font-mono text-xs font-bold">TT</div>
                             <h4 class="font-mono text-sm text-gray-200">TikTok Channel</h4>
                         </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Short-form video layout and captions feed.</p>
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL...">
-                        <div class="image-display-container relative w-full h-32 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    
+                    <!-- Multi-Media Container -->
+                    <div class="media-container flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
+                        </div>
+                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
                         </div>
                     </div>
+
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
                         <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none">
@@ -187,14 +193,20 @@
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-pink-400 flex items-center justify-center rounded font-mono text-xs font-bold">IG</div>
                             <h4 class="font-mono text-sm text-gray-200">Instagram Studio</h4>
                         </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-pink-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Feed post, story and carousel integration.</p>
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-pink-500 outline-none" placeholder="Paste image or video URL...">
-                        <div class="image-display-container relative w-full h-32 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    
+                    <!-- Multi-Media Container -->
+                    <div class="media-container flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-pink-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
+                        </div>
+                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
                         </div>
                     </div>
+
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
                         <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-pink-500 outline-none">
@@ -213,21 +225,66 @@
                     </div>
                 </div>
 
-                <!-- 3. Twitter / X Panel -->
+                <!-- 3. Facebook Panel -->
+                <div class="platform-card bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-blue-500 flex items-center justify-center rounded font-mono text-xs font-bold">FB</div>
+                            <h4 class="font-mono text-sm text-gray-200">Facebook Page</h4>
+                        </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-blue-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
+                    </div>
+                    <p class="text-xs text-gray-500 font-sans">Page updates, community sharing and video links.</p>
+                    
+                    <!-- Multi-Media Container -->
+                    <div class="media-container flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-blue-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
+                        </div>
+                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                            <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
+                        <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-mono text-gray-400 uppercase">Post Description / Caption</label>
+                        <textarea rows="3" placeholder="Write your post content here..." class="platform-body w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-blue-500 outline-none resize-none"></textarea>
+                    </div>
+                    <div class="flex items-center space-x-2 pt-2">
+                        <button onclick="publishTo('Facebook', this)" class="bg-gray-900 hover:bg-gray-800 text-blue-500 border border-gray-700 text-xs font-mono px-4 py-2 rounded transition font-bold whitespace-nowrap">Publish</button>
+                        <select class="account-select w-full bg-gray-900 border border-gray-700 text-gray-300 text-xs font-mono rounded p-2 outline-none">
+                            <option value="">Select Account...</option>
+                            <option value="facebook page 1">facebook page 1</option>
+                            <option value="facebook page 2">facebook page 2</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 4. Twitter / X Panel -->
                 <div class="platform-card bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-cyan-400 flex items-center justify-center rounded font-mono text-xs font-bold">TW</div>
                             <h4 class="font-mono text-sm text-gray-200">Twitter / X Stream</h4>
                         </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Character checked microblog and media attachments.</p>
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL...">
-                        <div class="image-display-container relative w-full h-32 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    
+                    <!-- Multi-Media Container -->
+                    <div class="media-container flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
+                        </div>
+                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
                         </div>
                     </div>
+
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
                         <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-cyan-500 outline-none">
@@ -246,21 +303,27 @@
                     </div>
                 </div>
 
-                <!-- 4. Telegram Panel -->
+                <!-- 5. Telegram Panel -->
                 <div class="platform-card bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-sky-400 flex items-center justify-center rounded font-mono text-xs font-bold">TG</div>
                             <h4 class="font-mono text-sm text-gray-200">Telegram Channel</h4>
                         </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-sky-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Direct subscriber announcement feed stream.</p>
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-sky-500 outline-none" placeholder="Paste image or video URL...">
-                        <div class="image-display-container relative w-full h-32 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    
+                    <!-- Multi-Media Container -->
+                    <div class="media-container flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-sky-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
+                        </div>
+                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
                         </div>
                     </div>
+
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
                         <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-sky-500 outline-none">
@@ -279,21 +342,27 @@
                     </div>
                 </div>
 
-                <!-- 5. YouTube Panel -->
+                <!-- 6. YouTube Panel -->
                 <div class="platform-card bg-[#111827] p-5 rounded-lg border border-gray-800 flex flex-col space-y-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-gray-900 border border-gray-700 text-red-500 flex items-center justify-center rounded font-mono text-xs font-bold">YT</div>
                             <h4 class="font-mono text-sm text-gray-200">YouTube Studio</h4>
                         </div>
+                        <button onclick="addMediaInput(this)" class="bg-gray-900 hover:bg-gray-800 text-red-400 border border-gray-700 text-[10px] font-mono px-2 py-1 rounded transition">+ Add Image</button>
                     </div>
                     <p class="text-xs text-gray-500 font-sans">Video descriptions, tags and community posts.</p>
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-red-500 outline-none" placeholder="Paste image or video URL...">
-                        <div class="image-display-container relative w-full h-32 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                    
+                    <!-- Multi-Media Container -->
+                    <div class="media-container flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-red-500 outline-none" placeholder="Paste image or video URL..." oninput="renderCardImage(this)">
+                        </div>
+                        <div class="image-display-container relative w-full h-28 bg-gray-900 border border-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
                             <span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>
                         </div>
                     </div>
+
                     <div>
                         <label class="text-[10px] font-mono text-gray-400 uppercase">Post Title</label>
                         <input type="text" placeholder="Enter title..." class="platform-title w-full bg-gray-900 border border-gray-700 text-gray-200 text-xs rounded p-2 mt-1 focus:border-red-500 outline-none">
@@ -336,13 +405,40 @@
             container.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load image URL</span>';">`;
         }
 
-        // 2. Distribute Content to All Platforms
+        // 2. Add Multi-Image input field dynamically inside a platform card
+        function addMediaInput(btn) {
+            const card = btn.closest('.platform-card');
+            const mediaContainer = card.querySelector('.media-container');
+            
+            const newInputRow = document.createElement('div');
+            newInputRow.className = "flex items-center space-x-2 mt-2";
+            newInputRow.innerHTML = `
+                <input type="text" class="media-url-input w-full bg-gray-900 border border-gray-700 rounded p-2 text-xs text-white focus:border-cyan-500 outline-none" placeholder="Paste extra image or video URL..." oninput="renderCardImage(this)">
+                <button onclick="this.parentElement.remove()" class="bg-red-900/30 text-red-400 hover:bg-red-900/60 text-xs px-2 py-2 rounded">✕</button>
+            `;
+            mediaContainer.insertBefore(newInputRow, card.querySelector('.image-display-container'));
+        }
+
+        // 3. Render Card Image Preview from any of its inputs
+        function renderCardImage(input) {
+            const card = input.closest('.platform-card');
+            const displayContainer = card.querySelector('.image-display-container');
+            const url = input.value.trim();
+
+            if (!url) {
+                displayContainer.innerHTML = `<span class="placeholder-text text-xs text-gray-500 font-mono">Preview will render here</span>`;
+                return;
+            }
+
+            displayContainer.innerHTML = `<img src="${url}" class="w-full h-full object-cover rounded" onerror="this.onerror=null; this.parentNode.innerHTML='<span class=\'text-xs text-red-400 font-mono\'>Failed to load preview</span>';">`;
+        }
+
+        // 4. Distribute Content to All Platforms
         function distributeContent() {
             const title = document.getElementById('postTitle').value;
             const imageUrl = document.getElementById('featuredImageUrl').value;
             const content = document.getElementById('postContent').value;
 
-            // Select all individual platform cards
             const platformCards = document.querySelectorAll('.platform-card');
 
             platformCards.forEach(card => {
@@ -355,11 +451,11 @@
                 if (bodyInput) bodyInput.value = content;
 
                 // Set Media URL and Preview Image
-                const mediaInput = card.querySelector('.media-url-input');
+                const firstMediaInput = card.querySelector('.media-url-input');
                 const displayContainer = card.querySelector('.image-display-container');
 
-                if (mediaInput && imageUrl) {
-                    mediaInput.value = imageUrl;
+                if (firstMediaInput && imageUrl) {
+                    firstMediaInput.value = imageUrl;
                 }
 
                 if (displayContainer && imageUrl) {
@@ -370,7 +466,7 @@
             alert('Content successfully distributed to all platforms!');
         }
 
-        // 3. Dummy Placeholders for Workspace & Publishing
+        // 5. Utilities
         function clearWorkspace() {
             document.getElementById('postTitle').value = '';
             document.getElementById('featuredImageUrl').value = '';
