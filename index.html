@@ -6,17 +6,46 @@
     <title>Research & Content Production Tool - Sign In</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        body { 
+            margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
+            background-color: #02040e; position: relative; overflow-x: hidden; overflow-y: auto;
         }
+        /* FUTURISTIC CYBER BACKDROP */
+        .cyber-backdrop-container {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(circle at center, #071235 0%, #02040e 100%);
+            pointer-events: none;
+        }
+        .hud-overlay {
+            position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px; z-index: 1; pointer-events: none;
+        }
+        .scanline {
+            position: absolute; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, #10b981, #00f2fe, #10b981, transparent);
+            box-shadow: 0 0 20px #10b981; top: 0; z-index: 4;
+            animation: scanning 3s linear infinite; pointer-events: none;
+        }
+        @keyframes scanning {
+            0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; }
+        }
+        .app-interface { position: relative; z-index: 10; }
     </style>
 </head>
-<body class="text-slate-100 flex items-center justify-center min-h-screen">
-    <div class="w-full max-w-md p-8 bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-xl border border-slate-700">
-        <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center">Sign In to Dashboard</h2>
+<body class="flex items-center justify-center min-h-screen">
+
+    <!-- Futuristic Cyber Background Elements -->
+    <div class="cyber-backdrop-container">
+        <div class="hud-overlay"></div>
+        <div class="scanline"></div>
+    </div>
+
+    <!-- Main Content Box -->
+    <div class="app-interface w-full max-w-md p-8 bg-slate-900/80 backdrop-blur-md rounded-2xl shadow-2xl border border-emerald-500/30">
+        <h2 class="text-2xl font-bold mb-6 text-emerald-400 text-center tracking-wider">Sign In to Dashboard</h2>
 
         <form id="signin-form" class="space-y-4">
             <div>
@@ -27,7 +56,7 @@
                 <label class="block text-sm font-medium text-slate-300 mb-1">Password</label>
                 <input type="password" id="password" required class="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none text-white">
             </div>
-            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-lg transition duration-200 text-white">Sign In</button>
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-lg transition duration-200 text-white shadow-lg shadow-emerald-900/40">Sign In</button>
         </form>
 
         <div class="mt-6 text-center">
