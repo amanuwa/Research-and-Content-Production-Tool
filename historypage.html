@@ -9,13 +9,13 @@
 </head>
 <body class="bg-[#0b0f19] text-gray-100 font-sans antialiased min-h-screen flex flex-col justify-between">
 
-    <div class="flex flex-col min-h-screen">
+    <div class="flex flex-col min-h-screen w-full">
         <!-- Top Navigation Bar -->
-        <header class="border-b border-gray-800 bg-[#0b0f19] sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+        <header class="border-b border-gray-800 bg-[#0b0f19] sticky top-0 z-50 w-full">
+            <div class="w-full px-4 sm:px-6 py-3 flex justify-between items-center">
                 <div class="flex items-center space-x-3">
                     <!-- Back Button routing to Production Studio -->
-                    <button onclick="window.location.href='dashboard.html'"class="bg-[#1f2937] hover:bg-gray-700 text-gray-300 text-xs font-mono px-3 py-1.5 rounded border border-gray-700 flex items-center space-x-1.5 transition">
+                    <button onclick="window.location.href='dashboard.html'" class="bg-[#1f2937] hover:bg-gray-700 text-gray-300 text-xs font-mono px-3 py-1.5 rounded border border-gray-700 flex items-center space-x-1.5 transition">
                         <svg class="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
@@ -30,7 +30,7 @@
         </header>
 
         <!-- Main Content Area -->
-        <main class="max-w-7xl mx-auto px-6 py-8 w-full flex-grow">
+        <main class="w-full px-4 sm:px-6 py-8 flex-grow">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
                     <h1 class="text-xl font-mono font-bold text-gray-100 flex items-center space-x-2">
@@ -39,13 +39,13 @@
                     <p class="text-xs font-mono text-gray-500 mt-1">Review all previously published articles, drafts, and multi-platform distributions with attached media and institutional metadata.</p>
                 </div>
                 <div class="flex items-center space-x-2">
-                 
+                   
                 </div>
             </div>
 
             <!-- Tabular Container -->
-            <div class="bg-[#111827] border border-gray-800 rounded-lg overflow-hidden shadow-xl">
-                <div class="overflow-x-auto">
+            <div class="bg-[#111827] border border-gray-800 rounded-lg overflow-hidden shadow-xl w-full">
+                <div class="overflow-x-auto w-full">
                     <table class="w-full text-left border-collapse font-mono text-xs">
                         <thead>
                             <tr class="bg-[#1f2937]/50 border-b border-gray-800 text-gray-400 uppercase tracking-wider text-[10px]">
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-800 py-4 text-center text-gray-600 font-mono text-xs">
+    <footer class="border-t border-gray-800 py-4 text-center text-gray-600 font-mono text-xs w-full">
         // Journalist Preparation Studio &copy; 2026
     </footer>
 
@@ -182,10 +182,10 @@
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/&/g, "&amp;")
-                      .replace(/</g, "&lt;")
-                      .replace(/>/g, "&gt;")
-                      .replace(/"/g, "&quot;")
-                      .replace(/'/g, "&#039;");
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
         }
 
         window.onload = loadHistoryTable;
