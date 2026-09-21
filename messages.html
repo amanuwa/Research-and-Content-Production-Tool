@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governmental Corporate Message Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            margin: 0; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column;
+            background-color: #02040e; position: relative; overflow-x: hidden;
+        }
+        #cyberCanvas {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        }
+        .app-interface { position: relative; z-index: 10; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #ffffff; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
 
+    <!-- Holographic Warp Background -->
+    <canvas id="cyberCanvas"></canvas>
+
+    <!-- Top Navigation Bar -->
+    <header class="app-interface w-full bg-slate-900/95 backdrop-blur-md border-b border-blue-500/30 px-6 py-3 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-4">
+            <!-- Back Button to dashboard.html on the top-most left -->
+            <button onclick="window.location.href='dashboard.html'" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-xl border border-slate-700 transition flex items-center space-x-2 shadow" title="Return to Dashboard">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="hidden sm:inline">Dashboard</span>
+            </button>
+            <div class="h-5 w-[1px] bg-slate-800"></div>
+            <div class="flex items-center space-x-3">
+                <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
+                <h1 class="text-lg font-bold text-blue-400 tracking-wide">Governmental Corporate Message Portal</h1>
+            </div>
+        </div>
+
+        <!-- Top Right Elements: Production Button, Logged-in User Name, Sign Out -->
+        <div class="flex items-center space-x-4">
+            <button onclick="window.location.href='production.html'" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg shadow-blue-950/50">
+                Production
+            </button>
+            <div class="h-8 w-[1px] bg-slate-700"></div>
+            <div class="text-right">
+                <div id="user-email" class="text-xs font-medium text-slate-200">Loading session...</div>
+                <button onclick="handleSignOut()" class="text-[11px] text-red-400 hover:text-red-300 underline transition cursor-pointer">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace (Gmail Inbox Layout) -->
+    <main class="app-interface flex-1 w-full max-w-7xl mx-auto px-6 py-6 flex flex-col gap-6">
+        
+        <!-- Search & Control Toolbar -->
+        <div class="bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-blue-500/30 shadow-xl flex flex-col sm:flex-row gap-4 items-center justify-between">
+            <div class="flex items-center space-x-3 w-full sm:w-auto flex-1">
+                <i class="fa-solid fa-search text-slate-400 ml-2"></i>
+                <input type="text" id="mail-search" placeholder="Search mail messages..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+            <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">Secure Protocol: Active</span>
+            </div>
+        </div>
+
+        <!-- Gmail-Style Interactive Message Box -->
+        <div class="bg-white text-slate-900 rounded-2xl shadow-2xl flex flex-col h-[68vh] border border-slate-300 overflow-hidden">
+            
+            <!-- Gmail Header Toolbar -->
+            <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs text-slate-600">
+                <div class="flex items-center space-x-3">
+                    <input type="checkbox" id="select-all" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer">
+                    <span class="font-bold text-slate-700 uppercase tracking-wider">Primary Inbox</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-slate-500">1-5 of 5</span>
+                    <div class="flex space-x-2">
+                        <button class="p-1.5 hover:bg-slate-200 rounded text-slate-600 transition"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="p-1.5 hover:bg-slate-200 rounded text-slate-600 transition"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages List (Most Recent at Top Style) -->
+            <div class="custom-scroll flex-1 overflow-y-auto divide-y divide-slate-100">
+
+                <!-- Message 1 (Unread - Most Recent) -->
+                <div class="px-4 py-3 bg-blue-50/50 hover:bg-blue-100/50 hover:shadow-inner transition flex items-center justify-between cursor-pointer group">
+                    <div class="flex items-center space-x-4 min-w-0 flex-1">
+                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
+                        <button class="text-amber-400 hover:text-amber-500 shrink-0"><i class="fa-regular fa-star"></i></button>
+                        <span class="font-bold text-slate-900 text-sm w-56 truncate shrink-0">Director of Operations (HQ)</span>
+                        <div class="text-xs text-slate-800 truncate flex-1">
+                            <span class="font-bold text-slate-900 mr-2">URGENT:</span>Q3 regional clearance verification and protocol alignment directives...
+                        </div>
+                    </div>
+                    <div class="text-xs font-bold text-blue-700 shrink-0 pl-4">
+                        11:15 AM
+                    </div>
+                </div>
+
+                <!-- Message 2 (Unread) -->
+                <div class="px-4 py-3 bg-blue-50/50 hover:bg-blue-100/50 hover:shadow-inner transition flex items-center justify-between cursor-pointer group">
+                    <div class="flex items-center space-x-4 min-w-0 flex-1">
+                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
+                        <button class="text-amber-400 hover:text-amber-500 shrink-0"><i class="fa-regular fa-star"></i></button>
+                        <span class="font-bold text-slate-900 text-sm w-56 truncate shrink-0">Automated Web Scraper Bot</span>
+                        <div class="text-xs text-slate-800 truncate flex-1">
+                            <span class="font-bold text-slate-900 mr-2">Feed Alert:</span>New CSV telemetry package synchronized successfully from node database.
+                        </div>
+                    </div>
+                    <div class="text-xs font-bold text-blue-700 shrink-0 pl-4">
+                        09:42 AM
+                    </div>
+                </div>
+
+                <!-- Message 3 (Read) -->
+                <div class="px-4 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between cursor-pointer group">
+                    <div class="flex items-center space-x-4 min-w-0 flex-1">
+                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
+                        <button class="text-slate-300 hover:text-amber-400 shrink-0"><i class="fa-regular fa-star"></i></button>
+                        <span class="font-normal text-slate-700 text-sm w-56 truncate shrink-0">System Security Division</span>
+                        <div class="text-xs text-slate-600 truncate flex-1">
+                            <span class="font-normal text-slate-700 mr-2">Policy Update:</span>Monthly security credentials and session timeout policies updated.
+                        </div>
+                    </div>
+                    <div class="text-xs font-medium text-slate-500 shrink-0 pl-4">
+                        Yesterday
+                    </div>
+                </div>
+
+                <!-- Message 4 (Read / Previously Sent) -->
+                <div class="px-4 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between cursor-pointer group">
+                    <div class="flex items-center space-x-4 min-w-0 flex-1">
+                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
+                        <button class="text-amber-400 hover:text-amber-500 shrink-0"><i class="fa-solid fa-star"></i></button>
+                        <span class="font-normal text-slate-700 text-sm w-56 truncate shrink-0">Amanuel Woldesenbet</span>
+                        <div class="text-xs text-slate-600 truncate flex-1">
+                            <span class="font-normal text-slate-700 mr-2">Outgoing Report:</span>Initial pipeline integration check completed for n8n webhooks.
+                        </div>
+                    </div>
+                    <div class="text-xs font-medium text-slate-500 shrink-0 pl-4">
+                        Sep 18
+                    </div>
+                </div>
+
+                <!-- Message 5 (Read) -->
+                <div class="px-4 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between cursor-pointer group">
+                    <div class="flex items-center space-x-4 min-w-0 flex-1">
+                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
+                        <button class="text-slate-300 hover:text-amber-400 shrink-0"><i class="fa-regular fa-star"></i></button>
+                        <span class="font-normal text-slate-700 text-sm w-56 truncate shrink-0">HR Department</span>
+                        <div class="text-xs text-slate-600 truncate flex-1">
+                            <span class="font-normal text-slate-700 mr-2">Notice:</span>Quarterly compliance confirmation deadline scheduled for end of month.
+                        </div>
+                    </div>
+                    <div class="text-xs font-medium text-slate-500 shrink-0 pl-4">
+                        Sep 14
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script src="session-timeout.js"></script>
+
+    <!-- Background Animation Script -->
+    <script>
+        const canvas = document.getElementById('cyberCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const streams = [];
+        for (let i = 0; i < 40; i++) {
+            streams.push({
+                x: (Math.random() - 0.5) * width * 2,
+                y: (Math.random() - 0.5) * height * 2,
+                z: Math.random() * width,
+                speed: Math.random() * 2 + 1
+            });
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(2, 4, 14, 0.25)';
+            ctx.fillRect(0, 0, width, height);
+            const cx = width / 2, cy = height / 2;
+
+            streams.forEach(s => {
+                s.z -= s.speed;
+                if (s.z <= 0) {
+                    s.z = width;
+                    s.x = (Math.random() - 0.5) * width * 2;
+                    s.y = (Math.random() - 0.5) * height * 2;
+                }
+                const k = 300 / s.z;
+                const px = s.x * k + cx, py = s.y * k + cy;
+                const prevK = 300 / (s.z + s.speed * 8);
+                const prevPx = s.x * prevK + cx, prevPy = s.y * prevK + cy;
+
+                if (px >= 0 && px <= width && py >= 0 && py <= height) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevPx, prevPy);
+                    ctx.lineTo(px, py);
+                    ctx.strokeStyle = `rgba(0, 242, 254, ${1 - s.z / width})`;
+                    ctx.lineWidth = k * 1.5;
+                    ctx.stroke();
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+
+    <!-- Supabase Session & Sign Out Module -->
+    <script type="module">
+        import { supabase } from './config.js';
+
+        async function checkUserSession() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+                if (!session) {
+                    window.location.href = 'index.html';
+                } else {
+                    document.getElementById('user-email').textContent = session.user.email;
+                }
+            } catch (err) {
+                console.error("Session check error:", err.message);
+            }
+        }
+        checkUserSession();
+
+        window.handleSignOut = async function() {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) {
+                    console.error("Sign out error:", error.message);
+                }
+                window.location.href = 'index.html';
+            } catch (err) {
+                console.error("Unexpected sign out error:", err);
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
