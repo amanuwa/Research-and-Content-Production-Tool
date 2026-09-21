@@ -36,13 +36,12 @@
             <div class="h-5 w-[1px] bg-slate-800"></div>
             <div class="flex items-center space-x-3">
                 <div class="h-3 w-3 rounded-full bg-blue-500 animate-pulse"></div>
-                <h1 class="text-lg font-bold text-blue-400 tracking-wide">Ministry of Agriculture  Message Portal</h1>
+                <h1 class="text-lg font-bold text-blue-400 tracking-wide">Ministry of Agriculture Message Portal</h1>
             </div>
         </div>
 
-        <!-- Top Right Elements: Production Button, Logged-in User Name, Sign Out -->
+        <!-- Top Right Elements: Logged-in User Name, Sign Out -->
         <div class="flex items-center space-x-4">
-         
             <div class="h-8 w-[1px] bg-slate-700"></div>
             <div class="text-right">
                 <div id="user-email" class="text-xs font-medium text-slate-200">Loading session...</div>
@@ -51,7 +50,7 @@
         </div>
     </header>
 
-    <!-- Main Workspace (Gmail Inbox Layout) -->
+    <!-- Main Workspace -->
     <main class="app-interface flex-1 w-full max-w-7xl mx-auto px-6 py-6 flex flex-col gap-6">
         
         <!-- Search & Control Toolbar -->
@@ -65,99 +64,113 @@
             </div>
         </div>
 
-        <!-- Gmail-Style Interactive Message Box -->
-        <div class="bg-white text-slate-900 rounded-2xl shadow-2xl flex flex-col h-[68vh] border border-slate-300 overflow-hidden">
+        <!-- Main Layout Split: Left Filter/Action Sidebar + Right Gmail Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             
-            <!-- Gmail Header Toolbar -->
-            <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs text-slate-600">
-                <div class="flex items-center space-x-3">
-                    <input type="checkbox" id="select-all" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer">
-                    <span class="font-bold text-slate-700 uppercase tracking-wider">Primary Inbox</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-slate-500">1-5 of 5</span>
-                    <div class="flex space-x-2">
-                        <button class="p-1.5 hover:bg-slate-200 rounded text-slate-600 transition"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button class="p-1.5 hover:bg-slate-200 rounded text-slate-600 transition"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
+            <!-- Left Sidebar: Filters & Write Message Button -->
+            <div class="bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-blue-500/30 shadow-xl flex flex-col gap-4 h-fit">
+                <!-- Write Message Button -->
+                <button onclick="openComposePanel()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-sm uppercase tracking-wider cursor-pointer">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Write Message</span>
+                </button>
+
+                <div class="h-[1px] bg-slate-800 my-1"></div>
+
+                <!-- Filter Navigation Links -->
+                <div class="flex flex-col space-y-1">
+                    <button onclick="switchTab('arrived')" id="btn-arrived" class="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition flex items-center justify-between bg-blue-600 text-white shadow">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-inbox"></i>
+                            <span>Arrived Messages</span>
+                        </div>
+                        <span id="arrived-count" class="text-xs bg-blue-800 px-2 py-0.5 rounded-full">3</span>
+                    </button>
+                    
+                    <button onclick="switchTab('sent')" id="btn-sent" class="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition flex items-center justify-between text-slate-300 hover:bg-slate-800">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Sent Messages</span>
+                        </div>
+                        <span id="sent-count" class="text-xs bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full">2</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Messages List (Most Recent at Top Style) -->
-            <div class="custom-scroll flex-1 overflow-y-auto divide-y divide-slate-100">
-
-                <!-- Message 1 (Unread - Most Recent) -->
-                <div class="px-4 py-3 bg-blue-50/50 hover:bg-blue-100/50 hover:shadow-inner transition flex items-center justify-between cursor-pointer group">
-                    <div class="flex items-center space-x-4 min-w-0 flex-1">
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
-                        <button class="text-amber-400 hover:text-amber-500 shrink-0"><i class="fa-regular fa-star"></i></button>
-                        <span class="font-bold text-slate-900 text-sm w-56 truncate shrink-0">Director of Operations (HQ)</span>
-                        <div class="text-xs text-slate-800 truncate flex-1">
-                            <span class="font-bold text-slate-900 mr-2">URGENT:</span>Q3 regional clearance verification and protocol alignment directives...
+            <!-- Right Content Area (Gmail Message List & View Panels) -->
+            <div class="lg:col-span-3 flex flex-col gap-6">
+                
+                <!-- Gmail-Style Interactive Message Box -->
+                <div class="bg-white text-slate-900 rounded-2xl shadow-2xl flex flex-col h-[52vh] border border-slate-300 overflow-hidden">
+                    
+                    <!-- Gmail Header Toolbar -->
+                    <div class="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs text-slate-600">
+                        <div class="flex items-center space-x-3">
+                            <input type="checkbox" id="select-all" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 cursor-pointer">
+                            <span id="current-list-title" class="font-bold text-slate-700 uppercase tracking-wider">Arrived Messages</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span id="pagination-indicator" class="text-slate-500">1-3 of 3</span>
+                            <div class="flex space-x-2">
+                                <button class="p-1.5 hover:bg-slate-200 rounded text-slate-600 transition"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button class="p-1.5 hover:bg-slate-200 rounded text-slate-600 transition"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="text-xs font-bold text-blue-700 shrink-0 pl-4">
-                        11:15 AM
+
+                    <!-- Dynamic Messages List Container -->
+                    <div id="messages-container" class="custom-scroll flex-1 overflow-y-auto divide-y divide-slate-100">
+                        <!-- Dynamically populated via JS -->
                     </div>
                 </div>
 
-                <!-- Message 2 (Unread) -->
-                <div class="px-4 py-3 bg-blue-50/50 hover:bg-blue-100/50 hover:shadow-inner transition flex items-center justify-between cursor-pointer group">
-                    <div class="flex items-center space-x-4 min-w-0 flex-1">
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
-                        <button class="text-amber-400 hover:text-amber-500 shrink-0"><i class="fa-regular fa-star"></i></button>
-                        <span class="font-bold text-slate-900 text-sm w-56 truncate shrink-0">Automated Web Scraper Bot</span>
-                        <div class="text-xs text-slate-800 truncate flex-1">
-                            <span class="font-bold text-slate-900 mr-2">Feed Alert:</span>New CSV telemetry package synchronized successfully from node database.
+                <!-- Bottom Full Message Reading Panel (Hidden by default until message clicked) -->
+                <div id="detail-panel" class="hidden bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-500/30 p-6 flex flex-col gap-4 text-slate-100">
+                    <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+                        <div>
+                            <h3 id="detail-subject" class="text-base font-bold text-blue-400">Message Subject</h3>
+                            <div class="text-xs text-slate-400 mt-1 flex gap-3">
+                                <span><strong>From/To:</strong> <span id="detail-sender">Sender Name</span></span>
+                                <span><strong>Time Arrived/Sent:</strong> <span id="detail-time">Timestamp</span></span>
+                            </div>
                         </div>
+                        <button onclick="closeDetailPanel()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
                     </div>
-                    <div class="text-xs font-bold text-blue-700 shrink-0 pl-4">
-                        09:42 AM
+                    <div id="detail-body" class="text-sm text-slate-200 bg-slate-950 p-4 rounded-xl border border-slate-800 min-h-[90px] leading-relaxed">
+                        Full message body content goes here...
+                    </div>
+                    <div class="flex justify-end">
+                        <button onclick="openReplyPanel()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-reply"></i>
+                            <span>Reply</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Message 3 (Read) -->
-                <div class="px-4 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between cursor-pointer group">
-                    <div class="flex items-center space-x-4 min-w-0 flex-1">
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
-                        <button class="text-slate-300 hover:text-amber-400 shrink-0"><i class="fa-regular fa-star"></i></button>
-                        <span class="font-normal text-slate-700 text-sm w-56 truncate shrink-0">System Security Division</span>
-                        <div class="text-xs text-slate-600 truncate flex-1">
-                            <span class="font-normal text-slate-700 mr-2">Policy Update:</span>Monthly security credentials and session timeout policies updated.
-                        </div>
+                <!-- Bottom Compose / Reply Panel (Hidden by default) -->
+                <div id="compose-panel" class="hidden bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-2xl border border-blue-500/30 p-6 flex flex-col gap-4 text-slate-100">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <h3 id="compose-title" class="text-base font-bold text-blue-400 flex items-center space-x-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>New Message</span>
+                        </h3>
+                        <button onclick="closeComposePanel()" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
                     </div>
-                    <div class="text-xs font-medium text-slate-500 shrink-0 pl-4">
-                        Yesterday
+                    <div class="flex flex-col gap-3">
+                        <input type="text" id="compose-recipient" placeholder="Recipient (e.g., Regional Directorate or staff email)" class="bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <input type="text" id="compose-subject" placeholder="Subject" class="bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <textarea id="compose-body" rows="4" placeholder="Write your message here..." class="bg-slate-950 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 custom-scroll"></textarea>
                     </div>
-                </div>
-
-                <!-- Message 4 (Read / Previously Sent) -->
-                <div class="px-4 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between cursor-pointer group">
-                    <div class="flex items-center space-x-4 min-w-0 flex-1">
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
-                        <button class="text-amber-400 hover:text-amber-500 shrink-0"><i class="fa-solid fa-star"></i></button>
-                        <span class="font-normal text-slate-700 text-sm w-56 truncate shrink-0">Amanuel Woldesenbet</span>
-                        <div class="text-xs text-slate-600 truncate flex-1">
-                            <span class="font-normal text-slate-700 mr-2">Outgoing Report:</span>Initial pipeline integration check completed for n8n webhooks.
-                        </div>
-                    </div>
-                    <div class="text-xs font-medium text-slate-500 shrink-0 pl-4">
-                        Sep 18
-                    </div>
-                </div>
-
-                <!-- Message 5 (Read) -->
-                <div class="px-4 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between cursor-pointer group">
-                    <div class="flex items-center space-x-4 min-w-0 flex-1">
-                        <input type="checkbox" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
-                        <button class="text-slate-300 hover:text-amber-400 shrink-0"><i class="fa-regular fa-star"></i></button>
-                        <span class="font-normal text-slate-700 text-sm w-56 truncate shrink-0">HR Department</span>
-                        <div class="text-xs text-slate-600 truncate flex-1">
-                            <span class="font-normal text-slate-700 mr-2">Notice:</span>Quarterly compliance confirmation deadline scheduled for end of month.
-                        </div>
-                    </div>
-                    <div class="text-xs font-medium text-slate-500 shrink-0 pl-4">
-                        Sep 14
+                    <div class="flex justify-end space-x-3">
+                        <button onclick="closeComposePanel()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition">Cancel</button>
+                        <button onclick="sendUserMessage()" class="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow transition cursor-pointer flex items-center space-x-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Send Message</span>
+                        </button>
                     </div>
                 </div>
 
@@ -167,6 +180,216 @@
     </main>
 
     <script src="session-timeout.js"></script>
+
+    <!-- Application Script Handling State, Tabs, and Panels -->
+    <script>
+        // Mock Database of Messages separated by type ('arrived' and 'sent')
+        const messagesData = {
+            arrived: [
+                {
+                    id: 1,
+                    sender: "Director of Operations (HQ)",
+                    previewPrefix: "URGENT:",
+                    previewText: "Q3 regional clearance verification and protocol alignment directives...",
+                    fullBody: "Official directive regarding Q3 regional clearance verifications. All branch stations must complete telemetry cross-checks and protocol alignment reports before the upcoming audit cycle closes.",
+                    time: "11:15 AM",
+                    unread: true,
+                    starred: true
+                },
+                {
+                    id: 2,
+                    sender: "Automated Web Scraper Bot",
+                    previewPrefix: "Feed Alert:",
+                    previewText: "New CSV telemetry package synchronized successfully from node database.",
+                    fullBody: "Automated cron execution completed successfully. Node database extracted 1,420 agricultural supply log rows with zero conflict exceptions logged.",
+                    time: "09:42 AM",
+                    unread: true,
+                    starred: false
+                },
+                {
+                    id: 3,
+                    sender: "System Security Division",
+                    previewPrefix: "Policy Update:",
+                    previewText: "Monthly security credentials and session timeout policies updated.",
+                    fullBody: "Please note that standard session security tokens have been refreshed across portal endpoints in compliance with Federal digital governance guidelines.",
+                    time: "Yesterday",
+                    unread: false,
+                    starred: false
+                }
+            ],
+            sent: [
+                {
+                    id: 4,
+                    sender: "Amanuel Woldesenbet (You)",
+                    previewPrefix: "Outgoing Report:",
+                    previewText: "Initial pipeline integration check completed for n8n webhooks.",
+                    fullBody: "Sent confirmation report to infrastructure leads. Initial pipeline integration checks for webhook triggers have successfully linked with Supabase backend nodes.",
+                    time: "Sep 18",
+                    unread: false,
+                    starred: true
+                },
+                {
+                    id: 5,
+                    sender: "Amanuel Woldesenbet (You)",
+                    previewPrefix: "Inquiry:",
+                    previewText: "Request for supplementary resource allocation for regional software deployment.",
+                    fullBody: "Submitted formal documentation requesting expanded container allocation limits on Render servers to support multi-region scraper throughput.",
+                    time: "Sep 14",
+                    unread: false,
+                    starred: false
+                }
+            ]
+        };
+
+        let currentTab = 'arrived';
+        let activeMessage = null;
+
+        function renderMessages() {
+            const container = document.getElementById('messages-container');
+            const list = messagesData[currentTab];
+            
+            // Update UI elements based on tab
+            document.getElementById('current-list-title').textContent = currentTab === 'arrived' ? 'Arrived Messages' : 'Sent Messages';
+            document.getElementById('pagination-indicator').textContent = `1-${list.length} of ${list.length}`;
+            
+            document.getElementById('arrived-count').textContent = messagesData.arrived.length;
+            document.getElementById('sent-count').textContent = messagesData.sent.length;
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-500 text-xs">No messages found in this folder.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            list.forEach((msg) => {
+                const row = document.createElement('div');
+                const bgClass = msg.unread ? 'bg-blue-50/50 hover:bg-blue-100/50' : 'bg-white hover:bg-slate-50';
+                row.className = `px-4 py-3 ${bgClass} hover:shadow-inner transition flex items-center justify-between cursor-pointer group`;
+                
+                row.innerHTML = `
+                    <div class="flex items-center space-x-4 min-w-0 flex-1" onclick="selectMessage(${msg.id})">
+                        <input type="checkbox" onclick="event.stopPropagation()" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4 shrink-0 cursor-pointer">
+                        <button onclick="event.stopPropagation(); toggleStar(${msg.id})" class="${msg.starred ? 'text-amber-400' : 'text-slate-300 hover:text-amber-400'} shrink-0"><i class="${msg.starred ? 'fa-solid' : 'fa-regular'} fa-star"></i></button>
+                        <span class="${msg.unread ? 'font-bold text-slate-900' : 'font-normal text-slate-700'} text-sm w-56 truncate shrink-0">${msg.sender}</span>
+                        <div class="text-xs ${msg.unread ? 'text-slate-800 font-medium' : 'text-slate-600'} truncate flex-1">
+                            <span class="${msg.unread ? 'font-bold text-slate-900' : 'font-normal text-slate-700'} mr-2">${msg.previewPrefix}</span>${msg.previewText}
+                        </div>
+                    </div>
+                    <div class="text-xs ${msg.unread ? 'font-bold text-blue-700' : 'font-medium text-slate-500'} shrink-0 pl-4" onclick="selectMessage(${msg.id})">
+                        ${msg.time}
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            activeMessage = null;
+            document.getElementById('detail-panel').classList.add('hidden');
+            document.getElementById('compose-panel').classList.add('hidden');
+
+            const btnArrived = document.getElementById('btn-arrived');
+            const btnSent = document.getElementById('btn-sent');
+
+            if (tab === 'arrived') {
+                btnArrived.className = "w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition flex items-center justify-between bg-blue-600 text-white shadow";
+                btnSent.className = "w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition flex items-center justify-between text-slate-300 hover:bg-slate-800";
+            } else {
+                btnSent.className = "w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition flex items-center justify-between bg-blue-600 text-white shadow";
+                btnArrived.className = "w-full text-left px-4 py-3 rounded-xl text-sm font-semibold transition flex items-center justify-between text-slate-300 hover:bg-slate-800";
+            }
+            renderMessages();
+        }
+
+        function selectMessage(id) {
+            const list = messagesData[currentTab];
+            const msg = list.find(m => m.id === id);
+            if (!msg) return;
+
+            msg.unread = false; // Mark read when clicked
+            activeMessage = msg;
+
+            document.getElementById('detail-subject').textContent = `${msg.previewPrefix} ${msg.previewText}`;
+            document.getElementById('detail-sender').textContent = msg.sender;
+            document.getElementById('detail-time').textContent = msg.time;
+            document.getElementById('detail-body').textContent = msg.fullBody;
+
+            document.getElementById('detail-panel').classList.remove('hidden');
+            document.getElementById('compose-panel').classList.add('hidden'); // Hide compose if open
+            document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth' });
+            renderMessages();
+        }
+
+        function closeDetailPanel() {
+            document.getElementById('detail-panel').classList.add('hidden');
+            activeMessage = null;
+        }
+
+        function openComposePanel() {
+            document.getElementById('compose-title').innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>New Message</span>`;
+            document.getElementById('compose-recipient').value = '';
+            document.getElementById('compose-subject').value = '';
+            document.getElementById('compose-body').value = '';
+            
+            document.getElementById('compose-panel').classList.remove('hidden');
+            document.getElementById('detail-panel').classList.add('hidden');
+            document.getElementById('compose-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openReplyPanel() {
+            if (!activeMessage) return;
+            document.getElementById('compose-title').innerHTML = `<i class="fa-solid fa-reply"></i><span>Reply to ${activeMessage.sender}</span>`;
+            document.getElementById('compose-recipient').value = activeMessage.sender;
+            document.getElementById('compose-subject').value = `Re: ${activeMessage.previewPrefix} ${activeMessage.previewText}`;
+            document.getElementById('compose-body').value = `\n\n--- Original Message from ${activeMessage.sender} ---\n${activeMessage.fullBody}`;
+            
+            document.getElementById('compose-panel').classList.remove('hidden');
+            document.getElementById('compose-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeComposePanel() {
+            document.getElementById('compose-panel').classList.add('hidden');
+        }
+
+        function sendUserMessage() {
+            const recipient = document.getElementById('compose-recipient').value.trim();
+            const subject = document.getElementById('compose-subject').value.trim();
+            const body = document.getElementById('compose-body').value.trim();
+
+            if (!recipient || !subject || !body) {
+                alert('Please complete all fields before sending.');
+                return;
+            }
+
+            const newMsg = {
+                id: Date.now(),
+                sender: "Amanuel Woldesenbet (You)",
+                previewPrefix: subject,
+                previewText: body.substring(0, 60) + '...',
+                fullBody: body,
+                time: "Just now",
+                unread: false,
+                starred: false
+            };
+
+            messagesData.sent.unshift(newMsg); // Most recent at top
+            closeComposePanel();
+            switchTab('sent');
+        }
+
+        function toggleStar(id) {
+            const list = messagesData[currentTab];
+            const msg = list.find(m => m.id === id);
+            if (msg) {
+                msg.starred = !msg.starred;
+                renderMessages();
+            }
+        }
+
+        // Initialize view on load
+        renderMessages();
+    </script>
 
     <!-- Background Animation Script -->
     <script>
