@@ -9,7 +9,7 @@ function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(() => {
         alert("Session expired due to inactivity.");
-        window.location.href = 'signin.html'; // Adjust to your actual sign-in page filename
+        window.location.href = 'index.html'; // Adjust to your actual sign-in page filename
     }, INACTIVITY_TIMEOUT);
 }
 
